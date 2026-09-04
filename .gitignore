@@ -8,6 +8,8 @@
 # scratch renders
 *.png
 *.pdf
+# the site's own images are not scratch
+!docs/*.png
 /tmp/
 pptx_png/
 

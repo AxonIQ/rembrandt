@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog · Rembrandt · Axoniq</title>
+<meta name="description" content="Every version of Rembrandt, and what changed.">
+<meta name="robots" content="index,follow">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --ink:#181D27; --g700:#414651; --g600:#535862; --g500:#717680;
+  --line:#E9EAEB; --line-2:#D5D7DA; --surface:#FAFAFA; --white:#FFFFFF;
+  --n950:#0C111D;
+  --orange:#FF4405; --orange-50:#FFF4ED;
+  --blue:#1570EF;
+  --f-disp:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --f-body:'Geist','Inter','Helvetica Neue',Arial,sans-serif;
+  --f-mono:'Geist Mono','SF Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--white);color:var(--g600);font-family:var(--f-body);
+  font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+a{color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(21,112,239,.3)}
+a:hover{border-bottom-color:var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+
+.masthead{border-bottom:1px solid var(--line)}
+.masthead .wrap{display:flex;align-items:center;justify-content:space-between;
+  gap:24px;height:68px}
+.brand{display:flex;align-items:center;gap:11px;color:var(--ink)}
+.brand svg{display:block;height:19px;width:auto}
+.brand .sep{width:1px;height:20px;background:var(--line-2);flex:none}
+.brand .prod{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--g500);white-space:nowrap}
+.mnav a{font-size:14px;font-weight:500;color:var(--ink);background:var(--white);
+  border:0;box-shadow:inset 0 0 0 1px var(--line-2);border-radius:8px;padding:8px 14px}
+.mnav a:hover{background:var(--surface)}
+
+.head{padding:72px 0 46px}
+.eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--g500);display:flex;align-items:center;
+  gap:9px;margin-bottom:20px}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:999px;
+  background:var(--orange);flex:none}
+h1{font-family:var(--f-disp);font-size:clamp(40px,5.4vw,64px);font-weight:400;
+  line-height:1.06;letter-spacing:-.026em;color:var(--ink);margin-bottom:20px}
+.intro{max-width:70ch}
+.intro p{color:var(--g600);margin-bottom:14px}
+.intro p:last-child{margin-bottom:0}
+
+.rels{border-top:1px solid var(--line)}
+.rel{display:grid;grid-template-columns:180px 1fr;gap:40px;
+  padding:44px 0;border-bottom:1px solid var(--line)}
+.relv{display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+.rel h2{font-family:var(--f-mono);font-size:22px;font-weight:500;
+  letter-spacing:-.01em;color:var(--ink);scroll-margin-top:88px}
+.tag{font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:.11em;
+  text-transform:uppercase;color:#B93815;background:var(--orange-50);
+  box-shadow:inset 0 0 0 1px #F9DBAF;border-radius:999px;padding:4px 10px}
+.relbody{max-width:76ch}
+.relbody p{margin-bottom:16px;color:var(--g600)}
+.relbody ul{list-style:none;display:flex;flex-direction:column;gap:13px}
+.relbody li{position:relative;padding-left:20px;color:var(--g600)}
+.relbody li::before{content:"";position:absolute;left:2px;top:11px;
+  width:5px;height:5px;border-radius:999px;background:var(--line-2)}
+.relbody strong{color:var(--ink);font-weight:600}
+code{font-family:var(--f-mono);font-size:.87em;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:1px 6px}
+
+footer{border-top:1px solid var(--line);background:var(--surface)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:center;
+  padding:26px 28px;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--g500)}
+footer svg{display:block;height:15px;width:auto;color:var(--g600)}
+footer .push{margin-left:auto}
+footer a{color:var(--g500);border:0}
+footer a:hover{color:var(--ink)}
+
+@media (max-width:820px){
+  .rel{grid-template-columns:1fr;gap:18px;padding:36px 0}
+  .relv{flex-direction:row;align-items:center}
+  .head{padding:52px 0 36px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 1185 300" fill="currentColor" aria-label="Axoniq" role="img">
+<path d="M60.0002 155.5V133.5C60.0002 116.932 60.0002 100 90.0002 100C120 100 120 82.5 120 60V37C120 20.4315 120 0 150 0C180 0 180 20.4315 180 37V65.9314C180 82.5 180 100 210 100C240 100 240 82.5 240 65.9314V37C240 20.4315 240 0 270 0C300 0 300 20.4315 300 37V60C300 83 300 100 270 100C240 100 240 116.931 240 133.5V155.5C240 172.069 240 200 270 200C300 200 300 222.432 300 239L300 261C300 287.5 300 300 270 300C240 300 240 288 240 271.431L240 239C240 222.432 240 200 210 200C180 200 180 222.432 180 239L180 261C180 288 180 300 150 300C120 300 120 287.5 120 270.931L120 239C120 222.432 120 200 150 200C180 200 180 172.069 180 155.5V133.5C180 116.932 180 100 150 100C120 100 120 116.931 120 133.5V155.5C120 172.069 120 200 90.0002 200C60.0002 200 59.9999 222.432 59.9999 239L60.0002 270.931C60.0002 287.5 60.0002 300 30.0002 300C0.000272751 300 0.000273227 287.5 0.000273227 261L0 239C0 222.432 0.000272751 200 30.0002 200C60.0002 200 60.0002 172.069 60.0002 155.5Z"/>
+<path d="M1184.66 203.654V222.182H1106.3C1064.61 222.182 1040.68 190.53 1040.68 149.421C1040.68 109.084 1062.87 77.8184 1107.07 77.8184C1148.76 77.8184 1174.04 107.347 1174.04 148.649C1174.04 172.388 1163.62 194.583 1146.25 207.9C1158.79 205.391 1171.15 203.654 1184.66 203.654ZM1069.43 149.228C1069.43 180.687 1080.24 206.742 1107.07 206.742C1135.63 206.742 1145.28 177.792 1145.28 149.421C1145.28 117.19 1133.12 94.2234 1107.07 94.2234C1080.44 94.2234 1069.43 119.892 1069.43 149.228Z"/>
+<path d="M989.636 220.059V79.748H1016.85V220.059H989.636Z"/>
+<path d="M955.168 79.748V220.059H922.937L856.159 103.101L857.51 220.059H830.297V79.748H862.528L929.306 196.513L927.955 79.748H955.168Z"/>
+<path d="M807.677 150C807.677 191.302 783.745 222.182 740.899 222.182C697.86 222.182 674.121 191.302 674.121 150C674.121 108.505 697.86 77.8184 740.899 77.8184C783.745 77.8184 807.677 108.505 807.677 150ZM702.878 150C702.878 177.599 712.721 205.777 740.899 205.777C769.077 205.777 778.92 177.599 778.92 150C778.92 122.208 769.077 94.2234 740.899 94.2234C712.721 94.2234 702.878 122.208 702.878 150Z"/>
+<path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
+<path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
+</svg>
+      <span class="sep"></span>
+      <span class="prod">Rembrandt</span>
+    </div>
+    <nav class="mnav"><a href="./">Back to Rembrandt</a></nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="head">
+    <div class="eyebrow">Axoniq &middot; Rembrandt</div>
+    <h1>Changelog</h1>
+    <div class="intro">
+<p>Rembrandt is versioned as a whole: the skill, the kit and the master deck move together, because a deck built by one version cannot be checked by another's rules. Every rendered deck carries its version in the filename, so any output can be traced to the rules that made it.</p>
+<p>Releases are git tags from v1.0.0 on. Earlier history is not in this repository: it was rebuilt from a single commit before publication, because the example decks it carried held internal figures and customer names. The entries below remain the full record of what changed and why.</p>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="rels">
+
+      <article class="rel current">
+        <div class="relv">
+          <h2 id="v1-0-0">1.0.0</h2>
+          <span class="tag">Current</span>
+        </div>
+        <div class="relbody">
+<p>The cleanup. Nothing was added; a lot was taken away. Five versions of solving problems left a repository where scaffolding outnumbered the tool, so this release removes everything that was true once and is now archaeology, without dropping a single check.</p>
+<ul>
+<li><strong><code>kit/</code> is three files and two directories.</strong> <code>master.html</code> (renamed from <code>master-slide-deck.html</code>), <code>verify.js</code>, <code>VERSION</code>, plus <code>assets/</code> and <code>icons/</code>. It was sixteen files.</li>
+<li><strong>The four audits are one file.</strong> <code>kit/verify.js</code> now runs shell, styles, colour, layout and the house rules itself, in a single browser instead of launching Chromium four times. Every check is the same check, with the same thresholds and the same messages.</li>
+<li><strong>The editor and the presenter chrome live in the master.</strong> Copying the master carries them, so <code>editor.js</code> and <code>patch_shell.py</code> no longer exist. <code>set_deck_name()</code> is three lines of regex in SKILL.md rather than a shipped helper.</li>
+<li><strong>Removed the one-shot migrations.</strong> <code>retype_master.py</code>, <code>lucide_swap.py</code> and <code>cssedit.py</code> did their job once and were never going to run again. <code>shots.js</code> took screenshots, which <code>cohere.md</code> forbids. <code>cohere_measure.js</code> was superseded by the layout check. <code>shell-q3-retyped.html</code> was a second copy of the shell that failed three of the five checks.</li>
+<li><strong>Removed <code>Asset package/</code></strong>, a duplicate of <code>kit/assets/</code>, and <code>tools/</code>, which packaged a zip for a distribution route no longer in use.</li>
+<li><strong>The filename drops the model.</strong> <code>&lt;Presentation name&gt; - Rembrandt v&lt;version&gt;.html</code>. The skill now opens by recommending Opus 5 at Low effort instead of asking which model is running: a session cannot verify what is serving it, and asking put a wrong name on a delivered file.</li>
+<li><strong><code>verify.js</code> checks that <code>kit/VERSION</code> and <code>plugin.json</code> agree</strong>, so the version cannot drift between the stamp and the manifest.</li>
+<li><strong>Distribution is this repository.</strong> It is the marketplace, it is public, and Cowork's automatic sync means a push is the whole release. The icons are Lucide under ISC, which is what makes a public repository possible.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="v0-5-0">0.5.0</h2>
+          
+        </div>
+        <div class="relbody">
+<p>Rembrandt can now be hosted. That is the whole point of this release.</p>
+<p>Untitled UI's licence permits commercial use but forbids redistribution, and <code>/plugin marketplace add &lt;url&gt;</code> fetches with no authentication, so the package could never legally sit at a URL a teammate could install from. Every distribution plan ran into the same wall: a private bucket the plugin system cannot read, or a public one we are not allowed to fill.</p>
+<ul>
+<li><strong>The icon library is Lucide</strong> (<code>kit/icons/</code>, ISC), 2,057 icons in place of 1,173. Same 24px grid, same 2px round-capped single stroke, so the decks look the same. ISC permits redistribution outright, which makes the plugin freely hostable and removes the "internal only" caveat from every install instruction.</li>
+<li><strong>Icon names are Lucide's own</strong>: <code>zap</code>, <code>shield-check</code>, <code>trending-up</code>, <code>chart-column</code>. No vendor-numbered variants (<code>shield-01</code>, <code>trend-up-01</code>) to guess at any more, which should reduce the wrong-icon-name failures weaker models were producing.</li>
+<li><strong><code>kit/lucide_swap.py</code></strong> carries the 33 mappings and rewrites a deck's inlined sprite in place. It is idempotent and it fails loudly on an unmapped name rather than silently dropping a glyph. Kept in the repo so an older deck can be brought forward.</li>
+<li><strong><code>icon_symbols()</code> moves the stroke attributes onto the <code>&lt;symbol&gt;</code>.</strong> Lucide carries them on the root <code>&lt;svg&gt;</code>, which a <code>&lt;use&gt;</code> does not inherit from; on the symbol the children pick them up as ordinary inherited presentation attributes. Without this the icons render as solid black blobs.</li>
+<li>Master and both examples regenerated and re-verified. All three pass the gate.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="v0-4-0">0.4.0</h2>
+          
+        </div>
+        <div class="relbody">
+<p>The deck stops being a rendering and becomes an application. Until now a one-word typo meant a new chat, a full regeneration and another trip through the gate. Now the person fixes it themselves, and the type system survives them doing it.</p>
+<ul>
+<li><strong><code>kit/editor.js</code> ships with every deck</strong>, inlined as <code>script#rb-editor</code> and inert until the person presses EDIT. Three jobs:</li>
+<li><strong>Edit text.</strong> <code>contenteditable="plaintext-only"</code> plus a paste interceptor that forces <code>text/plain</code> and an Enter that is suppressed. This is the whole point: plain <code>contenteditable</code> would let a paste from Word carry a font stack, a size and a colour into a text node and silently break the one rule Rembrandt exists to enforce. A person can retype every word in the deck and cannot violate it.</li>
+<li><strong>Remove an item.</strong> Icons, images and marks fade to <code>opacity:0</code> on hover-and-click. Repeated units (card, stat, row, chip, table row) are removed outright and the grid column count is recomputed, because a hidden card in a fixed 3-up leaves a hole. The last sibling is never removable, so a slide cannot be emptied.</li>
+<li><strong>Save.</strong> Three layers. A patch object in <code>localStorage</code> keyed on the document title, so a reload never loses work. <code>showSaveFilePicker</code> writing back into the same file, which works on <code>file://</code> in Chromium and is a genuine in-place save. A Blob download everywhere else.</li>
+<li><strong>A live geometry guard</strong> runs the <code>audit_layout.js</code> logic inside the page and reports overflow or collision in the edit bar as the person types. Verified to agree with the offline audit on the same broken edit. Editing invalidates the audits, so the audit had to move into the page.</li>
+<li><strong>A baked deck carrying hand edits passes the full gate.</strong> <code>bake()</code> strips every editor artefact, and <code>verify.js</code> prints PASS on the output. That is the test that made this shippable.</li>
+<li><strong>The presenter chrome is dark.</strong> <code>--ch-bg</code> and <code>--ch-panel</code>, so the slide is the only lit surface on screen. The overview grid, the arrows and the edit bar moved with it.</li>
+<li><strong>The HUD reads <code>07/23 . Deck name . slide name</code>.</strong> The counter and the deck name are pinned and only the slide name grows, into its own reserved box, so nothing on the bar shifts as you page. Previously the counter sat in a centre cell and drifted.</li>
+<li><strong>Full screen</strong>, on the FULL SCREEN button or <code>F</code>. The slide goes edge to edge and the chrome slides away after a few seconds of stillness.</li>
+<li><strong>A first-run notice</strong> on the first EDIT, dismissible and remembered in <code>localStorage</code>, plus a line in the edit bar that never goes away. It says the three things that are true and easy to get wrong: edits live in the browser and not in the file, Save writes a file, and Rembrandt may overwrite hand edits if the file is fed back into the skill.</li>
+<li><strong><code>kit/patch_shell.py</code></strong> applies all of this to a deck in place and is idempotent, so old decks can be brought forward without regenerating them. It also exposes <code>set_deck_name()</code>, which names the deck in the HUD, the overview header and <code>&lt;title&gt;</code> in one call.</li>
+<li><strong><code>kit/audit_shell.js</code> enforces the chrome.</strong> Dark surface, the <code>.hud-meta</code> group, the EDIT and FULL SCREEN buttons, and a live <code>window.__rbEditor</code>. Every v0.3 deck fails it, which is correct: a deck without the editor is a deck the person cannot fix a typo in. <code>.hud-mid</code> joins the banned classes.</li>
+<li><strong>Two shell faults found while testing.</strong> The <code>.navzone</code> click strips sat above the slide and swallowed every hover in the left and right thirds, so an icon at x=147 was unreachable. And the editor's injected style block duplicated on each bake cycle. Both fixed.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="v0-3-3">0.3.3</h2>
+          
+        </div>
+        <div class="relbody">
+<p>The same component broke in a Sonnet run and an Opus run: a stat built without its <code>.stat</code> wrapper, so a 96px numeral and its 21px label became inline neighbours and collided. Both were perfectly on-style, so the style and colour audits passed them. Geometry was unchecked.</p>
+<ul>
+<li><strong><code>kit/audit_layout.js</code></strong> is new and checks three things a style audit cannot see: <strong>collisions</strong> (two pieces of text overlapping, with labels that carry their own surface exempted as deliberate overlays), <strong>out-of-frame</strong> (past the 64px margins, below y=1012, or off the canvas), and <strong>dead bands</strong> (a content slide stopping more than one grid row short). It is part of <code>kit/verify.js</code>, which now runs five checks.</li>
+<li><strong>The master had nine of its own layout faults</strong> and now passes: <code>table/comparison</code>, <code>table/definitions</code>, <code>table/matrix</code>, <code>team/solo</code>, <code>team/trio</code>, <code>team/five</code>, <code>team/six</code>, <code>versus/split</code> and <code>diagram/architecture</code> were piling content at the top or overrunning the bottom, and <code>chapter/typographic</code> and <code>spec/type</code> sat a few pixels past the frame.</li>
+<li><strong>Assemble</strong> now says a component is its markup and not its look, with the stat as the worked example: <code>.stat</code> is the flex column that stacks label, numeral and reading line, and dropping it is what produces the collision. Combining two templates on one slide is called out as inventing a layout, which is allowed, flagged, and still audited.</li>
+<li><strong>Model identity.</strong> A run stamped the wrong model on a filename by trusting the environment's configured-model line. A model cannot verify which model is serving a turn, so the skill now reports it as configured and unverified, asks the person to confirm, and uses their answer. It is told explicitly not to infer it from its own style, the session URL, or an example deck's name.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="v0-3-2">0.3.2</h2>
+          
+        </div>
+        <div class="relbody">
+<p>Investigating a Haiku run that produced a broken deck turned up a worse problem: <strong>the audits passed on it.</strong> They queried <code>section.slide</code>, the deck used <code>div.slide</code>, so they measured nothing and reported success. An audit that fails open is worse than no audit, because it certifies the thing it was built to catch.</p>
+<ul>
+<li><strong>Every audit now fails closed</strong> and finds slides by class rather than tag. Zero slides is a FAIL.</li>
+<li><strong><code>kit/audit_shell.js</code></strong> is new and checks provenance: slides are <code>section.slide</code> inside <code>#scaler</code>, <code>symbol#lockup</code> and <code>symbol#mk</code> are present, the logo is a <code>&lt;use&gt;</code> and not typed text, <code>window.__go</code> / <code>__count</code> exist, <code>#frame</code> is actually sized, no invented or stale classes. The Haiku deck failed all eight of its checks; it had retyped the shell from memory, so its logo was <code>&lt;svg&gt;&lt;text&gt;Axoniq&lt;/text&gt;&lt;/svg&gt;</code>, its type scale was fabricated, and its viewer left <code>#frame</code> at 0×0.</li>
+<li><strong><code>kit/verify.js</code></strong> is the single gate: four audits plus the house rules (em dash, emoji, Axoniq, padded <code>#NN</code>, placeholder text, filename against <code>kit/VERSION</code>), one PASS or FAIL. Cohere is now "run this until it passes", which is far harder to skip than four separate commands.</li>
+<li><strong>Assemble rewritten.</strong> The shell is *copied* with a three-line head/tail split, never retyped, and the skill says why: a retyped shell looks right and is broken invisibly. Slides must be <code>section.slide</code> with <code>data-name</code> set to the master template used.</li>
+<li><strong><code>kit/cssedit.py</code></strong> replaces loose-regex CSS deletion. A pattern like <code>\.kicker\{[^}]*\}</code> also matches the tail of <code>.cover-b .kicker{…}</code> and leaves a dangling selector that eats the next rule. That bug destroyed <code>.cat-row</code> in 0.2 and <code>.cover-b .cv-title</code> in 0.3; both are repaired, and a selector-level diff against 0.1 now shows no unintended losses.</li>
+<li>The dead <code>.kicker</code> class is gone from the master and the deck shell. Both example decks regenerated and passing the gate.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="v0-3-1">0.3.1</h2>
+          
+        </div>
+        <div class="relbody">
+<ul>
+<li><strong>One run per chat.</strong> The skill opens by stating its version and model, then stops if the conversation has already run Rembrandt, quoted an earlier version of the rules, or been used to work on the skill itself. Rules already in the context window beat the file on disk, so a deck built in a reused chat is stamped with a version it was not built to, and no audit can catch it because the wrong rule was applied consistently.</li>
+<li><strong>Master:</strong> the gradient sphere is gone from the cover backdrop and the closing slide, not just the mark inside it. Those slides stand on their own backdrop gradient. The company mark now appears at two sizes only: the header lockup and the 84px closing icon, and the skill no longer tells anyone to place a ball behind a title.</li>
+<li><strong>Fixed:</strong> <code>index/catalog</code> (slide 4) had lost its <code>.cat-row</code> grid in the 0.2 retype, when a regex meant to delete <code>.idx-page</code> also matched the tail of a selector list and left a dangling selector that swallowed the next rule. A selector-level diff of 0.1 against 0.3 confirmed it was the only casualty; the same diff on the deck shell came back clean.</li>
+<li>Decks are unaffected, so the two examples keep their <code>v0.3</code> filenames: the stamp is major.minor.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="v0-3-0">0.3.0</h2>
+          
+        </div>
+        <div class="relbody">
+<ul>
+<li><strong>Color rule.</strong> When you use color, use the <strong>500</strong>. The 600 and 700 are only for text or a glyph on a colored surface (a chip, a tinted band, a dark slide); the 25/50/100/200 are surfaces and their borders, never text. <code>kit/audit_colors.js</code> enforces it, reading the palette from the deck's own <code>:root</code>.</li>
+<li><strong>Named output.</strong> Every deck is delivered as <code>&lt;Presentation name&gt; - Rembrandt v&lt;version&gt; - &lt;Model&gt;.html</code>.</li>
+<li><strong>Master:</strong> the oversized Axoniq mark is gone from the cover backdrop and the closing slide.</li>
+<li>Explicit <code>--blue-500</code> and <code>--orange-500</code> aliases, so every hue has a 500 to name.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="v0-2-0">0.2.0</h2>
+          
+        </div>
+        <div class="relbody">
+<ul>
+<li><strong>The hard rule.</strong> Every text node on every slide is exactly one of 18 text styles (family, size, weight); only SVG chart labels are exempt. <code>kit/audit_styles.js</code> enforces it. The master was retyped onto those styles: 92 CSS rules and 65 inline sizes, from roughly 45 distinct sizes down to 18 named ones.</li>
+<li>New named styles the layouts needed: Display sm, Stat sm, Stat xl, Numeral, Subtitle, Body 1 strong, Code, Label.</li>
+<li><strong>Kickers removed</strong> from all 37 layouts; a gray Subtitle under the title replaces them.</li>
+<li><strong>Header</strong> reads <code>Chapter · Presentation title · #N</code>, the moving part first.</li>
+<li><strong>Chapter cover</strong> is the master <code>index/spread</code>: chapter name and description left, a large mono Numeral right, no slide numbers.</li>
+<li><strong>Icons:</strong> Untitled UI Icons in <code>kit/icons/</code>, icon at the top of a card, text at the bottom.</li>
+<li><strong>Ingest</strong> specified: text first, one low-res contact sheet, single-slide reads only with a named reason. Never read a picture of your own output.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="v0-1-0">0.1.0</h2>
+          
+        </div>
+        <div class="relbody">
+<ul>
+<li>The skill, the flow (Ingest, Fidelity, Questionnaire, Outline, Fill, Assemble, Cohere, Deliver), and the kit: the 37-layout master deck, the tokens, the brand assets.</li>
+<li><strong>Composer</strong> step and the Body 1 floor: title top, content anchored to y=1012, compact styles only on genuine overflow.</li>
+<li>Plugin and marketplace manifests; the Q3 deck as the first worked example.</li>
+</ul>
+        </div>
+      </article>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <svg viewBox="0 0 1185 300" fill="currentColor" aria-label="Axoniq" role="img">
+<path d="M60.0002 155.5V133.5C60.0002 116.932 60.0002 100 90.0002 100C120 100 120 82.5 120 60V37C120 20.4315 120 0 150 0C180 0 180 20.4315 180 37V65.9314C180 82.5 180 100 210 100C240 100 240 82.5 240 65.9314V37C240 20.4315 240 0 270 0C300 0 300 20.4315 300 37V60C300 83 300 100 270 100C240 100 240 116.931 240 133.5V155.5C240 172.069 240 200 270 200C300 200 300 222.432 300 239L300 261C300 287.5 300 300 270 300C240 300 240 288 240 271.431L240 239C240 222.432 240 200 210 200C180 200 180 222.432 180 239L180 261C180 288 180 300 150 300C120 300 120 287.5 120 270.931L120 239C120 222.432 120 200 150 200C180 200 180 172.069 180 155.5V133.5C180 116.932 180 100 150 100C120 100 120 116.931 120 133.5V155.5C120 172.069 120 200 90.0002 200C60.0002 200 59.9999 222.432 59.9999 239L60.0002 270.931C60.0002 287.5 60.0002 300 30.0002 300C0.000272751 300 0.000273227 287.5 0.000273227 261L0 239C0 222.432 0.000272751 200 30.0002 200C60.0002 200 60.0002 172.069 60.0002 155.5Z"/>
+<path d="M1184.66 203.654V222.182H1106.3C1064.61 222.182 1040.68 190.53 1040.68 149.421C1040.68 109.084 1062.87 77.8184 1107.07 77.8184C1148.76 77.8184 1174.04 107.347 1174.04 148.649C1174.04 172.388 1163.62 194.583 1146.25 207.9C1158.79 205.391 1171.15 203.654 1184.66 203.654ZM1069.43 149.228C1069.43 180.687 1080.24 206.742 1107.07 206.742C1135.63 206.742 1145.28 177.792 1145.28 149.421C1145.28 117.19 1133.12 94.2234 1107.07 94.2234C1080.44 94.2234 1069.43 119.892 1069.43 149.228Z"/>
+<path d="M989.636 220.059V79.748H1016.85V220.059H989.636Z"/>
+<path d="M955.168 79.748V220.059H922.937L856.159 103.101L857.51 220.059H830.297V79.748H862.528L929.306 196.513L927.955 79.748H955.168Z"/>
+<path d="M807.677 150C807.677 191.302 783.745 222.182 740.899 222.182C697.86 222.182 674.121 191.302 674.121 150C674.121 108.505 697.86 77.8184 740.899 77.8184C783.745 77.8184 807.677 108.505 807.677 150ZM702.878 150C702.878 177.599 712.721 205.777 740.899 205.777C769.077 205.777 778.92 177.599 778.92 150C778.92 122.208 769.077 94.2234 740.899 94.2234C712.721 94.2234 702.878 122.208 702.878 150Z"/>
+<path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
+<path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
+</svg>
+    <span>Rembrandt v1.0.0</span>
+    <span class="push"><a href="https://axoniq.io">axoniq.io</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

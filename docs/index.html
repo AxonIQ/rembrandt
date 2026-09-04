@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rembrandt · Axoniq</title>
+<meta name="description" content="Hand it anything. It gives you back an Axoniq deck.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Axoniq house style, as it runs on axoniq.io: white ground, Untitled UI
+   neutrals, display type set large at regular weight with tight tracking.
+   Committed to light, the way the site is, so every colour is painted. */
+:root{
+  color-scheme:light;
+  /* neutrals, sampled from axoniq.io */
+  --ink:#181D27; --g700:#414651; --g600:#535862; --g500:#717680;
+  --line:#E9EAEB; --line-2:#D5D7DA; --surface:#FAFAFA; --white:#FFFFFF;
+  --n950:#0C111D;
+  /* brand */
+  --orange:#FF4405; --orange-50:#FFF4ED;
+  --success-50:#ECFDF3; --success-200:#ABEFC6; --success-700:#067647;
+  --blue:#1570EF;
+  --f-disp:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --f-body:'Geist','Inter','Helvetica Neue',Arial,sans-serif;
+  --f-mono:'Geist Mono','SF Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--white);color:var(--g600);font-family:var(--f-body);
+  font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+a{color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(21,112,239,.3)}
+a:hover{border-bottom-color:var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+
+/* ---------- masthead ---------- */
+.masthead{border-bottom:1px solid var(--line)}
+.masthead .wrap{display:flex;align-items:center;justify-content:space-between;
+  gap:24px;height:68px}
+.brand{display:flex;align-items:center;gap:11px;color:var(--ink)}
+.brand svg{display:block;height:19px;width:auto;color:var(--ink)}
+.brand .sep{width:1px;height:20px;background:var(--line-2);flex:none}
+.brand .prod{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--g500);white-space:nowrap}
+/* One link in the header, by design. */
+.mnav a{font-size:14px;font-weight:500;color:var(--ink);background:var(--white);
+  border:0;box-shadow:inset 0 0 0 1px var(--line-2);border-radius:8px;padding:8px 14px}
+.mnav a:hover{background:var(--surface)}
+
+/* ---------- hero: centred, the mark on the axis ---------- */
+.hero{padding:80px 0 84px;text-align:center;
+  display:flex;flex-direction:column;align-items:center}
+.mark{width:96px;height:96px;border-radius:14px;overflow:hidden;
+  border:1px solid var(--line-2);background:var(--surface);
+  box-shadow:0 10px 26px -12px rgba(16,24,40,.18);margin-bottom:30px}
+.mark img{display:block;width:100%;height:100%;object-fit:cover}
+h1{font-family:var(--f-disp);font-size:clamp(46px,6.6vw,76px);font-weight:400;
+  line-height:1.06;letter-spacing:-.026em;color:var(--ink);
+  margin-bottom:22px;text-wrap:balance}
+.stand{font-size:19px;line-height:1.55;color:var(--g600);max-width:46ch;
+  margin:0 auto 30px;text-wrap:pretty}
+.cta{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:34px}
+.cta a{font-size:14.5px;font-weight:500;border-radius:8px;padding:11px 18px;border:0}
+.cta .solid{background:var(--ink);color:var(--white)}
+.cta .solid:hover{background:#000}
+.facts{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.pill{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--g600);background:var(--white);
+  box-shadow:inset 0 0 0 1px var(--line-2);border-radius:999px;padding:6px 12px}
+.pill.live{color:#B93815;background:var(--orange-50);
+  box-shadow:inset 0 0 0 1px #F9DBAF;font-weight:500}
+
+/* ---------- sections ---------- */
+section{padding:74px 0;border-top:1px solid var(--line)}
+.shead{max-width:60ch;margin-bottom:40px}
+h2{font-family:var(--f-disp);font-size:clamp(32px,4vw,44px);font-weight:400;
+  line-height:1.1;letter-spacing:-.024em;color:var(--ink);margin-bottom:12px}
+.lede{color:var(--g500);font-size:17px}
+
+/* an install route: full width, so the screenshot can breathe */
+.route{border:1px solid var(--line);border-radius:14px;background:var(--white);
+  overflow:hidden;margin-bottom:22px}
+.route:last-child{margin-bottom:0}
+.rhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:20px 26px;border-bottom:1px solid var(--line);background:var(--surface)}
+.rhead h3{font-family:var(--f-body);font-size:19px;font-weight:600;color:var(--ink)}
+.rhead .where{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--g500);background:var(--white);
+  box-shadow:inset 0 0 0 1px var(--line-2);border-radius:999px;padding:4px 10px}
+.rhead .rec{margin-left:auto;font-family:var(--f-mono);font-size:10.5px;font-weight:500;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--success-700);
+  background:var(--success-50);box-shadow:inset 0 0 0 1px var(--success-200);
+  border-radius:999px;padding:4px 10px}
+/* The recommended route reads as the primary one before you read a word of it. */
+.route.rec-route{box-shadow:0 0 0 1px var(--line-2), 0 10px 30px -18px rgba(16,24,40,.22)}
+.rbody{padding:26px}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+/* Grid items default to min-width:auto, so an unwrappable command line sizes
+   its own track and gets clipped by the card. Let the pre scroll instead. */
+.rgrid > *{min-width:0}
+.route p{font-size:15.5px;color:var(--g600)}
+.route p + p{margin-top:12px}
+.route .warn{color:var(--g700)}
+.route .warn em{font-style:normal;font-family:var(--f-mono);font-size:.9em;color:#B93815}
+
+/* numbered steps. The circles are the orange of the callouts on the screenshot,
+   so list item 2 and the 2 painted on the image read as the same thing. */
+ol.steps{list-style:none;counter-reset:s;display:flex;flex-direction:column;
+  gap:13px;margin:18px 0 0}
+ol.steps li{counter-increment:s;position:relative;padding-left:34px;
+  font-size:15.5px;color:var(--g700)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:2px;
+  font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--white);
+  background:var(--orange);width:21px;height:21px;border-radius:999px;
+  display:flex;align-items:center;justify-content:center}
+ol.steps li.off::before{color:var(--g600);background:var(--white);
+  box-shadow:inset 0 0 0 1px var(--line-2)}
+ol.steps b{color:var(--ink);font-weight:600}
+
+/* the annotated screenshot. Full card width: the strip is about 5:1, and the
+   UI text inside it is only legible when it gets the whole measure. */
+figure{margin:0}
+.col{max-width:68ch}
+figure.lead{margin-bottom:28px}
+figure .shot{border:1px solid var(--line-2);border-radius:10px;overflow:hidden;
+  background:var(--n950);min-height:80px}
+figure .shot img{display:block;width:100%;height:auto}
+figcaption{margin-top:11px;font-family:var(--f-mono);font-size:11px;
+  letter-spacing:.05em;color:var(--g500);line-height:1.7}
+
+/* code */
+.snip{margin-top:18px}
+.snip:first-child{margin-top:0}
+.snip .cap{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--g500);margin-bottom:8px;
+  display:flex;align-items:center;gap:8px}
+.snip .cap span{color:var(--white);background:var(--orange);border-radius:999px;
+  width:18px;height:18px;font-size:10px;font-weight:500;letter-spacing:0;
+  display:flex;align-items:center;justify-content:center;flex:none}
+pre{background:var(--n950);border-radius:9px;padding:14px 16px;overflow-x:auto;
+  font-family:var(--f-mono);font-size:12.5px;line-height:1.75;color:#D0D5DD}
+pre b{color:#B9E6FE;font-weight:400}
+.url{font-family:var(--f-mono);font-size:12.5px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line-2);border-radius:9px;
+  padding:13px 15px;overflow-x:auto;white-space:nowrap}
+code{font-family:var(--f-mono);font-size:.87em;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:1px 6px}
+.note{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);
+  font-size:14.5px;color:var(--g500)}
+
+/* what you get */
+.gets{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.get{border-top:2px solid var(--ink);padding-top:18px}
+.get h3{font-family:var(--f-body);font-size:17px;font-weight:600;color:var(--ink);
+  margin-bottom:6px}
+.get p{font-size:15px;color:var(--g500)}
+kbd{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--ink);
+  background:var(--white);border:1px solid var(--line-2);border-bottom-width:2px;
+  border-radius:5px;padding:2px 7px}
+
+/* ---------- scope: two boxes, what it isn't and how to feed it ---------- */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+.box{border:1px solid var(--line);border-radius:14px;background:var(--white);
+  overflow:hidden;height:100%}
+.box.good{box-shadow:0 0 0 1px var(--line-2), 0 10px 30px -18px rgba(16,24,40,.22)}
+.boxhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:20px 26px;border-bottom:1px solid var(--line);background:var(--surface)}
+.boxhead h3{font-family:var(--f-body);font-size:19px;font-weight:600;color:var(--ink)}
+.boxhead .sub{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--g500)}
+.boxbody{padding:26px}
+.boxbody > ul{list-style:none;display:flex;flex-direction:column;gap:18px}
+.boxbody li{position:relative;padding-left:32px;font-size:15.5px;color:var(--g600)}
+.boxbody b{color:var(--ink);font-weight:600}
+/* A ruled-out point gets a struck circle; a practice gets a check. Same size,
+   so the two columns line up across the gap. */
+ul.nots li::before{content:"";position:absolute;left:0;top:9px;width:19px;height:19px;
+  border-radius:999px;box-shadow:inset 0 0 0 1px var(--line-2);
+  background:linear-gradient(var(--g500),var(--g500)) center/9px 1px no-repeat}
+ul.dos li::before{content:"";position:absolute;left:0;top:9px;width:19px;height:19px;
+  border-radius:999px;background:var(--success-50);
+  box-shadow:inset 0 0 0 1px var(--success-200)}
+ul.dos li::after{content:"";position:absolute;left:6px;top:14px;width:7px;height:4px;
+  border-left:1.5px solid var(--success-700);border-bottom:1.5px solid var(--success-700);
+  transform:rotate(-45deg)}
+
+/* ---------- excel ---------- */
+.rule{font-family:var(--f-mono);font-size:13px;letter-spacing:.02em;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line-2);
+  border-left:3px solid var(--orange);border-radius:0 9px 9px 0;
+  padding:15px 18px;margin-bottom:34px}
+.xl{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-bottom:38px}
+.xl .cell{border-top:2px solid var(--ink);padding-top:18px}
+.xl h3{font-family:var(--f-body);font-size:17px;font-weight:600;color:var(--ink);
+  margin-bottom:7px}
+.xl p{font-size:15px;color:var(--g500)}
+.xl p + p{margin-top:10px}
+.prep{border:1px solid var(--line);border-radius:14px;background:var(--white);padding:26px}
+.prep h3{font-family:var(--f-body);font-size:17px;font-weight:600;color:var(--ink);
+  margin-bottom:16px}
+.prep ol{list-style:none;counter-reset:p;display:flex;flex-direction:column;gap:15px}
+.prep li{counter-increment:p;position:relative;padding-left:34px;font-size:15.5px;
+  color:var(--g700)}
+.prep li::before{content:counter(p);position:absolute;left:0;top:2px;
+  font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--white);
+  background:var(--orange);width:21px;height:21px;border-radius:999px;
+  display:flex;align-items:center;justify-content:center}
+.prep b{color:var(--ink);font-weight:600}
+
+footer{border-top:1px solid var(--line);background:var(--surface)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:center;
+  padding:26px 28px;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--g500)}
+footer svg{display:block;height:15px;width:auto;color:var(--g600)}
+footer .push{margin-left:auto}
+footer a{color:var(--g500);border:0}
+footer a:hover{color:var(--ink)}
+
+@media (max-width:920px){
+  .hero{padding:56px 0 60px}
+  .rgrid{grid-template-columns:1fr;gap:28px}
+  .gets,.duo,.xl{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 1185 300" fill="currentColor" aria-label="Axoniq" role="img">
+        <path d="M60.0002 155.5V133.5C60.0002 116.932 60.0002 100 90.0002 100C120 100 120 82.5 120 60V37C120 20.4315 120 0 150 0C180 0 180 20.4315 180 37V65.9314C180 82.5 180 100 210 100C240 100 240 82.5 240 65.9314V37C240 20.4315 240 0 270 0C300 0 300 20.4315 300 37V60C300 83 300 100 270 100C240 100 240 116.931 240 133.5V155.5C240 172.069 240 200 270 200C300 200 300 222.432 300 239L300 261C300 287.5 300 300 270 300C240 300 240 288 240 271.431L240 239C240 222.432 240 200 210 200C180 200 180 222.432 180 239L180 261C180 288 180 300 150 300C120 300 120 287.5 120 270.931L120 239C120 222.432 120 200 150 200C180 200 180 172.069 180 155.5V133.5C180 116.932 180 100 150 100C120 100 120 116.931 120 133.5V155.5C120 172.069 120 200 90.0002 200C60.0002 200 59.9999 222.432 59.9999 239L60.0002 270.931C60.0002 287.5 60.0002 300 30.0002 300C0.000272751 300 0.000273227 287.5 0.000273227 261L0 239C0 222.432 0.000272751 200 30.0002 200C60.0002 200 60.0002 172.069 60.0002 155.5Z"/>
+        <path d="M1184.66 203.654V222.182H1106.3C1064.61 222.182 1040.68 190.53 1040.68 149.421C1040.68 109.084 1062.87 77.8184 1107.07 77.8184C1148.76 77.8184 1174.04 107.347 1174.04 148.649C1174.04 172.388 1163.62 194.583 1146.25 207.9C1158.79 205.391 1171.15 203.654 1184.66 203.654ZM1069.43 149.228C1069.43 180.687 1080.24 206.742 1107.07 206.742C1135.63 206.742 1145.28 177.792 1145.28 149.421C1145.28 117.19 1133.12 94.2234 1107.07 94.2234C1080.44 94.2234 1069.43 119.892 1069.43 149.228Z"/>
+        <path d="M989.636 220.059V79.748H1016.85V220.059H989.636Z"/>
+        <path d="M955.168 79.748V220.059H922.937L856.159 103.101L857.51 220.059H830.297V79.748H862.528L929.306 196.513L927.955 79.748H955.168Z"/>
+        <path d="M807.677 150C807.677 191.302 783.745 222.182 740.899 222.182C697.86 222.182 674.121 191.302 674.121 150C674.121 108.505 697.86 77.8184 740.899 77.8184C783.745 77.8184 807.677 108.505 807.677 150ZM702.878 150C702.878 177.599 712.721 205.777 740.899 205.777C769.077 205.777 778.92 177.599 778.92 150C778.92 122.208 769.077 94.2234 740.899 94.2234C712.721 94.2234 702.878 122.208 702.878 150Z"/>
+        <path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
+        <path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
+      </svg>
+      <span class="sep"></span>
+      <span class="prod">Rembrandt</span>
+    </div>
+    <nav class="mnav">
+      <a href="changelog.html">Changelog</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="mark"><img src="hero.jpg" width="96" height="96"
+      alt="Illustrated portrait of a painter in a black beret holding a brush, on a gold ground."></div>
+    <h1>Axoniq Branded Decks</h1>
+    <p class="stand">Hand it a deck, a document, or a paragraph. It hands back an Axoniq presentation as one HTML file.</p>
+    <div class="cta">
+      <a class="solid" href="#getting-it">Install Rembrandt</a>
+    </div>
+    <div class="facts">
+      <span class="pill live">v1.0 live</span>
+      <span class="pill">37 layouts</span>
+      <span class="pill">18 type styles</span>
+      <span class="pill">Editable in the browser</span>
+    </div>
+  </header>
+
+</div>
+
+<div class="wrap">
+  <section id="getting-it">
+    <div class="shead">
+      <h2>Getting it</h2>
+      <p class="lede">Two apps, two different doors. The terminal has slash commands; the desktop app does not, which is the mistake everyone makes first.</p>
+    </div>
+
+    <div class="route rec-route">
+      <div class="rhead">
+        <h3>Claude desktop</h3>
+        <span class="where">Cowork</span>
+        <span class="rec">Recommended</span>
+      </div>
+      <div class="rbody">
+        <figure class="lead">
+          <div class="shot">
+            <img src="plugins-ui.jpg" width="1324" height="248"
+              alt="The Claude desktop sidebar and Customize page, with callouts numbered one on Customize in the sidebar, two on the Plugins tab, and three on the Add marketplace item in the Add menu.">
+          </div>
+          <figcaption>The three numbered callouts match steps 1 to 3.</figcaption>
+        </figure>
+
+        <div class="col">
+          <p class="warn">There is no <code>/plugin</code> command here. Typing one gets you <em>Unknown skill: plugin</em>. Everything happens in the sidebar instead.</p>
+          <ol class="steps">
+            <li>Open <b>Customize</b> at the bottom of the sidebar.</li>
+            <li>Switch to the <b>Plugins</b> tab.</li>
+            <li>Open <b>Add</b> and choose <b>Add marketplace</b>, then enter the address below.</li>
+            <li class="off">Find Rembrandt in the list and hit <b>Install</b>.</li>
+          </ol>
+          <div class="snip">
+            <div class="cap">Marketplace address</div>
+            <div class="url">AxonIQ/rembrandt</div>
+          </div>
+        </div>
+
+        <p class="note">Leave <b>Sync automatically</b> on and new versions arrive by themselves.</p>
+      </div>
+    </div>
+
+    <div class="route">
+      <div class="rhead">
+        <h3>Claude Code</h3>
+        <span class="where">Terminal</span>
+      </div>
+      <div class="rbody">
+        <div class="rgrid">
+          <div>
+            <p>Two commands, sent one at a time. Both on one line is the other classic mistake.</p>
+            <p>Send the first, wait for it to confirm the marketplace was added, then send the second.</p>
+          </div>
+          <div>
+            <div class="snip">
+              <div class="cap"><span>1</span> Add the marketplace</div>
+              <pre>/plugin marketplace add <b>AxonIQ/rembrandt</b></pre>
+            </div>
+            <div class="snip">
+              <div class="cap"><span>2</span> Then, as a separate message</div>
+              <pre>/plugin install <b>rembrandt@axoniq</b></pre>
+            </div>
+          </div>
+        </div>
+        <p class="note">Later, when a new version ships, <code>/plugin marketplace update axoniq</code> picks it up.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>Then</h2>
+      <p class="lede">Start a fresh chat for every deck. Rembrandt reads the whole conversation, so leftovers from the last one bleed into the next and nothing catches it. Ask for a deck and it opens with its version and a recommendation to run on Opus 5 at Low effort. No version line means it did not load.</p>
+    </div>
+    <div class="gets">
+      <div class="get">
+        <h3>One file</h3>
+        <p>Named <code>Your Deck - Rembrandt v1.0.0.html</code>. Opens in any browser, works offline, nothing to install.</p>
+      </div>
+      <div class="get">
+        <h3>Present with the keyboard</h3>
+        <p>Arrows to move, <kbd>G</kbd> for every slide at once, <kbd>F</kbd> for full screen with the chrome out of the way.</p>
+      </div>
+      <div class="get">
+        <h3>Fix your own typos</h3>
+        <p>Press <kbd>E</kbd>. Text becomes editable and the type system holds no matter what you paste into it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="scope">
+    <div class="shead">
+      <h2>What it is, and what it isn't</h2>
+      <p class="lede">Rembrandt is the designer at the end of the process, not the room you write in. Knowing which half is which saves the most time.</p>
+    </div>
+
+    <div class="duo">
+      <div class="box">
+        <div class="boxhead">
+          <h3>What it isn't</h3>
+          <span class="sub">Ruled out on purpose</span>
+        </div>
+        <div class="boxbody">
+          <ul class="nots">
+            <li><b>A collaboration tool.</b> Finish collaborating on content in Notion, like the lord intended, then export a PDF and hand it to the designer.</li>
+            <li><b>A layout editor.</b> You can make any edit you want by asking Claude, but you cannot move things yourself the way you would in Slides or PowerPoint. It feels weird. Trust me, it is for your own good 🙏🏼</li>
+            <li><b>An illustrator.</b> Rembrandt will not add visuals to your slides. If they are in the original file, it will use them.</li>
+            <li><b>A reviewer.</b> Rembrandt checks your slides for coherence. It does not check your statements for veracity. That is the next iteration.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="box good">
+        <div class="boxhead">
+          <h3>Best practices</h3>
+          <span class="sub">How to hand it over</span>
+        </div>
+        <div class="boxbody">
+          <ul class="dos">
+            <li><b>Start in a text editor.</b> Markdown is king; Notion works too. Write paragraphs, tables, bullet points and lists, and use dividers for pages. Do not get bogged down in layout.</li>
+            <li><b>Attach raw Excel data, not screenshots.</b> For tables and for graphs alike.</li>
+            <li><b>Add raw code, not screenshots of code.</b></li>
+            <li><b>Use bold and underline to emphasise.</b> That is the signal Rembrandt reads to decide what carries weight on the slide.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="excel">
+    <div class="shead">
+      <h2>Using data from Excel</h2>
+      <p class="lede">Send the sheet, not a picture of the sheet. This is the single change that most improves what comes back.</p>
+    </div>
+
+    <p class="rule">Text is the content of record. A picture of the source is a lookup, not a reading pass, and Rembrandt will never guess a number off a chart it could not read.</p>
+
+    <div class="xl">
+      <div class="cell">
+        <h3>What happens to a table</h3>
+        <p>Rembrandt picks a table variant from the shape of your data: comparison, matrix, dense, or definitions, chosen by row count and cell length.</p>
+        <p>Two columns is not a table, it becomes a versus. Cells full of prose are not a table either, they become cards.</p>
+      </div>
+      <div class="cell">
+        <h3>What happens to your numbers</h3>
+        <p>A handful of key figures becomes a numbers grid sized to the count: one hero figure, or a grid of four, six or nine.</p>
+        <p>A target against an actual is drawn as a gauge or before and after bars, with the hero numeral and a reading line under it. Never two numerals and a caption.</p>
+      </div>
+      <div class="cell">
+        <h3>What happens to a chart</h3>
+        <p>Your Excel chart is not embedded. Rembrandt redraws from the series in the master's own style, so what it needs is the numbers behind the picture.</p>
+        <p>If a value exists only inside a chart image, it becomes a question for you rather than a slide.</p>
+      </div>
+    </div>
+
+    <div class="prep">
+      <h3>Preparing the sheet</h3>
+      <ol>
+        <li><b>One table per range, with a real header row.</b> Merged header cells and stacked title rows above the data are the main reason columns get lost on the way in.</li>
+        <li><b>Units in the header, not in every cell.</b> A column called Revenue (&euro;m) beats <code>&euro;1.2m</code> repeated forty times, and it keeps the cells short enough for a readable variant.</li>
+        <li><b>Pre-aggregate.</b> A four hundred row export is a data source, not a slide. Send the summary you would actually present and keep the full extract attached underneath it.</li>
+        <li><b>Say which figure is the point.</b> Most tables have one number the slide is really about. Naming it is the difference between a table and a hero number.</li>
+        <li><b>Keep the file attached even if you paste the numbers.</b> Anything ambiguous then gets checked against the source instead of guessed at.</li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <svg viewBox="0 0 1185 300" fill="currentColor" aria-label="Axoniq" role="img">
+      <path d="M60.0002 155.5V133.5C60.0002 116.932 60.0002 100 90.0002 100C120 100 120 82.5 120 60V37C120 20.4315 120 0 150 0C180 0 180 20.4315 180 37V65.9314C180 82.5 180 100 210 100C240 100 240 82.5 240 65.9314V37C240 20.4315 240 0 270 0C300 0 300 20.4315 300 37V60C300 83 300 100 270 100C240 100 240 116.931 240 133.5V155.5C240 172.069 240 200 270 200C300 200 300 222.432 300 239L300 261C300 287.5 300 300 270 300C240 300 240 288 240 271.431L240 239C240 222.432 240 200 210 200C180 200 180 222.432 180 239L180 261C180 288 180 300 150 300C120 300 120 287.5 120 270.931L120 239C120 222.432 120 200 150 200C180 200 180 172.069 180 155.5V133.5C180 116.932 180 100 150 100C120 100 120 116.931 120 133.5V155.5C120 172.069 120 200 90.0002 200C60.0002 200 59.9999 222.432 59.9999 239L60.0002 270.931C60.0002 287.5 60.0002 300 30.0002 300C0.000272751 300 0.000273227 287.5 0.000273227 261L0 239C0 222.432 0.000272751 200 30.0002 200C60.0002 200 60.0002 172.069 60.0002 155.5Z"/>
+      <path d="M1184.66 203.654V222.182H1106.3C1064.61 222.182 1040.68 190.53 1040.68 149.421C1040.68 109.084 1062.87 77.8184 1107.07 77.8184C1148.76 77.8184 1174.04 107.347 1174.04 148.649C1174.04 172.388 1163.62 194.583 1146.25 207.9C1158.79 205.391 1171.15 203.654 1184.66 203.654ZM1069.43 149.228C1069.43 180.687 1080.24 206.742 1107.07 206.742C1135.63 206.742 1145.28 177.792 1145.28 149.421C1145.28 117.19 1133.12 94.2234 1107.07 94.2234C1080.44 94.2234 1069.43 119.892 1069.43 149.228Z"/>
+      <path d="M989.636 220.059V79.748H1016.85V220.059H989.636Z"/>
+      <path d="M955.168 79.748V220.059H922.937L856.159 103.101L857.51 220.059H830.297V79.748H862.528L929.306 196.513L927.955 79.748H955.168Z"/>
+      <path d="M807.677 150C807.677 191.302 783.745 222.182 740.899 222.182C697.86 222.182 674.121 191.302 674.121 150C674.121 108.505 697.86 77.8184 740.899 77.8184C783.745 77.8184 807.677 108.505 807.677 150ZM702.878 150C702.878 177.599 712.721 205.777 740.899 205.777C769.077 205.777 778.92 177.599 778.92 150C778.92 122.208 769.077 94.2234 740.899 94.2234C712.721 94.2234 702.878 122.208 702.878 150Z"/>
+      <path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
+      <path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
+    </svg>
+    <span>Rembrandt v1.0.0</span>
+    <span class="push"><a href="https://axoniq.io">axoniq.io</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
