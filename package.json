@@ -1,0 +1,13 @@
+{
+  "name": "rembrandt",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Authoring-time tools for the Rembrandt kit. Not shipped to deck consumers.",
+  "scripts": {
+    "verify": "node kit/verify.js",
+    "postinstall-note": "echo 'run: npx playwright install chromium'"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0"
+  }
+}

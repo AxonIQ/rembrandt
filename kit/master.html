@@ -1,0 +1,1636 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Axoniq Master Deck</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap">
+<style>
+/* ============================================================
+   AXONIQ MASTER SLIDE DECK
+   Canvas 1920x1080 · 12 cols (margin 64, gutter 20) · rows from y=184
+   Fonts: Inter (display), Geist (body), Geist Mono (meta). Never others.
+   Neutrals + status: Untitled UI. Spark gradient sampled from brand.
+   ============================================================ */
+:root{
+  /* Untitled UI neutrals */
+  --n25:#FCFCFD; --n50:#F9FAFB; --n100:#F2F4F7; --n200:#EAECF0; --n300:#D0D5DD;
+  --n400:#98A2B3; --n500:#667085; --n600:#475467; --n700:#344054; --n800:#1D2939;
+  --n900:#101828; --n950:#0C111D;
+  /* brand */
+  --blue:#2E90FA; --blue-500:#2E90FA; --blue-600:#1570EF; --blue-700:#175CD3; --blue-50:#EFF8FF; --blue-200:#B2DDFF;
+  --orange:#FF4405; --orange-500:#FF4405; --orange-50:#FFF4ED; --orange-200:#F9DBAF; --orange-700:#B93815;
+  --success-50:#ECFDF3; --success-200:#ABEFC6; --success-500:#17B26A; --success-700:#067647;
+  --warning-50:#FFFAEB; --warning-200:#FEDF89; --warning-500:#F79009; --warning-700:#B54708;
+  --error-50:#FEF3F2; --error-200:#FECDCA; --error-500:#F04438; --error-700:#B42318;
+  --violet-50:#F5F3FF; --violet-200:#DDD6FE; --violet-500:#7A5AF8; --violet-700:#5925DC;
+  --ink:#0A0D14;
+  /* presenter chrome. Dark, so the slide is the only lit surface. */
+  --ch-bg:#080A0F; --ch-panel:#12151C; --ch-line:#232834; --ch-dim:#7A8699;
+  --ch-text:#C3CAD6; --ch-strong:#F2F4F7; --ch-hover:#1B1F29;
+  /* spark gradient, sampled from the master deck header */
+  --spark:linear-gradient(90deg,#EAEBEC 0%,#D9E1EC 3.2%,#C9D8ED 6.5%,#B9CDEF 9.7%,#A9C4EF 13%,#99B9EE 15.5%,#96ACD9 17.5%,#9D93AC 18.8%,#B27E7E 19.7%,#D46241 21.3%,#E4572E 22.7%,#D66C4D 24.4%,#CB7C68 26%,#C48B83 27.6%,#BF9A9C 29.2%,#BDA8B2 30.8%,#BEB5C4 32.4%,#C2C2D3 34%,#C8CFDF 35.7%,#D3D9E6 37.3%,#DEE4EB 39%,#EAEBEC 40.6%,#EAEBEC 100%);
+  --spark-strong:linear-gradient(90deg,#9FBFEE 0%,#99B9EE 22%,#B27E7E 38%,#FF4405 55%,#D98F78 74%,#EAD9D4 100%);
+  --dots:radial-gradient(circle,#E2E4E8 1.15px,transparent 1.35px);
+  --dots-light:radial-gradient(circle,rgba(255,255,255,.10) 1.15px,transparent 1.35px);
+  --checker:repeating-conic-gradient(#FAFAFA 0% 25%,#EBEBEB 0% 50%);
+  --f-display:'Inter','Inter Fallback','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --f-body:'Geist','Inter','Helvetica Neue',Arial,sans-serif;
+  --f-mono:'Geist Mono','SF Mono',Menlo,Consolas,monospace;
+}
+[hidden]{display:none!important}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--ch-bg); color:var(--ch-text); font-family:var(--f-body);
+  overflow:hidden; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible{outline:2px solid var(--blue-600);outline-offset:2px;border-radius:6px}
+
+/* ---------- viewer chrome ---------- */
+#app{height:100%;display:flex;flex-direction:column}
+#stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+#frame{position:relative;box-shadow:0 0 0 1px rgba(255,255,255,.07),0 28px 70px -14px rgba(0,0,0,.72);border-radius:2px}
+#scaler{transform-origin:0 0;position:absolute;top:0;left:0}
+#hud{
+  height:52px;flex:none;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:20px;
+  padding:0 20px;background:var(--ch-panel);border-top:1px solid var(--ch-line);
+  font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;color:var(--ch-dim);
+  user-select:none;
+}
+/* --- shell chrome v0.4 --- */
+#hud .hud-brand{display:flex;align-items:center;gap:10px;color:var(--ch-strong)}
+#hud .hud-brand svg{width:14px;height:14px;color:var(--ch-strong)}
+#hud .hud-btn{padding:6px 10px;border:1px solid var(--ch-line);border-radius:8px;background:transparent;color:var(--ch-text);letter-spacing:.08em;font-size:11.5px;line-height:1}
+#hud .hud-btn:hover{border-color:#39414F;background:var(--ch-hover);color:var(--ch-strong)}
+#hud .hud-btn[aria-pressed="true"]{border-color:var(--blue-500);color:#fff;background:rgba(46,144,250,.16)}
+#hud .hud-right{display:flex;align-items:center;justify-content:space-between;gap:20px;min-width:0}
+/* the meta group: counter and deck name are fixed, only the slide name grows,
+   and it grows into its own reserved box so nothing to its left ever shifts. */
+#hud .hud-meta{display:flex;align-items:center;gap:9px;min-width:0}
+#hud .hud-meta .sep{color:#39414F}
+#hud #counter{color:var(--ch-strong);font-variant-numeric:tabular-nums}
+#hud #deckname{color:var(--ch-text);white-space:nowrap}
+#hud #slidename{color:var(--ch-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+#hud .hud-acts{display:flex;align-items:center;gap:8px;flex:none}
+/* full screen: chrome slides away when the mouse rests, slide goes edge to edge */
+body.fs #hud{position:fixed;left:0;right:0;bottom:0;z-index:30;transition:transform .18s,opacity .18s}
+body.fs.fs-idle #hud{transform:translateY(100%);opacity:0;pointer-events:none}
+body.fs #frame{border-radius:0;box-shadow:none}
+body.fs.fs-idle .narrow{opacity:0}
+body.fs.fs-idle{cursor:none}
+/* first-run editing notice */
+#rb-note{position:fixed;left:50%;bottom:72px;transform:translateX(-50%);z-index:55;max-width:640px;
+  display:flex;gap:14px;align-items:flex-start;background:var(--ch-panel);border:1px solid var(--ch-line);
+  border-radius:12px;padding:16px 16px 16px 18px;box-shadow:0 18px 48px -12px rgba(0,0,0,.7);
+  font-family:var(--f-mono);font-size:12px;line-height:1.65;letter-spacing:.045em;color:var(--ch-text)}
+#rb-note b{display:block;color:var(--ch-strong);font-weight:500;letter-spacing:.09em;margin-bottom:7px}
+#rb-note ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+#rb-note li{padding-left:14px;position:relative}
+#rb-note li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:999px;background:var(--orange-500)}
+#rb-note .nx{flex:none;color:var(--ch-dim);font-size:15px;line-height:1;padding:3px 4px;border-radius:6px}
+#rb-note .nx:hover{color:var(--ch-strong);background:var(--ch-hover)}
+.navzone{position:absolute;top:0;bottom:0;width:18%;z-index:5;cursor:pointer}
+.navzone:focus-visible{outline:none}
+#zoneL{left:0}#zoneR{right:0}
+
+/* ---------- overview grid ---------- */
+#overview{
+  position:fixed;inset:0;z-index:40;overflow:auto;background:var(--ch-bg);padding:28px;
+}
+#overview .ov-head{display:flex;align-items:baseline;gap:16px;margin:4px 6px 20px;
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;color:var(--ch-dim)}
+#overview .ov-head b{font-weight:600;color:var(--ch-strong);letter-spacing:.1em}
+#ovgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:18px}
+.th{display:block;text-align:left;border-radius:10px;padding:0}
+.th-frame{width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--ch-line);border-radius:8px;background:#fff;position:relative;box-shadow:0 8px 20px -8px rgba(0,0,0,.6)}
+.th:hover .th-frame,.th:focus-visible .th-frame{border-color:#4A5364}
+.th.cur .th-frame{outline:2px solid var(--blue-500);outline-offset:1px}
+.th-frame .slide{transform-origin:0 0;position:absolute;top:0;left:0}
+.th-cap{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em;display:flex;gap:8px;align-items:baseline;margin:8px 2px 0;color:var(--ch-dim)}
+.th-cap b{color:var(--ch-strong);font-weight:600}
+
+/* ============================================================
+   SLIDE CANVAS
+   ============================================================ */
+.slide{
+  width:1920px;height:1080px;background:#fff;position:absolute;top:0;left:0;
+  overflow:hidden;color:var(--n900);font-family:var(--f-body);
+}
+.slide .body{position:absolute;left:64px;right:64px;top:184px;bottom:68px}
+.cols{display:grid;grid-template-columns:repeat(12,1fr);gap:20px;height:100%}
+
+/* ---------- header (all non-cover slides) ---------- */
+.hd{
+  position:absolute;top:0;left:0;right:0;height:108px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 64px;background-image:var(--dots);background-size:12.5px 14px;background-position:6px 8px;
+}
+.hd::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--spark)}
+.hd-meta{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+
+/* ---------- logo lockup ---------- */
+.logo{display:inline-flex;align-items:center;gap:12px;color:var(--ink)}
+.logo svg{display:block;width:126.5px;height:32px;flex:none}
+.logo .word{font-family:var(--f-display);font-weight:700;font-size:26px;letter-spacing:.055em;line-height:1;transform:translateY(1px)}
+.logo--light{color:#fff}
+.logo--lg svg{width:170px;height:43px}
+.logo--lg .word{font-size:35px}
+
+/* ---------- type ---------- */
+.t-block{display:flex;flex-direction:column;gap:14px}
+h1.title{font-family:var(--f-display);font-size:54px;line-height:1.1;font-weight:530;letter-spacing:-.015em;color:var(--ink);text-wrap:balance}
+.t-sub{font-family:var(--f-body);font-size:25px;line-height:1.52;font-weight:400;letter-spacing:0;color:var(--n500)}
+.display{font-family:var(--f-display);font-size:122px;line-height:1.07;font-weight:470;letter-spacing:-.025em;color:var(--ink)}
+.lede{font-family:var(--f-body);font-size:25px;line-height:1.52;font-weight:400;letter-spacing:0;color:var(--n800)}
+.foot{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em;position:absolute;left:0;bottom:0;color:var(--n400)}
+
+/* ---------- shared bits ---------- */
+.ph{background:var(--checker) 0 0/128px 128px}
+.card{border:1.5px solid var(--n200);border-radius:20px;background:#fff;padding:36px}
+.card--tint{background:var(--n50);border-color:transparent}
+.chip{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:999px;white-space:nowrap}
+.chip--cat{border:1.5px solid var(--n200);color:var(--n700);background:#fff}
+.chip--cat i{width:9px;height:9px;border-radius:999px;flex:none}
+.chip--st{border:1.5px solid}
+.st-done{background:var(--success-50);border-color:var(--success-200);color:var(--success-700)}
+.st-prog{background:var(--blue-50);border-color:var(--blue-200);color:var(--blue-700)}
+.st-next{background:var(--n50);border-color:var(--n200);color:var(--n600)}
+.st-risk{background:var(--warning-50);border-color:var(--warning-200);color:var(--warning-700)}
+.st-block{background:var(--error-50);border-color:var(--error-200);color:var(--error-700)}
+.c-server{background:var(--blue-500)} .c-framework{background:var(--orange)}
+.c-console{background:var(--success-500)} .c-insights{background:var(--violet-500)}
+.c-neutral{background:var(--n400)}
+.hairline{height:1.5px;background:var(--n200)}
+.sparkline{height:3px;background:var(--spark-strong);border-radius:2px}
+.num{font-family:var(--f-display);font-variant-numeric:tabular-nums;letter-spacing:-.03em;font-weight:560;color:var(--ink)}
+
+/* dark covers */
+.slide--dark{background:#060A12;color:#fff}
+.slide--dark .bg{position:absolute;inset:0;overflow:hidden;
+  background-image:
+    radial-gradient(1100px 700px at 84% 12%,rgba(46,144,250,.30),transparent 62%),
+    radial-gradient(900px 640px at 8% 96%,rgba(228,87,46,.30),transparent 60%),
+    var(--dots-light);
+  background-size:auto,auto,12.5px 14px}
+.slide--dark .bg::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(1400px 900px at 50% 50%,transparent 40%,rgba(4,6,10,.5) 100%)}
+
+/* ============================================================
+   PER-SLIDE LAYOUTS
+   ============================================================ */
+
+/* -- covers -- */
+.cover-a .logo{position:absolute;top:38px;left:64px}
+.cover-a .cv-main{position:absolute;left:64px;right:64px;bottom:170px;display:flex;flex-direction:column;gap:36px}
+.cover-a .cv-title{font-family:var(--f-display);font-size:122px;line-height:1.07;font-weight:470;letter-spacing:-.025em;color:var(--ink);max-width:1450px;text-wrap:balance}
+.cover-a .cv-sub{font-family:var(--f-body);font-size:25px;line-height:1.52;font-weight:400;letter-spacing:0;color:var(--n500);max-width:840px}
+.cv-meta{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;position:absolute;left:64px;right:64px;bottom:64px;display:flex;justify-content:space-between;color:var(--n500)}
+.cv-meta::before{content:"";position:absolute;left:0;right:0;top:-34px;height:2px;background:var(--spark)}
+.cover-b .logo{position:absolute;top:38px;left:64px}
+.cover-b .cv-main{position:absolute;left:64px;right:64px;bottom:170px;display:flex;flex-direction:column;gap:34px}
+.cover-b .cv-title{font-family:var(--f-display);font-size:122px;line-height:1.07;font-weight:470;letter-spacing:-.025em;color:#fff;max-width:1500px;text-wrap:balance}
+.cover-b .cv-sub{font-family:var(--f-body);font-size:25px;line-height:1.52;font-weight:400;letter-spacing:0;color:rgba(255,255,255,.68);max-width:820px}
+.cover-b .cv-meta{color:rgba(255,255,255,.55)}
+.cover-b .cv-meta::before{opacity:.85}
+
+/* -- index -- */
+.idx-list{display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.idx-row{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;padding:26px 0;border-bottom:1.5px solid var(--n200)}
+.idx-row:last-child{border-bottom:0;padding-bottom:0}
+.idx-num{font-family:var(--f-mono);font-size:96px;line-height:1;font-weight:400;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--n300)}
+.idx-name{font-family:var(--f-display);font-size:40px;line-height:1.16;font-weight:540;letter-spacing:-.012em;color:var(--ink)}
+.idx-desc{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0;color:var(--n500);margin-top:6px}
+/* chapter-cover states: .cur = chapter being entered, .past = already presented */
+.idx-row.cur .idx-num{color:var(--ink)}
+.idx-row.past .idx-name,.idx-row.past .idx-desc{color:var(--n400)}
+.idx-row.past .idx-num{color:var(--n200)}
+.cat-row{display:grid;grid-template-columns:64px 1fr auto auto;gap:22px;align-items:baseline;padding:19.5px 0;border-bottom:1px solid var(--n200)}
+.cat-row .l{flex:1;border-bottom:2px dotted var(--n300);transform:translateY(-6px)}
+.cat-name{font-family:var(--f-body);font-size:21px;line-height:1.4;font-weight:560;letter-spacing:-.005em;color:var(--n900);display:flex;align-items:baseline;gap:22px}
+.cat-count{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--n400)}
+.cat-page{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--ink)}
+
+/* -- chapters -- */
+.chap-a .display{position:absolute;left:0;bottom:0}
+.chap-b .ch-title{font-family:var(--f-display);font-size:88px;line-height:1.08;font-weight:500;letter-spacing:-.022em;position:absolute;left:0;bottom:230px;max-width:1050px;color:var(--ink);text-wrap:balance}
+.ch-rail{position:absolute;right:0;bottom:0;display:flex;flex-direction:column;gap:17px;align-items:flex-end}
+.ch-rail span{font-family:var(--f-body);font-size:21px;line-height:1.4;font-weight:560;letter-spacing:-.005em;color:var(--n500);display:flex;gap:16px;align-items:baseline}
+.ch-rail .ch-n{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:inherit}
+.ch-rail .past{color:var(--n300)}
+.ch-rail .cur{color:var(--ink);font-weight:560}
+.ch-rail .cur::before{content:"\2192";color:var(--orange);margin-right:6px;font-weight:500}
+.ch-rail--h{position:absolute;left:0;right:auto;bottom:0;flex-direction:row;gap:40px;align-items:baseline}
+.chap-b .ch-items{font-family:var(--f-mono);font-size:15px;line-height:1.3;font-weight:500;letter-spacing:.14em;text-transform:uppercase;position:absolute;left:0;bottom:0;display:flex;gap:56px;color:var(--n500)}
+.chap-b .ch-items span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--orange);margin-right:14px;transform:translateY(-1px)}
+
+/* -- cards -- */
+.head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
+.grid-cards{display:grid;gap:20px}
+.card .c-idx{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--n400)}
+.card h3{font-family:var(--f-display);font-size:40px;line-height:1.16;font-weight:540;letter-spacing:-.012em;color:var(--ink)}
+.card p{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0;color:var(--n600)}
+.cards3 .card{display:flex;flex-direction:column;gap:18px;padding:40px;justify-content:flex-end}
+.cards3 .card .ico{margin-bottom:auto;width:44px;height:44px}
+.cards3 .card h3{margin-top:auto}
+.cards3 .card p{min-height:4.7em}
+.cards3 .card h3{font-family:var(--f-display);font-size:40px;line-height:1.16;font-weight:540;letter-spacing:-.012em}
+.cards3 .card p{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0}
+.cards2 .card{display:flex;flex-direction:column;gap:22px;padding:52px}
+.cards2 .card h3{font-family:var(--f-display);font-size:40px;line-height:1.16;font-weight:540;letter-spacing:-.012em}
+.cards2 .card p{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0;max-width:640px}
+.cards2 .chips{display:flex;gap:10px;margin-top:auto}
+.cards4 .card{display:flex;flex-direction:column;gap:14px;padding:32px}
+.cards4 .card h3{margin-top:auto}
+.cards4 .card h3{font-family:var(--f-display);font-size:33px;line-height:1.2;font-weight:550;letter-spacing:-.01em}
+.cards4 .card p{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0}
+.cards6 .card{display:flex;flex-direction:column;gap:10px;padding:28px 30px;border-radius:16px;justify-content:flex-end}
+.cards6 .card .ico{margin-bottom:auto}
+.cards6 .card h3{font-family:var(--f-body);font-size:21px;line-height:1.4;font-weight:560;letter-spacing:-.005em}
+.cards6 .card p{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0;color:var(--n500)}
+.prodmark{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.prodmark svg{width:22px;height:22px}
+
+/* -- image slides -- */
+.img-cap{font-family:var(--f-body);font-size:17px;line-height:1.55;font-weight:400;letter-spacing:0;color:var(--n500)}
+.img-kick{display:flex;align-items:center;gap:12px}
+
+/* -- numbers -- */
+.stat .v{font-family:var(--f-display);font-size:96px;line-height:1;font-weight:560;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat .l{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0;color:var(--n500);max-width:330px}
+.stat .s{font-family:var(--f-body);font-size:17px;line-height:1.55;font-weight:400;letter-spacing:0;color:var(--n400)}
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.stats4 .stat{border-left:1.5px solid var(--n200);padding-left:34px;display:flex;flex-direction:column;gap:18px}
+.stats6{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.stats6 .stat{border:1.5px solid var(--n200);border-radius:20px;padding:36px 38px;display:flex;flex-direction:column;gap:14px;justify-content:flex-end}
+.stats6 .stat .ico{margin-bottom:auto;color:var(--n500)}
+.stats6 .v{font-family:var(--f-display);font-size:58px;line-height:1;font-weight:560;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.stats9{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1.5px solid var(--n200);border-radius:20px;overflow:hidden}
+.stats9 .stat{padding:34px 40px;display:flex;flex-direction:column;gap:10px;justify-content:flex-end;border-right:1.5px solid var(--n200);border-bottom:1.5px solid var(--n200)}
+.stats9 .stat:nth-child(3n){border-right:0}
+.stats9 .stat:nth-child(n+7){border-bottom:0}
+.stats9 .v{font-family:var(--f-display);font-size:58px;line-height:1;font-weight:560;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.stats9 .l{font-family:var(--f-body);font-size:17px;line-height:1.55;font-weight:400;letter-spacing:0}
+
+/* -- tables -- */
+table{border-collapse:collapse;width:100%}
+.tbl th{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--n500);text-align:left;padding:0 28px 18px 28px;border-bottom:2px solid var(--ink)}
+.tbl td{font-family:var(--f-body);font-size:21px;line-height:1.5;font-weight:400;letter-spacing:0;padding:32px 28px;border-bottom:1.5px solid var(--n200);vertical-align:top}
+.tbl tr>*:first-child{padding-left:0}
+.tbl tr>*:last-child{padding-right:0}
+.tbl--dense td{padding:17px 20px;border-bottom:1px solid var(--n200)}
+.tbl--dense th{padding:0 20px 12px 20px}
+.mono{font-family:var(--f-mono)}
+.tnum{font-variant-numeric:tabular-nums}
+.glyph-y{color:var(--success-500);font-weight:600}
+.glyph-p{color:var(--n400)}
+.glyph-n{color:var(--n300)}
+.col-hi{background:var(--n50)}
+
+/* -- plan -- */
+.plan{display:flex;flex-direction:column}
+.plan-row{display:grid;align-items:center;gap:28px;border-bottom:1.5px solid var(--n200);padding:24px 0}
+.plan-row>.chip{justify-self:start}
+.plan-task{font-family:var(--f-display);font-size:33px;line-height:1.2;font-weight:550;letter-spacing:-.01em;color:var(--ink)}
+.plan-desc{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0;color:var(--n500);margin-top:6px}
+.owner{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;width:44px;height:44px;border-radius:999px;background:var(--n100);border:1.5px solid var(--n200);
+  display:inline-flex;align-items:center;justify-content:center;color:var(--n600)}
+
+/* -- roadmap -- */
+.rm-axis{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;display:grid;gap:0;color:var(--n500)}
+.rm-bar{border-radius:12px;background:var(--n50);border:1.5px solid var(--n200);padding:20px 24px;display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden}
+.rm-bar::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+.rm-bar h4{font-family:var(--f-body);font-size:21px;line-height:1.4;font-weight:560;letter-spacing:-.005em;color:var(--ink)}
+.rm-bar .rm-when{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em;color:var(--n400)}
+.rm-bar--server::before{background:var(--blue-500)}
+.rm-bar--framework::before{background:var(--orange)}
+.rm-bar--platform::before{background:var(--violet-500)}
+
+/* -- team -- */
+.face{background:var(--checker) 0 0/96px 96px;border-radius:18px}
+.tm-name{font-family:var(--f-display);font-size:33px;line-height:1.2;font-weight:550;letter-spacing:-.01em;color:var(--ink)}
+.tm-role{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--n500)}
+.tm-line{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0;color:var(--n600)}
+
+/* -- extras -- */
+.quote-mark{width:72px;height:6px;background:var(--spark-strong);border-radius:3px}
+.vs-line{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.vs-item{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0;padding:26px 0;border-bottom:1.5px solid var(--n200);color:var(--n700)}
+.logo-tile{border:1.5px solid var(--n200);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--n400)}
+
+/* -- layout utilities -- */
+.stack{display:flex;flex-direction:column;gap:52px;height:100%}
+.grow{flex:1;min-height:0}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.title-sm{font-family:var(--f-display);font-size:40px;line-height:1.16;font-weight:540;letter-spacing:-.012em;color:var(--ink);text-wrap:balance}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip--sm{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;height:26px;padding:0 11px}
+.stat .m{font-family:var(--f-body);font-size:21px;line-height:1.4;font-weight:560;letter-spacing:-.005em;color:var(--ink)}
+.tm-name-lg{font-family:var(--f-display);font-size:54px;line-height:1.1;font-weight:530;letter-spacing:-.015em;color:var(--ink)}
+
+/* -- matrix + definition tables -- */
+.tbl--matrix th,.tbl--matrix td{text-align:center}
+.tbl--matrix th:first-child,.tbl--matrix td:first-child{text-align:left}
+.tbl--matrix td{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0;padding-top:25px;padding-bottom:25px}
+.tbl--matrix td:first-child{font-family:var(--f-body);font-size:21px;line-height:1.4;font-weight:560;letter-spacing:-.005em;color:var(--n800)}
+.half{display:inline-block;width:15px;height:15px;border-radius:50%;border:2px solid var(--n400);background:linear-gradient(90deg,var(--n400) 50%,transparent 50%)}
+.cellnote{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em;display:block;color:var(--n400);margin-top:7px}
+.def-row{display:grid;grid-template-columns:4fr 8fr;gap:20px;padding:34px 0;border-top:1.5px solid var(--n200)}
+.def-term{font-family:var(--f-display);font-size:33px;line-height:1.2;font-weight:550;letter-spacing:-.01em;color:var(--ink);max-width:420px}
+.def-body{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0;color:var(--n600);max-width:1000px}
+
+/* -- roadmap A (quarter lanes) -- */
+.rm-wrap{position:relative;height:100%;display:flex;flex-direction:column;gap:0}
+.rm-head{display:grid;grid-template-columns:190px repeat(8,1fr);padding-bottom:18px;border-bottom:1.5px solid var(--n200)}
+.rm-head span{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;grid-column:span 2;color:var(--n500);padding-left:16px}
+.rm-lanes{position:relative;flex:1;display:flex;flex-direction:column;justify-content:space-evenly}
+.rm-row{display:grid;grid-template-columns:190px repeat(8,1fr);gap:14px 0;align-items:center}
+.rm-lane-label{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--n600);display:flex;align-items:center;gap:12px}
+.rm-lane-label i{width:9px;height:9px;border-radius:999px;flex:none}
+.rm-guide{position:absolute;top:0;bottom:0;width:0;border-left:1.5px dashed var(--n200)}
+.rm-today{position:absolute;top:-42px;bottom:0;width:0;border-left:2px solid var(--blue-500);z-index:2}
+.rm-today em{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em;position:absolute;top:0;left:10px;font-style:normal;color:var(--blue-700);background:var(--blue-50);border:1px solid var(--blue-200);border-radius:6px;padding:4px 8px;white-space:nowrap}
+.rm-bar{margin-right:14px}
+
+/* -- roadmap B (timeline) -- */
+.tl{position:relative;height:100%}
+.tl-axis{position:absolute;left:0;right:0;top:56%;height:2px;background:var(--n200)}
+.tl-months{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;position:absolute;left:0;right:0;top:calc(56% + 20px);display:flex;justify-content:space-between;color:var(--n400)}
+.tl-m{position:absolute;width:320px}
+.tl .tl-dot{position:absolute;width:15px;height:15px;border-radius:999px;background:#fff;border:3.5px solid var(--n400);transform:translateX(-50%)}
+.tl .tl-stem{position:absolute;width:0;border-left:1.5px solid var(--n300);transform:translateX(-50%)}
+.tl-card{position:relative;border:1.5px solid var(--n200);border-radius:14px;background:#fff;padding:20px 24px}
+.tl-card .tl-date{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em;color:var(--n500)}
+.tl-card h4{font-family:var(--f-body);font-size:21px;line-height:1.4;font-weight:560;letter-spacing:-.005em;color:var(--ink);margin:7px 0 6px}
+.tl-card p{font-family:var(--f-body);font-size:17px;line-height:1.55;font-weight:400;letter-spacing:0;color:var(--n500)}
+
+/* -- diagram -- */
+.dg{position:relative;height:100%;min-height:730px}
+.dg-box{position:absolute;border:1.5px solid var(--n200);border-radius:18px;background:#fff;padding:26px 30px;display:flex;flex-direction:column;gap:8px}
+.dg-box h4{font-family:var(--f-body);font-size:21px;line-height:1.4;font-weight:560;letter-spacing:-.005em;color:var(--ink)}
+.dg-box .dg-sub{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em;color:var(--n500)}
+.dg-core{background-image:var(--dots);background-size:12.5px 14px;background-color:var(--n25)}
+.dg-core .dg-replicas{display:flex;gap:10px;margin-top:18px}
+.dg-core .dg-replicas span{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em;color:var(--n600);border:1.5px solid var(--n300);background:#fff;border-radius:8px;padding:7px 12px}
+.dg-ctx{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.dg-ctx span{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--n600);border-top:1px solid var(--n200);padding-top:8px}
+.dg-note{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em;margin-top:auto;color:var(--orange-500)}
+.dg svg.wires{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.dg .wire{stroke:var(--n300);stroke-width:2;fill:none}
+.dg .wire-lab{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em;fill:var(--n500)}
+
+/* -- versus -- */
+.vs-wrap{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:20px;height:100%}
+.vs-panel{border-radius:24px;padding:56px 60px;display:flex;flex-direction:column;justify-content:flex-end}
+.vs-panel--l{background:var(--n50)}
+.vs-panel--r{border:1.5px solid var(--n200)}
+.vs-tag{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--n500)}
+.vs-h{font-family:var(--f-display);font-size:40px;line-height:1.16;font-weight:540;letter-spacing:-.012em;color:var(--ink);margin:18px 0 30px}
+.vs-badge{font-family:var(--f-mono);font-size:15px;line-height:1.3;font-weight:500;letter-spacing:.14em;text-transform:uppercase;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:68px;height:68px;border-radius:999px;background:#fff;border:1.5px solid var(--n200);display:flex;align-items:center;justify-content:center;color:var(--ink);box-shadow:0 2px 8px rgba(16,24,40,.06);z-index:2}
+
+/* -- quote / statement -- */
+.q-text{font-family:var(--f-display);font-size:54px;line-height:1.1;font-weight:530;letter-spacing:-.015em;color:var(--ink);max-width:1560px;text-wrap:balance}
+.q-attr{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--n500)}
+.stmt{font-family:var(--f-display);font-size:122px;line-height:1.07;font-weight:470;letter-spacing:-.025em;color:var(--ink);text-wrap:balance}
+.stmt .fs{color:var(--orange)}
+
+/* -- text styles (documented on spec/type, slide 37) -- */
+.title-sm--c{font-family:var(--f-display);font-size:33px;line-height:1.2;font-weight:550;letter-spacing:-.01em;color:var(--ink);text-wrap:balance}
+.body1{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0;color:var(--n600)}
+.body1--c{font-family:var(--f-body);font-size:17.5px;line-height:1.5;font-weight:400;letter-spacing:0;color:var(--n600)}
+.ts-row{border-top:1px solid var(--n200);padding:5px 0 5px;display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.ts-row:first-child{border-top:0;padding-top:0}
+.ts-spec{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em;color:var(--n400)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.narrow{position:absolute;top:50%;transform:translateY(-50%);z-index:8;width:52px;height:52px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:var(--ch-panel);border:1px solid var(--ch-line);color:var(--ch-text);box-shadow:0 6px 18px -6px rgba(0,0,0,.6);cursor:pointer;opacity:.45;transition:opacity .15s,border-color .15s,color .15s}
+#stage:hover .narrow{opacity:1}
+.narrow:hover{border-color:#4A5364;background:var(--ch-hover);color:#fff}
+.narrow svg{width:20px;height:20px}
+.narrow[disabled]{opacity:.18;cursor:default;pointer-events:none}
+
+
+/* ---- TEXT STYLES. Every text node on a slide is exactly one of these. ---- */
+.display{font-family:var(--f-display);font-size:122px;line-height:1.07;font-weight:470;letter-spacing:-.025em}
+.display-sm{font-family:var(--f-display);font-size:88px;line-height:1.08;font-weight:500;letter-spacing:-.022em}
+.title{font-family:var(--f-display);font-size:54px;line-height:1.1;font-weight:530;letter-spacing:-.015em}
+.title-sm{font-family:var(--f-display);font-size:40px;line-height:1.16;font-weight:540;letter-spacing:-.012em}
+.title-sm--c{font-family:var(--f-display);font-size:33px;line-height:1.2;font-weight:550;letter-spacing:-.01em}
+.num{font-family:var(--f-display);font-size:96px;line-height:1;font-weight:560;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.num-sm{font-family:var(--f-display);font-size:58px;line-height:1;font-weight:560;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.num-xl{font-family:var(--f-display);font-size:220px;line-height:.95;font-weight:560;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.numeral{font-family:var(--f-mono);font-size:96px;line-height:1;font-weight:400;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.lede{font-family:var(--f-body);font-size:25px;line-height:1.52;font-weight:400;letter-spacing:0}
+.body1{font-family:var(--f-body);font-size:21px;line-height:1.6;font-weight:400;letter-spacing:0}
+.body1s{font-family:var(--f-body);font-size:21px;line-height:1.4;font-weight:560;letter-spacing:-.005em}
+.body1--c{font-family:var(--f-body);font-size:17.5px;line-height:1.5;font-weight:400;letter-spacing:0}
+.img-cap{font-family:var(--f-body);font-size:17px;line-height:1.55;font-weight:400;letter-spacing:0}
+.label{font-family:var(--f-mono);font-size:15px;line-height:1.3;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+.meta{font-family:var(--f-mono);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.09em;text-transform:uppercase}
+.foot{font-family:var(--f-mono);font-size:12.5px;line-height:1.5;font-weight:400;letter-spacing:.07em}
+.code,.tbl td.mono{font-family:var(--f-mono);font-size:17px;line-height:1.55;font-weight:400;letter-spacing:0}
+.sub{font-family:var(--f-body);font-size:25px;line-height:1.52;font-weight:400;letter-spacing:0;color:var(--n500)}
+.slide b,.slide strong{font-weight:560}
+.slide i,.slide em{font-weight:inherit}
+.ico{width:40px;height:40px;color:var(--ink);flex:none}
+.ico svg,.ico use{width:100%;height:100%}
+</style>
+</head>
+<body>
+<svg style="display:none" aria-hidden="true"><defs>
+<symbol id="mk" viewBox="0 0 300 300"><path d="M60.0002 155.5V133.5C60.0002 116.932 60.0002 100 90.0002 100C120 100 120 82.5 120 60V37C120 20.4315 120 0 150 0C180 0 180 20.4315 180 37V65.9314C180 82.5 180 100 210 100C240 100 240 82.5 240 65.9314V37C240 20.4315 240 0 270 0C300 0 300 20.4315 300 37V60C300 83 300 100 270 100C240 100 240 116.931 240 133.5V155.5C240 172.069 240 200 270 200C300 200 300 222.432 300 239L300 261C300 287.5 300 300 270 300C240 300 240 288 240 271.431L240 239C240 222.432 240 200 210 200C180 200 180 222.432 180 239L180 261C180 288 180 300 150 300C120 300 120 287.5 120 270.931L120 239C120 222.432 120 200 150 200C180 200 180 172.069 180 155.5V133.5C180 116.932 180 100 150 100C120 100 120 116.931 120 133.5V155.5C120 172.069 120 200 90.0002 200C60.0002 200 59.9999 222.432 59.9999 239L60.0002 270.931C60.0002 287.5 60.0002 300 30.0002 300C0.000272751 300 0.000273227 287.5 0.000273227 261L0 239C0 222.432 0.000272751 200 30.0002 200C60.0002 200 60.0002 172.069 60.0002 155.5Z" fill="currentColor"/></symbol>
+<symbol id="lockup" viewBox="0 0 1185 300"><path d="M60.0002 155.5V133.5C60.0002 116.932 60.0002 100 90.0002 100C120 100 120 82.5 120 60V37C120 20.4315 120 0 150 0C180 0 180 20.4315 180 37V65.9314C180 82.5 180 100 210 100C240 100 240 82.5 240 65.9314V37C240 20.4315 240 0 270 0C300 0 300 20.4315 300 37V60C300 83 300 100 270 100C240 100 240 116.931 240 133.5V155.5C240 172.069 240 200 270 200C300 200 300 222.432 300 239L300 261C300 287.5 300 300 270 300C240 300 240 288 240 271.431L240 239C240 222.432 240 200 210 200C180 200 180 222.432 180 239L180 261C180 288 180 300 150 300C120 300 120 287.5 120 270.931L120 239C120 222.432 120 200 150 200C180 200 180 172.069 180 155.5V133.5C180 116.932 180 100 150 100C120 100 120 116.931 120 133.5V155.5C120 172.069 120 200 90.0002 200C60.0002 200 59.9999 222.432 59.9999 239L60.0002 270.931C60.0002 287.5 60.0002 300 30.0002 300C0.000272751 300 0.000273227 287.5 0.000273227 261L0 239C0 222.432 0.000272751 200 30.0002 200C60.0002 200 60.0002 172.069 60.0002 155.5Z" fill="currentColor"/>
+<path d="M1184.66 203.654V222.182H1106.3C1064.61 222.182 1040.68 190.53 1040.68 149.421C1040.68 109.084 1062.87 77.8184 1107.07 77.8184C1148.76 77.8184 1174.04 107.347 1174.04 148.649C1174.04 172.388 1163.62 194.583 1146.25 207.9C1158.79 205.391 1171.15 203.654 1184.66 203.654ZM1069.43 149.228C1069.43 180.687 1080.24 206.742 1107.07 206.742C1135.63 206.742 1145.28 177.792 1145.28 149.421C1145.28 117.19 1133.12 94.2234 1107.07 94.2234C1080.44 94.2234 1069.43 119.892 1069.43 149.228Z" fill="currentColor"/>
+<path d="M989.636 220.059V79.748H1016.85V220.059H989.636Z" fill="currentColor"/>
+<path d="M955.168 79.748V220.059H922.937L856.159 103.101L857.51 220.059H830.297V79.748H862.528L929.306 196.513L927.955 79.748H955.168Z" fill="currentColor"/>
+<path d="M807.677 150C807.677 191.302 783.745 222.182 740.899 222.182C697.86 222.182 674.121 191.302 674.121 150C674.121 108.505 697.86 77.8184 740.899 77.8184C783.745 77.8184 807.677 108.505 807.677 150ZM702.878 150C702.878 177.599 712.721 205.777 740.899 205.777C769.077 205.777 778.92 177.599 778.92 150C778.92 122.208 769.077 94.2234 740.899 94.2234C712.721 94.2234 702.878 122.208 702.878 150Z" fill="currentColor"/>
+<path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z" fill="currentColor"/>
+<path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z" fill="currentColor"/></symbol>
+<symbol id="pm-fw" viewBox="0 0 307 300"><path d="M60.0715 129.998V170.002C60.0715 186.572 73.5176 200.002 90.1072 200.002C98.397 200.002 105.906 203.358 111.342 208.791C116.779 214.219 120.143 221.719 120.143 230.002V270C120.143 286.57 106.697 300 90.1072 300C73.5176 300 60.0715 286.57 60.0715 270V230.002C60.0715 221.719 56.7075 214.219 51.271 208.791C45.8345 203.358 38.3256 200.002 30.0357 200.002C13.4461 200.002 0 186.572 0 170.002V129.998C0 113.428 13.4461 99.9984 30.0357 99.9984C46.6253 99.9984 60.0715 86.5687 60.0715 69.9984V30C60.0715 13.4297 73.5176 0 90.1072 0C98.397 0 105.906 3.36094 111.342 8.78906C116.779 14.2219 120.143 21.7219 120.143 30V69.9984C120.143 86.5687 106.697 99.9984 90.1072 99.9984C73.5176 99.9984 60.0715 113.428 60.0715 129.998Z" fill="#FF4405"/>
+<path d="M183.214 129.998C183.214 113.432 169.766 99.998 153.178 99.998C136.59 99.998 123.143 113.432 123.143 129.998V170.001C123.143 186.567 136.59 200.001 153.178 200.001C169.766 200.001 183.214 186.567 183.214 170.001V129.998Z" fill="#FF4405"/>
+<path d="M306.358 129.998V170.002C306.358 186.572 292.912 200.002 276.322 200.002C259.732 200.002 246.286 213.431 246.286 230.002V270C246.286 286.57 232.841 300 216.251 300C199.661 300 186.215 286.57 186.215 270V230.002C186.215 213.431 199.661 200.002 216.251 200.002C232.841 200.002 246.286 186.572 246.286 170.002V129.998C246.286 121.72 242.922 114.22 237.486 108.792C232.049 103.359 224.54 99.9984 216.251 99.9984C199.661 99.9984 186.215 86.5687 186.215 69.9984V30C186.215 13.4297 199.661 0 216.251 0C224.54 0 232.049 3.36094 237.486 8.78906C242.922 14.2219 246.286 21.7219 246.286 30V69.9984C246.286 86.5687 259.732 99.9984 276.322 99.9984C284.612 99.9984 292.121 103.359 297.557 108.792C302.994 114.22 306.358 121.72 306.358 129.998Z" fill="#FF4405"/></symbol>
+<symbol id="pm-sv" viewBox="0 0 300 300"><path d="M180.211 129.998V170.002C180.211 186.572 166.804 200.002 150.263 200.002C133.722 200.002 120.316 213.431 120.316 230.001V270C120.316 286.57 106.909 300 90.3683 300C73.827 300 60.4209 286.57 60.4209 270V230.001C60.4209 213.431 73.827 200.002 90.3683 200.002C106.909 200.002 120.316 186.572 120.316 170.002V129.998C120.316 121.72 116.962 114.22 111.541 108.792C106.121 103.359 98.6338 99.9984 90.3683 99.9984C73.827 99.9984 60.4209 86.5687 60.4209 69.9984V30C60.4209 13.4297 73.827 0 90.3683 0C98.6338 0 106.121 3.36094 111.541 8.78906C116.962 14.2219 120.316 21.7218 120.316 30V69.9984C120.316 86.5687 133.722 99.9984 150.263 99.9984C158.529 99.9984 166.015 103.359 171.436 108.792C176.856 114.22 180.211 121.72 180.211 129.998Z" fill="#2E90FA"/>
+<path d="M300 129.998V170.002C300 186.572 286.593 200.002 270.052 200.002C253.511 200.002 240.105 213.431 240.105 230.001V270C240.105 286.57 226.699 300 210.157 300C193.617 300 180.21 286.57 180.21 270V230.001C180.21 213.431 193.617 200.002 210.157 200.002C226.699 200.002 240.105 186.572 240.105 170.002V129.998C240.105 121.72 236.751 114.22 231.33 108.792C225.91 103.359 218.423 99.9984 210.157 99.9984C193.617 99.9984 180.21 86.5687 180.21 69.9984V30C180.21 13.4297 193.617 0 210.157 0C218.423 0 225.91 3.36094 231.33 8.78906C236.751 14.2219 240.105 21.7218 240.105 30V69.9984C240.105 86.5687 253.511 99.9984 270.052 99.9984C278.318 99.9984 285.805 103.359 291.225 108.792C296.645 114.22 300 121.72 300 129.998Z" fill="#2E90FA"/>
+<path d="M59.8948 130C59.8948 113.434 46.4868 100 29.9474 100C13.408 100 0 113.434 0 130V170.003C0 186.569 13.408 200.003 29.9474 200.003C46.4868 200.003 59.8948 186.569 59.8948 170.003V130Z" fill="#2E90FA"/></symbol>
+<symbol id="pm-in" viewBox="0 0 299 299"><path d="M29.9004 299.004C13.3871 299.004 0.000121967 285.617 2.61398e-06 269.103L6.09928e-06 229.236C7.52038e-06 212.981 12.9721 199.755 29.1289 199.346L30.6719 199.326C46.8289 198.917 59.8008 185.691 59.8008 169.436L59.8008 129.568C59.8008 113.313 72.7728 100.087 88.9297 99.6777L90.4727 99.6582C106.63 99.249 119.602 86.0232 119.602 69.7676L119.602 29.9004C119.602 13.387 132.989 -1.45135e-05 149.502 -1.30699e-05C166.015 -9.95107e-06 179.402 13.387 179.402 29.9004L179.402 69.7676C179.402 86.0231 166.43 99.249 150.273 99.6582L148.73 99.6777C132.574 100.087 119.602 113.313 119.602 129.568L119.602 169.436C119.602 185.691 106.63 198.917 90.4727 199.326L88.9297 199.346C72.7728 199.755 59.8008 212.981 59.8008 229.236L59.8008 269.103C59.8007 285.617 46.4138 299.004 29.9004 299.004ZM149.502 299.004C132.989 299.004 119.602 285.617 119.602 269.103L119.602 229.236C119.602 212.981 132.574 199.755 148.73 199.346L150.273 199.326C166.43 198.917 179.402 185.691 179.402 169.436L179.402 129.568C179.402 113.055 192.789 99.668 209.303 99.668C225.816 99.668 239.203 113.055 239.203 129.568L239.203 169.436C239.203 185.691 226.231 198.917 210.074 199.326L208.531 199.346C192.374 199.755 179.402 212.981 179.402 229.236L179.402 269.104C179.402 285.617 166.015 299.004 149.502 299.004ZM269.104 299.004C252.59 299.004 239.203 285.617 239.203 269.104L239.203 229.236C239.203 212.723 252.59 199.336 269.104 199.336C285.617 199.336 299.004 212.723 299.004 229.236L299.004 269.104C299.004 285.617 285.617 299.004 269.104 299.004Z" fill="#7A5AF8"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /></symbol>
+<symbol id="i-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></symbol>
+<symbol id="i-trending-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6" /><path d="m22 7-8.5 8.5-5-5L2 17" /></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" /><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" /><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" /></symbol>
+<symbol id="i-git-branch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6a9 9 0 0 0-9 9V3" /><circle cx="18" cy="6" r="3" /><circle cx="6" cy="18" r="3" /></symbol>
+<symbol id="i-cpu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v2" /><path d="M12 2v2" /><path d="M17 20v2" /><path d="M17 2v2" /><path d="M2 12h2" /><path d="M2 17h2" /><path d="M2 7h2" /><path d="M20 12h2" /><path d="M20 17h2" /><path d="M20 7h2" /><path d="M7 20v2" /><path d="M7 2v2" /><rect x="4" y="4" width="16" height="16" rx="2" /><rect x="8" y="8" width="8" height="8" rx="1" /></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol>
+<symbol id="i-workflow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="8" x="3" y="3" rx="2" /><path d="M7 11v4a2 2 0 0 0 2 2h4" /><rect width="8" height="8" x="13" y="13" rx="2" /></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></symbol>
+<symbol id="i-landmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 18v-7" /><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" /><path d="M14 18v-7" /><path d="M18 18v-7" /><path d="M3 22h18" /><path d="M6 18v-7" /></symbol>
+<symbol id="i-credit-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2" /><line x1="2" x2="22" y1="10" y2="10" /></symbol>
+<symbol id="i-shopping-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10a4 4 0 0 1-8 0" /><path d="M3.103 6.034h17.794" /><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z" /></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18H9" /><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /><circle cx="17" cy="18" r="2" /><circle cx="7" cy="18" r="2" /></symbol>
+<symbol id="i-database" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M3 5V19A9 3 0 0 0 21 19V5" /><path d="M3 12A9 3 0 0 0 21 12" /></symbol>
+<symbol id="i-clock-arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v6l1.56.78" /><path d="M13.227 21.925a10 10 0 1 1 8.767-9.588" /><path d="m14 18 4-4 4 4" /><path d="M18 22v-8" /></symbol>
+<symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /><rect width="20" height="8" x="2" y="14" rx="2" ry="2" /><line x1="6" x2="6.01" y1="6" y2="6" /><line x1="6" x2="6.01" y1="18" y2="18" /></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></symbol>
+<symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><path d="M16 3.128a4 4 0 0 1 0 7.744" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><circle cx="9" cy="7" r="4" /></symbol>
+<symbol id="i-chart-column" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></symbol>
+<symbol id="i-circle-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="m16 9-5.5 5.5L8 12" /></symbol>
+<symbol id="i-triangle-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path d="M12 9v4" /><path d="M12 17h.01" /></symbol>
+<symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></symbol>
+<symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></symbol>
+<symbol id="i-book-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></symbol>
+<symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6" /><path d="m8 6-6 6 6 6" /></symbol>
+<symbol id="i-message-square" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" /></symbol>
+<symbol id="i-file-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /><path d="M14 2v5a1 1 0 0 0 1 1h5" /><path d="m9 15 2 2 4-4" /></symbol>
+<symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" /></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /><circle cx="12" cy="12" r="3" /></symbol>
+</defs></svg>
+
+<div id="app">
+<div id="stage">
+  <button class="navzone" id="zoneL" aria-label="Previous slide"></button>
+  <button class="navzone" id="zoneR" aria-label="Next slide"></button>
+  <button class="narrow" id="arrowL" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="narrow" id="arrowR" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+  <div id="frame"><div id="scaler">
+<!-- SLIDES -->
+
+<!-- 01 · cover / light -->
+<section class="slide cover-a" data-name="cover/light" data-chapter="Covers">
+  <span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span>
+  <div class="cv-main">
+    <div class="cv-title">Trust every decision your systems make</div>
+    <div class="cv-sub">Axoniq makes complex systems explainable, no rewrite required. Every decision stored exactly as it happened, in order, and complete.</div>
+  </div>
+  <div class="cv-meta"><span>axoniq.io</span><span>Prepared for the platform team</span><span>September 2026</span></div>
+</section>
+
+<!-- 02 · cover / backdrop -->
+<section class="slide slide--dark cover-b" data-name="cover/backdrop" data-chapter="Covers" hidden>
+  <div class="bg"></div>
+  <span class="logo logo--light"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span>
+  <div class="cv-main">
+    <div class="cv-title">Events are the heartbeat of your organization</div>
+    <div class="cv-sub">The system of record that captures and makes sense of your event stream, at speeds generic databases were never designed for.</div>
+  </div>
+  <div class="cv-meta"><span>axoniq.io/server</span><span>Customer roundtable edition</span><span>September 2026</span></div>
+</section>
+
+<!-- 03 · index / spread -->
+<section class="slide" data-name="index/spread" data-chapter="Index" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Index &middot; Master Slide Deck &middot; #03</span></header>
+  <div class="body"><div class="cols">
+    <div style="grid-column:1/5;display:flex;flex-direction:column;justify-content:flex-end;height:100%">
+      <h1 class="title">Agenda</h1>
+      <p class="sub" style="margin-top:14px;max-width:420px">Five chapters, 38 minutes, questions at the end</p>
+    </div>
+    <div class="idx-list" style="grid-column:5/13">
+      <div class="idx-row cur"><div><div class="idx-name">Why events</div><div class="idx-desc">The case for a durable system of record</div></div><span class="idx-num">01</span></div>
+      <div class="idx-row"><div><div class="idx-name">Platform overview</div><div class="idx-desc">Framework, Server, Console and Insights, one coherent platform</div></div><span class="idx-num">02</span></div>
+      <div class="idx-row"><div><div class="idx-name">Dynamic consistency</div><div class="idx-desc">Boundaries that form per operation, not per schema</div></div><span class="idx-num">03</span></div>
+      <div class="idx-row"><div><div class="idx-name">Proof</div><div class="idx-desc">Performance and adoption numbers from production</div></div><span class="idx-num">04</span></div>
+      <div class="idx-row"><div><div class="idx-name">Rollout</div><div class="idx-desc">Plan, roadmap and the team behind it</div></div><span class="idx-num">05</span></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 04 · index / catalog -->
+<section class="slide" data-name="index/catalog" data-chapter="Index" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Index &middot; Master Slide Deck &middot; #04</span></header>
+  <div class="body"><div class="cols">
+    <div style="grid-column:1/5;display:flex;flex-direction:column;gap:26px">
+      <h1 class="title">In this template</h1>
+      <p class="t-sub" style="max-width:420px">Every layout in this file, with the slide to copy from. Duplicate, replace the copy, ship the deck.</p>
+    </div>
+    <div style="grid-column:5/13;display:flex;flex-direction:column;justify-content:center">
+      <div class="cat-row"><span class="cat-page">01</span><span class="cat-name">Covers</span><span class="cat-count">2 layouts</span><span class="cat-count">light &middot; backdrop</span></div>
+      <div class="cat-row"><span class="cat-page">03</span><span class="cat-name">Index</span><span class="cat-count">2 layouts</span><span class="cat-count">spread &middot; catalog</span></div>
+      <div class="cat-row"><span class="cat-page">05</span><span class="cat-name">Chapter dividers</span><span class="cat-count">2 layouts</span><span class="cat-count">typographic &middot; numbered</span></div>
+      <div class="cat-row"><span class="cat-page">07</span><span class="cat-name">Cards</span><span class="cat-count">4 layouts</span><span class="cat-count">3-up &middot; 2-up &middot; 4-up &middot; 6-grid</span></div>
+      <div class="cat-row"><span class="cat-page">11</span><span class="cat-name">Image layouts</span><span class="cat-count">4 layouts</span><span class="cat-count">3/4 &middot; top &middot; bottom &middot; half</span></div>
+      <div class="cat-row"><span class="cat-page">15</span><span class="cat-name">Numbers</span><span class="cat-count">4 layouts</span><span class="cat-count">hero &middot; 4 &middot; 6 &middot; 9</span></div>
+      <div class="cat-row"><span class="cat-page">19</span><span class="cat-name">Tables</span><span class="cat-count">4 layouts</span><span class="cat-count">comparison &middot; matrix &middot; dense &middot; definitions</span></div>
+      <div class="cat-row"><span class="cat-page">23</span><span class="cat-name">Plan</span><span class="cat-count">2 layouts</span><span class="cat-count">detailed &middot; compact</span></div>
+      <div class="cat-row"><span class="cat-page">25</span><span class="cat-name">Roadmap</span><span class="cat-count">2 layouts</span><span class="cat-count">quarters &middot; timeline</span></div>
+      <div class="cat-row"><span class="cat-page">27</span><span class="cat-name">Team</span><span class="cat-count">4 layouts</span><span class="cat-count">1 &middot; 3 &middot; 5 &middot; 6 people</span></div>
+      <div class="cat-row"><span class="cat-page">31</span><span class="cat-name">Extras</span><span class="cat-count">6 layouts</span><span class="cat-count">quote &middot; statement &middot; versus &middot; diagram &middot; logos &middot; closing</span></div>
+      <div class="cat-row" style="border-bottom:0"><span class="cat-page">37</span><span class="cat-name">Spec</span><span class="cat-count">1 layout</span><span class="cat-count">text styles, rendered and annotated</span></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 05 · chapter / typographic -->
+<section class="slide chap-a" data-name="chapter/typographic" data-chapter="Chapters" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Chapters &middot; Master Slide Deck &middot; #05</span></header>
+  <div class="body">
+    <div class="display">Dynamic<br>Consistency<br>Boundaries</div>
+    <div class="ch-rail" aria-label="Chapters">
+      <span class="past"><span class="ch-n">01</span>Why events</span>
+      <span class="past"><span class="ch-n">02</span>Platform overview</span>
+      <span class="cur"><span class="ch-n">03</span>Dynamic consistency</span>
+      <span><span class="ch-n">04</span>Proof</span>
+      <span><span class="ch-n">05</span>Rollout</span>
+      <span><span class="ch-n">06</span>Next steps</span>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · chapter / numbered -->
+<section class="slide chap-b" data-name="chapter/numbered" data-chapter="Chapters" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Chapters &middot; Master Slide Deck &middot; #06</span></header>
+  <div class="body">
+    <div class="numeral" style="position:absolute;left:0;top:0;color:var(--n300)">04</div>
+    <div class="ch-title">Proof, in production numbers</div>
+    <div class="ch-rail ch-rail--h" aria-label="Chapters">
+      <span class="past"><span class="ch-n">01</span>Why events</span>
+      <span class="past"><span class="ch-n">02</span>Platform overview</span>
+      <span class="past"><span class="ch-n">03</span>Dynamic consistency</span>
+      <span class="cur"><span class="ch-n">04</span>Proof</span>
+      <span><span class="ch-n">05</span>Rollout</span>
+      <span><span class="ch-n">06</span>Next steps</span>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · cards / 3-up -->
+<section class="slide" data-name="cards/3-up" data-chapter="Cards" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Cards &middot; Master Slide Deck &middot; #07</span></header>
+  <div class="body"><div class="stack">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Event-sourced systems are outgrowing generic databases</h1>
+      <p class="sub">Three properties a relational store cannot give you, however well you tune it.</p>
+    </div></div>
+    <div class="grid-cards cards3 g3 grow">
+      <div class="card"><svg class="ico" aria-hidden="true"><use href="#i-zap"/></svg><h3>Active push delivery</h3><p>Events reach every consumer the moment they commit. No polling overhead, no batch lag, no missed updates between systems.</p></div>
+      <div class="card"><svg class="ico" aria-hidden="true"><use href="#i-shield-check"/></svg><h3>Failure isolation</h3><p>Context-aware clustering gives each business domain its own boundary. Trouble in one context never cascades into the next.</p></div>
+      <div class="card"><svg class="ico" aria-hidden="true"><use href="#i-trending-up"/></svg><h3>A flat performance curve</h3><p>Append-only segment files keep writes fast at any history size. Performance does not degrade as you grow.</p></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 08 · cards / 2-up -->
+<section class="slide" data-name="cards/2-up" data-chapter="Cards" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Cards &middot; Master Slide Deck &middot; #08</span></header>
+  <div class="body"><div class="stack">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">The infra of choice for highly regulated industries</h1>
+    </div></div>
+    <div class="grid-cards cards2 g2 grow">
+      <div class="card card--tint">
+        <h3>Forensic-grade audit trail</h3>
+        <p>Regulated environments do not just need logs, they need forensic evidence. Events are written once, in order, and never updated in place. The audit trail is the system of record.</p>
+        <div class="chips"><span class="chip chip--cat">Banking</span><span class="chip chip--cat">Insurance</span><span class="chip chip--cat">Public sector</span></div>
+      </div>
+      <div class="card">
+        <h3>A natural fit for agentic workflows</h3>
+        <p>When AI decides, you answer. Complete, ordered history gives every agent decision a source of truth that you can replay, inspect and explain later.</p>
+        <div class="chips"><span class="chip chip--cat">Explainability</span><span class="chip chip--cat">Replay</span><span class="chip chip--cat">Time travel</span></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 09 · cards / 4-up -->
+<section class="slide" data-name="cards/4-up" data-chapter="Cards" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Cards &middot; Master Slide Deck &middot; #09</span></header>
+  <div class="body"><div class="stack">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">One coherent platform, from discovery to orchestration</h1>
+    </div></div>
+    <div class="grid-cards cards4 g4 grow">
+      <div class="card"><span class="prodmark" style="background:var(--orange-50)"><svg><use href="#pm-fw"/></svg></span><h3>Axon Framework</h3><p>Open source Java framework for event sourcing, CQRS and DDD. Free under Apache 2.0 for 15 years.</p></div>
+      <div class="card"><span class="prodmark" style="background:var(--blue-50)"><svg><use href="#pm-sv"/></svg></span><h3>Axon Server</h3><p>The leading dedicated event store and messaging runtime. Ordered history at production scale.</p></div>
+      <div class="card"><span class="prodmark" style="background:var(--n100);color:var(--ink)"><svg><use href="#mk"/></svg></span><h3>Console</h3><p>Operate clusters, contexts and processors from one control plane, self-hosted or in our cloud.</p></div>
+      <div class="card"><span class="prodmark" style="background:var(--violet-50)"><svg><use href="#pm-in"/></svg></span><h3>Insights</h3><p>Query and analyze system history. Ask what happened and why, and get answers with evidence.</p></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 10 · cards / 6-grid -->
+<section class="slide" data-name="cards/6-grid" data-chapter="Cards" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Cards &middot; Master Slide Deck &middot; #10</span></header>
+  <div class="body"><div class="stack" style="gap:44px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Six reasons teams standardize on Axon Server</h1>
+      <p class="sub">Each one is a capability, not a feature flag.</p>
+    </div></div>
+    <div class="grid-cards cards6 g3 grow">
+      <div class="card card--tint"><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg><h3>Multi-context isolation</h3><p>Scale business domains independently, each with its own failure boundary.</p></div>
+      <div class="card card--tint"><svg class="ico" aria-hidden="true"><use href="#i-git-branch"/></svg><h3>Dynamic consistency boundaries</h3><p>Consistency forms per operation, not per schema. No aggregate lock-in.</p></div>
+      <div class="card card--tint"><svg class="ico" aria-hidden="true"><use href="#i-workflow"/></svg><h3>Parallel processing</h3><p>Consumers work segments simultaneously with ordering guarantees intact.</p></div>
+      <div class="card card--tint"><svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg><h3>Tamper-resistant history</h3><p>Segmented binary storage with no update and no delete in the write API.</p></div>
+      <div class="card card--tint"><svg class="ico" aria-hidden="true"><use href="#i-link"/></svg><h3>Kafka connector</h3><p>Bridge topics both ways while the event store stays the source of truth.</p></div>
+      <div class="card card--tint"><svg class="ico" aria-hidden="true"><use href="#i-sparkles"/></svg><h3>AI dev assistant</h3><p>Agentic tooling that reads your event model and writes along with you.</p></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 11 · image / three-quarter -->
+<section class="slide" data-name="image/three-quarter" data-chapter="Images" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Images &middot; Master Slide Deck &middot; #11</span></header>
+  <div class="body"><div class="cols">
+    <div style="grid-column:1/4;display:flex;flex-direction:column;height:100%">
+      <div class="title-sm" style="margin-top:24px">See the story behind every state</div>
+      <p class="lede" style="margin-top:auto;max-width:400px">Insights reads the event stream directly. Trace any decision to the exact events behind it, then replay history into entirely new views.</p>
+    </div>
+    <div class="ph" style="grid-column:4/13"></div>
+  </div></div>
+</section>
+
+<!-- 12 · image / top -->
+<section class="slide" data-name="image/top" data-chapter="Images" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Images &middot; Master Slide Deck &middot; #12</span></header>
+  <div class="body"><div class="stack" style="gap:48px">
+    <div class="ph" style="flex:0 0 520px"></div>
+    <div class="cols" style="flex:1;height:auto">
+      <div style="grid-column:1/6"><div class="title-sm">One control plane for every context</div></div>
+      <p class="img-cap" style="grid-column:7/10">Monitor processors, rebalance segments and trigger replays without touching production. Every operator action is itself an event.</p>
+      <p class="img-cap" style="grid-column:10/13">Role-based access maps to your compliance posture, with the same audit trail your regulator already trusts.</p>
+    </div>
+  </div></div>
+</section>
+
+<!-- 13 · image / bottom -->
+<section class="slide" data-name="image/bottom" data-chapter="Images" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Images &middot; Master Slide Deck &middot; #13</span></header>
+  <div class="body"><div class="stack" style="gap:48px">
+    <div class="cols" style="flex:0 0 auto;height:auto;align-items:end">
+      <div style="grid-column:1/7"><div class="t-block">
+        <h1 class="title">Deploy anywhere your regulator allows</h1>
+      </div></div>
+      <p class="body1" style="grid-column:8/13">Self-hosted on your metal, inside your VPC, or fully managed in Axoniq Cloud. Same binaries, same guarantees, same audit story everywhere.</p>
+    </div>
+    <div class="ph grow"></div>
+  </div></div>
+</section>
+
+<!-- 14 · image / half-bleed -->
+<section class="slide" data-name="image/half-bleed" data-chapter="Images" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Images &middot; Master Slide Deck &middot; #14</span></header>
+  <div class="ph" style="position:absolute;top:110px;right:0;bottom:0;width:960px"></div>
+  <div class="body"><div class="cols">
+    <div style="grid-column:1/6;display:flex;flex-direction:column;height:100%">
+      <div class="title" style="margin-top:26px;max-width:700px">Runs beside your stack, not instead of it</div>
+      <p class="lede" style="margin-top:40px;max-width:640px">Keep Kafka for transport and your warehouse for analytics. Axon Server holds the ordered source of truth they both read from.</p>
+      <div class="chips" style="margin-top:auto"><span class="chip chip--cat">Kafka</span><span class="chip chip--cat">Spring</span><span class="chip chip--cat">Kubernetes</span><span class="chip chip--cat">Postgres</span></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 15 · numbers / hero -->
+<section class="slide" data-name="numbers/hero" data-chapter="Numbers" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Numbers &middot; Master Slide Deck &middot; #15</span></header>
+  <div class="body" style="display:flex;flex-direction:column">
+    <div class="cols grow" style="height:auto">
+      <div style="grid-column:1/9;align-self:center">
+        <div class="num-xl">80%</div>
+        <div class="sparkline" style="height:6px;width:478px;margin:34px 0 0 10px"></div>
+      </div>
+      <p class="lede" style="grid-column:9/13;align-self:end">of Fortune 100 companies rely on event-driven architecture powered by Axoniq.</p>
+    </div>
+    <div class="foot">Source: axoniq.io, September 2026</div>
+  </div>
+</section>
+
+<!-- 16 · numbers / 4-up -->
+<section class="slide" data-name="numbers/4-up" data-chapter="Numbers" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Numbers &middot; Master Slide Deck &middot; #16</span></header>
+  <div class="body"><div class="stack">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">The numbers behind the platform</h1>
+    </div></div>
+    <div class="stats4 grow" style="align-content:center">
+      <div class="stat"><span class="s">Years</span><span class="v num">15</span><span class="l">Of Axon Framework, free and open source under Apache 2.0.</span></div>
+      <div class="stat"><span class="s">Stars</span><span class="v num">3.5k</span><span class="l">On GitHub, with a contributor community to match.</span></div>
+      <div class="stat"><span class="s">Events</span><span class="v num">10B+</span><span class="l">Business events logged by customers in regulated industries.</span></div>
+      <div class="stat"><span class="s">P99 read</span><span class="v num">3.6 ms</span><span class="l">Latency on the live reference dashboard.</span></div>
+    </div>
+    <div class="foot" style="position:static">Figures from axoniq.io and reference environments, September 2026</div>
+  </div></div>
+</section>
+
+<!-- 17 · numbers / 6-grid -->
+<section class="slide" data-name="numbers/6-grid" data-chapter="Numbers" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Numbers &middot; Master Slide Deck &middot; #17</span></header>
+  <div class="body"><div class="stack" style="gap:44px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Faster where it counts, smaller where it costs</h1>
+      <p class="sub">Measured against tuned generic databases on identical hardware.</p>
+    </div></div>
+    <div class="stats6 grow">
+      <div class="stat"><svg class="ico" aria-hidden="true"><use href="#i-clock-arrow-up"/></svg><span class="v num">2-5&times;</span><span class="m">Faster cold start</span><span class="l">Against tuned generic databases on identical hardware.</span></div>
+      <div class="stat"><svg class="ico" aria-hidden="true"><use href="#i-trending-up"/></svg><span class="v num">5-10&times;</span><span class="m">Faster at scale</span><span class="l">The gap widens as history grows past a billion events.</span></div>
+      <div class="stat"><svg class="ico" aria-hidden="true"><use href="#i-database"/></svg><span class="v num">40%</span><span class="m">Less storage</span><span class="l">Append-only segments beat page-based storage on footprint.</span></div>
+      <div class="stat"><svg class="ico" aria-hidden="true"><use href="#i-server"/></svg><span class="v num">0 ms</span><span class="m">Replication lag</span><span class="l">Across a 12-node cluster in steady state.</span></div>
+      <div class="stat"><svg class="ico" aria-hidden="true"><use href="#i-chart-column"/></svg><span class="v num">4.2M</span><span class="m">Rows in one read model</span><span class="l">Rebuilt from history in a single replay.</span></div>
+      <div class="stat"><svg class="ico" aria-hidden="true"><use href="#i-globe"/></svg><span class="v num">3</span><span class="m">Availability zones</span><span class="l">Per cluster, with automatic leader election.</span></div>
+    </div>
+    <div class="foot" style="position:static">Methodology in the Axon Server whitepaper. Sample figures for layout.</div>
+  </div></div>
+</section>
+
+<!-- 18 · numbers / 9-grid -->
+<section class="slide" data-name="numbers/9-grid" data-chapter="Numbers" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Numbers &middot; Master Slide Deck &middot; #18</span></header>
+  <div class="body"><div class="stack" style="gap:44px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">A production cluster at a glance</h1>
+      <p class="sub">One cluster, one quarter, nothing edited.</p>
+    </div></div>
+    <div class="stats9 grow">
+      <div class="stat"><span class="v num">48</span><span class="s">Active contexts</span></div>
+      <div class="stat"><span class="v num">120M</span><span class="s">Events per day</span></div>
+      <div class="stat"><span class="v num">3.6 ms</span><span class="s">P99 write</span></div>
+      <div class="stat"><span class="v num">3</span><span class="s">Replicas per context</span></div>
+      <div class="stat"><span class="v num">0</span><span class="s">Events lost, RPO</span></div>
+      <div class="stat"><span class="v num">&lt;30 s</span><span class="s">Failover RTO</span></div>
+      <div class="stat"><span class="v num">12</span><span class="s">Kafka bridges</span></div>
+      <div class="stat"><span class="v num">6</span><span class="s">Regions</span></div>
+      <div class="stat"><span class="v num">27 mo</span><span class="s">Hot retention</span></div>
+    </div>
+    <div class="foot" style="position:static">Sample operational metrics. Replace with your monitoring export.</div>
+  </div></div>
+</section>
+
+<!-- 19 · table / comparison -->
+<section class="slide" data-name="table/comparison" data-chapter="Tables" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Tables &middot; Master Slide Deck &middot; #19</span></header>
+  <div class="body"><div class="stack" style="gap:56px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Fixed aggregates versus dynamic boundaries</h1>
+    </div></div>
+    <table class="tbl" style="margin-top:auto"><colgroup><col style="width:23%"><col style="width:38.5%"><col style="width:38.5%"></colgroup>
+      <thead><tr><th>Dimension</th><th>Fixed aggregates</th><th>Dynamic consistency boundaries</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--n500)">Boundary definition</td><td>Defined by structure. Every event belongs to at most one aggregate.</td><td>Expressed through tags. One stored event takes part in every boundary its tags allow.</td></tr>
+        <tr><td style="color:var(--n500)">Consistency scope</td><td>Fixed per schema, decided when the model is designed.</td><td>Formed per operation, at the moment the operation runs.</td></tr>
+        <tr><td style="color:var(--n500)">Cross-entity rules</td><td>Coordinated through processes and sagas.</td><td>Atomic across domain concepts, without processes and sagas.</td></tr>
+        <tr><td style="color:var(--n500)">Changing the model</td><td>A data migration, with history rewritten to fit.</td><td>Boundaries move by changing tag queries. History stays put.</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+</section>
+
+<!-- 20 · table / matrix -->
+<section class="slide" data-name="table/matrix" data-chapter="Tables" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Tables &middot; Master Slide Deck &middot; #20</span></header>
+  <div class="body"><div class="stack" style="gap:50px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">How the runtimes compare</h1>
+    </div></div>
+    <table class="tbl tbl--matrix" style="margin-top:auto"><colgroup><col style="width:30%"><col style="width:17.5%"><col style="width:17.5%"><col style="width:17.5%"><col style="width:17.5%"></colgroup>
+      <thead><tr><th>Capability</th><th class="col-hi" style="color:var(--ink)">Axon Server</th><th>Kafka</th><th>Generic database</th><th>Durable engines</th></tr></thead>
+      <tbody>
+        <tr><td>Ordered event history</td><td class="col-hi glyph-y">&#10003;</td><td><span class="glyph-p"><i class="half"></i></span><span class="cellnote">per partition</span></td><td class="glyph-n">&times;</td><td><span class="glyph-p"><i class="half"></i></span><span class="cellnote">while running</span></td></tr>
+        <tr><td>Push delivery to consumers</td><td class="col-hi glyph-y">&#10003;</td><td class="glyph-y">&#10003;</td><td class="glyph-n">&times;</td><td class="glyph-n">&times;</td></tr>
+        <tr><td>Per-operation consistency</td><td class="col-hi glyph-y">&#10003;</td><td class="glyph-n">&times;</td><td><span class="glyph-p"><i class="half"></i></span><span class="cellnote">row locks</span></td><td class="glyph-n">&times;</td></tr>
+        <tr><td>History kept as the product</td><td class="col-hi glyph-y">&#10003;</td><td><span class="glyph-p"><i class="half"></i></span><span class="cellnote">retention windows</span></td><td class="glyph-n">&times;</td><td><span class="glyph-n">&times;</span><span class="cellnote">pruned as exhaust</span></td></tr>
+        <tr><td>Replay into new read models</td><td class="col-hi glyph-y">&#10003;</td><td><span class="glyph-p"><i class="half"></i></span></td><td class="glyph-n">&times;</td><td class="glyph-n">&times;</td></tr>
+        <tr><td>Forensic-grade audit trail</td><td class="col-hi glyph-y">&#10003;</td><td class="glyph-n">&times;</td><td><span class="glyph-p"><i class="half"></i></span><span class="cellnote">with triggers</span></td><td><span class="glyph-p"><i class="half"></i></span></td></tr>
+      </tbody>
+    </table>
+  </div></div>
+</section>
+
+<!-- 21 · table / dense -->
+<section class="slide" data-name="table/dense" data-chapter="Tables" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Tables &middot; Master Slide Deck &middot; #21</span></header>
+  <div class="body"><div class="stack" style="gap:46px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Cluster snapshot, production contexts</h1>
+    </div></div>
+    <table class="tbl tbl--dense tnum">
+      <thead><tr><th>Context</th><th>Tier</th><th style="text-align:right">Nodes</th><th style="text-align:right">Events / day</th><th style="text-align:right">P99 write</th><th style="text-align:right">Retention</th><th style="text-align:right">Status</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">payments</td><td>Enterprise</td><td style="text-align:right">5</td><td style="text-align:right">38.4M</td><td style="text-align:right">2.9 ms</td><td style="text-align:right">36 mo</td><td style="text-align:right"><span class="chip chip--st chip--sm st-done">Healthy</span></td></tr>
+        <tr><td class="mono">ledger</td><td>Enterprise</td><td style="text-align:right">5</td><td style="text-align:right">24.1M</td><td style="text-align:right">3.1 ms</td><td style="text-align:right">84 mo</td><td style="text-align:right"><span class="chip chip--st chip--sm st-done">Healthy</span></td></tr>
+        <tr><td class="mono">notifications</td><td>Standard</td><td style="text-align:right">3</td><td style="text-align:right">41.7M</td><td style="text-align:right">3.2 ms</td><td style="text-align:right">6 mo</td><td style="text-align:right"><span class="chip chip--st chip--sm st-done">Healthy</span></td></tr>
+        <tr><td class="mono">risk-scoring</td><td>Enterprise</td><td style="text-align:right">5</td><td style="text-align:right">18.9M</td><td style="text-align:right">3.0 ms</td><td style="text-align:right">36 mo</td><td style="text-align:right"><span class="chip chip--st chip--sm st-prog">Rebalancing</span></td></tr>
+        <tr><td class="mono">settlement</td><td>Enterprise</td><td style="text-align:right">5</td><td style="text-align:right">9.6M</td><td style="text-align:right">2.8 ms</td><td style="text-align:right">84 mo</td><td style="text-align:right"><span class="chip chip--st chip--sm st-prog">Replay running</span></td></tr>
+        <tr><td class="mono">onboarding</td><td>Standard</td><td style="text-align:right">3</td><td style="text-align:right">6.2M</td><td style="text-align:right">3.4 ms</td><td style="text-align:right">24 mo</td><td style="text-align:right"><span class="chip chip--st chip--sm st-done">Healthy</span></td></tr>
+        <tr><td class="mono">kyc</td><td>Standard</td><td style="text-align:right">3</td><td style="text-align:right">2.8M</td><td style="text-align:right">3.6 ms</td><td style="text-align:right">60 mo</td><td style="text-align:right"><span class="chip chip--st chip--sm st-done">Healthy</span></td></tr>
+        <tr><td class="mono">archive</td><td>Cold</td><td style="text-align:right">2</td><td style="text-align:right">0.4M</td><td style="text-align:right">8.1 ms</td><td style="text-align:right">120 mo</td><td style="text-align:right"><span class="chip chip--st chip--sm st-next">Idle</span></td></tr>
+      </tbody>
+    </table>
+    <div class="foot" style="position:static;margin-top:auto">Sample data for layout. Wire to your monitoring export.</div>
+  </div></div>
+</section>
+
+<!-- 22 · table / definitions -->
+<section class="slide" data-name="table/definitions" data-chapter="Tables" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Tables &middot; Master Slide Deck &middot; #22</span></header>
+  <div class="body"><div class="stack" style="gap:40px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Shared language for the rest of this deck</h1>
+    </div></div>
+    <div class="grow" style="display:flex;flex-direction:column;justify-content:flex-end">
+      <div class="def-row" style="border-top:0"><div class="def-term">Event sourcing</div><div class="def-body">Persist every change as an immutable event instead of overwriting state. Current state is derived by replaying history, so the record is complete by construction and any past state can be reconstructed on demand.</div></div>
+      <div class="def-row"><div class="def-term">CQRS</div><div class="def-body">Command Query Responsibility Segregation. Writes go through commands that append events, reads come from projections built for each question. Both sides scale and evolve independently.</div></div>
+      <div class="def-row"><div class="def-term">Dynamic consistency boundary</div><div class="def-body">An architectural model that defines the scope of transactional consistency per operation, at the moment it runs, rather than binding it to a fixed aggregate. Introduced by Sara Pellegrini and Milan Savic in 2024.</div></div>
+      <div class="def-row"><div class="def-term">Projection</div><div class="def-body">A read model folded from the event stream. Cheap to build, cheap to throw away, and rebuildable from history at any time, which makes schema changes reversible.</div></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 23 · plan / detailed -->
+<section class="slide" data-name="plan/detailed" data-chapter="Plan" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Plan &middot; Master Slide Deck &middot; #23</span></header>
+  <div class="body"><div class="stack" style="gap:40px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Adoption plan, next two quarters</h1>
+    </div></div>
+    <div class="plan grow" style="justify-content:center">
+      <div class="plan-row" style="grid-template-columns:180px 1fr 240px">
+        <span><span class="chip chip--st st-done">Done</span></span>
+        <div><div class="plan-task">Event storming workshop</div><div class="plan-desc">Domain mapped with engineering and risk. 42 events and 9 commands named.</div></div>
+        <span class="chip chip--cat"><i class="c-neutral"></i>Discovery</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:180px 1fr 240px">
+        <span><span class="chip chip--st st-done">Done</span></span>
+        <div><div class="plan-task">Pilot context live</div><div class="plan-desc">Payments context running on a 3-node staging cluster.</div></div>
+        <span class="chip chip--cat"><i class="c-server"></i>Server</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:180px 1fr 240px">
+        <span><span class="chip chip--st st-prog">In progress</span></span>
+        <div><div class="plan-task">Ledger DCB migration</div><div class="plan-desc">Two sagas replaced with tagged consistency boundaries.</div></div>
+        <span class="chip chip--cat"><i class="c-framework"></i>Framework</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:180px 1fr 240px">
+        <span><span class="chip chip--st st-prog">In progress</span></span>
+        <div><div class="plan-task">Insights rollout</div><div class="plan-desc">Read access for the audit and compliance teams.</div></div>
+        <span class="chip chip--cat"><i class="c-insights"></i>Insights</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:180px 1fr 240px">
+        <span><span class="chip chip--st st-next">Next</span></span>
+        <div><div class="plan-task">Production cutover</div><div class="plan-desc">Blue-green switch of payment command traffic.</div></div>
+        <span class="chip chip--cat"><i class="c-neutral"></i>Rollout</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:180px 1fr 240px;border-bottom:0">
+        <span><span class="chip chip--st st-risk">At risk</span></span>
+        <div><div class="plan-task">Kafka bridge retirement</div><div class="plan-desc">Blocked on the downstream consumer inventory.</div></div>
+        <span class="chip chip--cat"><i class="c-console"></i>Integration</span>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 24 · plan / compact -->
+<section class="slide" data-name="plan/compact" data-chapter="Plan" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Plan &middot; Master Slide Deck &middot; #24</span></header>
+  <div class="body"><div class="stack" style="gap:40px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Workstream status, all teams</h1>
+    </div>
+    <div class="meta" style="display:flex;gap:40px;color:var(--n400);padding-bottom:6px">OWNER &middot; QUARTER</div></div>
+    <div class="plan grow" style="justify-content:center">
+      <div class="plan-row" style="grid-template-columns:160px 1fr 220px 70px 80px;padding:15.5px 0">
+        <span><span class="chip chip--st chip--sm st-done">Done</span></span><span class="plan-task">Cluster autoscaler GA</span>
+        <span class="chip chip--cat chip--sm"><i class="c-server"></i>Server</span><span class="owner">JV</span><span class="meta" style="color:var(--n500)">Q3 26</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:160px 1fr 220px 70px 80px;padding:15.5px 0">
+        <span><span class="chip chip--st chip--sm st-done">Done</span></span><span class="plan-task">AF5 migration guide</span>
+        <span class="chip chip--cat chip--sm"><i class="c-framework"></i>Framework</span><span class="owner">AS</span><span class="meta" style="color:var(--n500)">Q3 26</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:160px 1fr 220px 70px 80px;padding:15.5px 0">
+        <span><span class="chip chip--st chip--sm st-prog">In progress</span></span><span class="plan-task">Tiered storage preview</span>
+        <span class="chip chip--cat chip--sm"><i class="c-server"></i>Server</span><span class="owner">JV</span><span class="meta" style="color:var(--n500)">Q4 26</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:160px 1fr 220px 70px 80px;padding:15.5px 0">
+        <span><span class="chip chip--st chip--sm st-prog">In progress</span></span><span class="plan-task">Natural-language queries</span>
+        <span class="chip chip--cat chip--sm"><i class="c-insights"></i>Insights</span><span class="owner">EL</span><span class="meta" style="color:var(--n500)">Q4 26</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:160px 1fr 220px 70px 80px;padding:15.5px 0">
+        <span><span class="chip chip--st chip--sm st-prog">In progress</span></span><span class="plan-task">Console fleet view</span>
+        <span class="chip chip--cat chip--sm"><i class="c-console"></i>Console</span><span class="owner">SA</span><span class="meta" style="color:var(--n500)">Q4 26</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:160px 1fr 220px 70px 80px;padding:15.5px 0">
+        <span><span class="chip chip--st chip--sm st-next">Next</span></span><span class="plan-task">Agentic toolkit beta</span>
+        <span class="chip chip--cat chip--sm"><i class="c-framework"></i>Framework</span><span class="owner">AS</span><span class="meta" style="color:var(--n500)">Q1 27</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:160px 1fr 220px 70px 80px;padding:15.5px 0">
+        <span><span class="chip chip--st chip--sm st-next">Next</span></span><span class="plan-task">Cross-region replication</span>
+        <span class="chip chip--cat chip--sm"><i class="c-server"></i>Server</span><span class="owner">DO</span><span class="meta" style="color:var(--n500)">Q1 27</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:160px 1fr 220px 70px 80px;padding:15.5px 0">
+        <span><span class="chip chip--st chip--sm st-risk">At risk</span></span><span class="plan-task">Legacy connector sunset</span>
+        <span class="chip chip--cat chip--sm"><i class="c-neutral"></i>Platform</span><span class="owner">TR</span><span class="meta" style="color:var(--n500)">Q4 26</span>
+      </div>
+      <div class="plan-row" style="grid-template-columns:160px 1fr 220px 70px 80px;padding:15.5px 0;border-bottom:0">
+        <span><span class="chip chip--st chip--sm st-block">Blocked</span></span><span class="plan-task">FIPS build certification</span>
+        <span class="chip chip--cat chip--sm"><i class="c-server"></i>Server</span><span class="owner">JV</span><span class="meta" style="color:var(--n500)">Q1 27</span>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 25 · roadmap / quarters -->
+<section class="slide" data-name="roadmap/quarters" data-chapter="Roadmap" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Roadmap &middot; Master Slide Deck &middot; #25</span></header>
+  <div class="body"><div class="stack" style="gap:40px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Four quarters ahead</h1>
+    </div></div>
+    <div class="rm-wrap grow">
+      <div class="rm-head"><span style="grid-column:2/4">Q3 2026</span><span>Q4 2026</span><span>Q1 2027</span><span>Q2 2027</span></div>
+      <div class="rm-lanes">
+        <i class="rm-guide" style="left:calc(190px + (100% - 190px)*0.25)"></i>
+        <i class="rm-guide" style="left:calc(190px + (100% - 190px)*0.5)"></i>
+        <i class="rm-guide" style="left:calc(190px + (100% - 190px)*0.75)"></i>
+        <i class="rm-today" style="left:calc(190px + (100% - 190px)*0.168)"><em>TODAY &middot; SEP 01</em></i>
+        <div class="rm-row"><span class="rm-lane-label"><i style="background:var(--blue-500)"></i>Server</span><div class="rm-bar rm-bar--server" style="grid-column:2/6"><h4>DCB GA hardening</h4><span class="rm-when">Q3 - Q4 2026</span></div></div>
+        <div class="rm-row"><span></span><div class="rm-bar rm-bar--server" style="grid-column:4/8"><h4>Tiered storage</h4><span class="rm-when">Q4 2026 - Q1 2027</span></div></div>
+        <div class="rm-row"><span class="rm-lane-label"><i style="background:var(--orange)"></i>Framework</span><div class="rm-bar rm-bar--framework" style="grid-column:2/4"><h4>AF5 migration tooling</h4><span class="rm-when">Q3 2026</span></div></div>
+        <div class="rm-row"><span></span><div class="rm-bar rm-bar--framework" style="grid-column:5/8"><h4>Agentic toolkit</h4><span class="rm-when">Mid Q4 2026 - Q1 2027</span></div></div>
+        <div class="rm-row"><span class="rm-lane-label"><i style="background:var(--violet-500)"></i>Platform</span><div class="rm-bar rm-bar--platform" style="grid-column:3/6"><h4>Insights natural language</h4><span class="rm-when">Mid Q3 - Q4 2026</span></div></div>
+        <div class="rm-row"><span></span><div class="rm-bar rm-bar--platform" style="grid-column:6/10"><h4>Console fleet view</h4><span class="rm-when">Q1 - Q2 2027</span></div></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 26 · roadmap / timeline -->
+<section class="slide" data-name="roadmap/timeline" data-chapter="Roadmap" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Roadmap &middot; Master Slide Deck &middot; #26</span></header>
+  <div class="body"><div class="stack" style="gap:24px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">The next six months</h1>
+    </div></div>
+    <div class="tl grow">
+      <div class="tl-axis"></div>
+      <div class="tl-months"><span>SEP</span><span>OCT</span><span>NOV</span><span>DEC</span><span>JAN</span><span>FEB</span><span>MAR</span></div>
+      <i class="tl-dot" style="left:13%;top:calc(56% - 7.5px);border-color:var(--n900)"></i>
+      <i class="tl-stem" style="left:13%;bottom:44%;height:54px"></i>
+      <div class="tl-card" style="position:absolute;width:320px;left:calc(13% - 130px);bottom:calc(44% + 54px)"><span class="tl-date">SEP 24 - 25</span><h4>Axoniq Con Amsterdam</h4><p>Two days of event-driven architecture, DCB deep dives and customer stories.</p></div>
+      <i class="tl-dot" style="left:25%;top:calc(56% - 7.5px);border-color:var(--blue-500)"></i>
+      <i class="tl-stem" style="left:25%;top:calc(56% + 2px);height:54px"></i>
+      <div class="tl-card" style="position:absolute;width:320px;left:calc(25% - 100px);top:calc(56% + 56px)"><span class="tl-date">OCT 15</span><h4>Axon Server 2026.2</h4><p>Tiered storage preview and measurably faster cold starts.</p></div>
+      <i class="tl-dot" style="left:40%;top:calc(56% - 7.5px);border-color:var(--orange)"></i>
+      <i class="tl-stem" style="left:40%;bottom:44%;height:54px"></i>
+      <div class="tl-card" style="position:absolute;width:320px;left:calc(40% - 130px);bottom:calc(44% + 54px)"><span class="tl-date">NOV 12</span><h4>Framework 5.1</h4><p>DCB ergonomics, plus the new test fixtures.</p></div>
+      <i class="tl-dot" style="left:54%;top:calc(56% - 7.5px);border-color:var(--success-500)"></i>
+      <i class="tl-stem" style="left:54%;top:calc(56% + 2px);height:54px"></i>
+      <div class="tl-card" style="position:absolute;width:320px;left:calc(54% - 100px);top:calc(56% + 56px)"><span class="tl-date">DEC 08</span><h4>Insights GA</h4><p>Natural-language queries over event history.</p></div>
+      <i class="tl-dot" style="left:85%;top:calc(56% - 7.5px);border-color:var(--violet-500)"></i>
+      <i class="tl-stem" style="left:85%;bottom:44%;height:54px"></i>
+      <div class="tl-card" style="position:absolute;width:320px;left:calc(85% - 190px);bottom:calc(44% + 54px)"><span class="tl-date">FEB 04</span><h4>Console fleet view</h4><p>Every cluster, one screen.</p></div>
+    </div>
+    <div class="foot" style="position:static">Sample milestones for layout. Dates are illustrative.</div>
+  </div></div>
+</section>
+
+<!-- 27 · team / solo -->
+<section class="slide" data-name="team/solo" data-chapter="Team" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Team &middot; Master Slide Deck &middot; #27</span></header>
+  <div class="body"><div class="cols">
+    <div class="face" style="grid-column:1/5;align-self:end;height:644px"></div>
+    <div style="grid-column:6/13;align-self:end;display:flex;flex-direction:column;gap:20px">
+      <div class="tm-name-lg">Lina Haddad</div>
+      <div class="tm-role">Solutions Architect &middot; Axoniq</div>
+      <p class="lede" style="max-width:760px;margin-top:16px">Lina leads solution architecture for regulated customers in EMEA. Before Axoniq she ran core banking platforms, which is why she asks about your audit trail first.</p>
+      <div class="label" style="color:var(--n500);margin-top:22px;text-transform:none">lina.haddad@axoniq.io &middot; axoniq.io/team</div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 28 · team / trio -->
+<section class="slide" data-name="team/trio" data-chapter="Team" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Team &middot; Master Slide Deck &middot; #28</span></header>
+  <div class="body"><div class="stack" style="gap:48px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Who you will work with</h1>
+    </div></div>
+    <div class="grid-cards g3 grow" style="align-content:end">
+      <div><div class="face" style="height:470px;margin-bottom:28px"></div><div class="tm-name">Sofia Almeida</div><div class="tm-role" style="margin-top:9px">VP Engineering</div><p class="tm-line" style="margin-top:16px">Owns the Server roadmap and the on-call rotation that keeps it honest.</p></div>
+      <div><div class="face" style="height:412px;margin-bottom:28px"></div><div class="tm-name">Jonas Verhoeven</div><div class="tm-role" style="margin-top:9px">Principal Engineer &middot; Server</div><p class="tm-line" style="margin-top:16px">Wrote the replication layer. Thinks in append-only.</p></div>
+      <div><div class="face" style="height:412px;margin-bottom:28px"></div><div class="tm-name">Amira Selmi</div><div class="tm-role" style="margin-top:9px">Staff Engineer &middot; Framework</div><p class="tm-line" style="margin-top:16px">Drives Axon Framework 5 and its DCB ergonomics.</p></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 29 · team / five -->
+<section class="slide" data-name="team/five" data-chapter="Team" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Team &middot; Master Slide Deck &middot; #29</span></header>
+  <div class="body"><div class="stack" style="gap:48px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">The pilot crew</h1>
+    </div></div>
+    <div class="grid-cards grow" style="grid-template-columns:repeat(5,1fr);align-content:end">
+      <div><div class="face" style="height:466px;margin-bottom:24px"></div><div class="tm-name">Sofia Almeida</div><div class="tm-role" style="margin-top:8px">VP Engineering</div></div>
+      <div><div class="face" style="height:466px;margin-bottom:24px"></div><div class="tm-name">Jonas Verhoeven</div><div class="tm-role" style="margin-top:8px">Principal &middot; Server</div></div>
+      <div><div class="face" style="height:466px;margin-bottom:24px"></div><div class="tm-name">Amira Selmi</div><div class="tm-role" style="margin-top:8px">Staff &middot; Framework</div></div>
+      <div><div class="face" style="height:466px;margin-bottom:24px"></div><div class="tm-name">Tom&aacute;s Ribeiro</div><div class="tm-role" style="margin-top:8px">Developer Relations</div></div>
+      <div><div class="face" style="height:466px;margin-bottom:24px"></div><div class="tm-name">Eva Lindqvist</div><div class="tm-role" style="margin-top:8px">Customer Success</div></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 30 · team / six -->
+<section class="slide" data-name="team/six" data-chapter="Team" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Team &middot; Master Slide Deck &middot; #30</span></header>
+  <div class="body"><div class="stack" style="gap:48px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Everyone on the account</h1>
+    </div></div>
+    <div class="grid-cards g3 grow" style="align-content:end;gap:26px">
+      <div class="card" style="display:flex;align-items:center;gap:26px;padding:32px"><div class="face" style="width:126px;height:126px;flex:none;border-radius:14px"></div><div><div class="tm-name">Sofia Almeida</div><div class="tm-role" style="margin-top:8px">VP Engineering</div></div></div>
+      <div class="card" style="display:flex;align-items:center;gap:26px;padding:26px"><div class="face" style="width:126px;height:126px;flex:none;border-radius:14px"></div><div><div class="tm-name">Jonas Verhoeven</div><div class="tm-role" style="margin-top:8px">Principal &middot; Server</div></div></div>
+      <div class="card" style="display:flex;align-items:center;gap:26px;padding:26px"><div class="face" style="width:126px;height:126px;flex:none;border-radius:14px"></div><div><div class="tm-name">Amira Selmi</div><div class="tm-role" style="margin-top:8px">Staff &middot; Framework</div></div></div>
+      <div class="card" style="display:flex;align-items:center;gap:26px;padding:26px"><div class="face" style="width:126px;height:126px;flex:none;border-radius:14px"></div><div><div class="tm-name">Tom&aacute;s Ribeiro</div><div class="tm-role" style="margin-top:8px">Developer Relations</div></div></div>
+      <div class="card" style="display:flex;align-items:center;gap:26px;padding:26px"><div class="face" style="width:126px;height:126px;flex:none;border-radius:14px"></div><div><div class="tm-name">Eva Lindqvist</div><div class="tm-role" style="margin-top:8px">Customer Success</div></div></div>
+      <div class="card" style="display:flex;align-items:center;gap:26px;padding:26px"><div class="face" style="width:126px;height:126px;flex:none;border-radius:14px"></div><div><div class="tm-name">Daniel Okafor</div><div class="tm-role" style="margin-top:8px">Solutions Architect</div></div></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 31 · quote -->
+<section class="slide" data-name="quote/full" data-chapter="Extras" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Extras &middot; Master Slide Deck &middot; #31</span></header>
+  <div class="body" style="display:flex;flex-direction:column;justify-content:center;gap:46px">
+    <div class="quote-mark"></div>
+    <div class="q-text">Regulated environments do not just need logs, they need forensic evidence. With Axon Server, the audit trail is the system of record.</div>
+    <div class="q-attr">Axon Server design principle &middot; axoniq.io/server</div>
+  </div>
+</section>
+
+<!-- 32 · statement -->
+<section class="slide" data-name="statement/full" data-chapter="Extras" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Extras &middot; Master Slide Deck &middot; #32</span></header>
+  <div class="body" style="display:flex;flex-direction:column;justify-content:flex-end">
+    <div class="sparkline" style="height:8px;width:320px;margin-bottom:56px"></div>
+    <div class="stmt">When AI decides,<br>you answer<span class="fs">.</span></div>
+    <p class="lede" style="margin-top:44px;max-width:820px;color:var(--n500)">AI accelerates decisions. Explainability lets you answer for them.</p>
+  </div>
+</section>
+
+<!-- 33 · versus -->
+<section class="slide" data-name="versus/split" data-chapter="Extras" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Extras &middot; Master Slide Deck &middot; #33</span></header>
+  <div class="body"><div class="stack" style="gap:44px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Keeping state is not keeping the story</h1>
+    </div></div>
+    <div class="vs-wrap grow">
+      <div class="vs-panel vs-panel--l">
+        <div class="vs-tag">Durable execution engines</div>
+        <div class="vs-h">History as exhaust</div>
+        <div class="vs-line">
+          <div class="vs-item">Retained state exists so a workflow can resume.</div>
+          <div class="vs-item">History is pruned once execution completes.</div>
+          <div class="vs-item" style="border-bottom:0">Questions are limited to what happened to survive.</div>
+        </div>
+      </div>
+      <div class="vs-panel vs-panel--r">
+        <div class="vs-tag">Axon Server</div>
+        <div class="vs-h">History as the product</div>
+        <div class="vs-line">
+          <div class="vs-item">An ordered, complete, queryable record.</div>
+          <div class="vs-item">Every decision traceable end to end, forever.</div>
+          <div class="vs-item" style="border-bottom:0">Replay history into new models at any time.</div>
+        </div>
+      </div>
+      <div class="vs-badge">VS</div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 34 · diagram -->
+<section class="slide" data-name="diagram/architecture" data-chapter="Extras" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Extras &middot; Master Slide Deck &middot; #34</span></header>
+  <div class="body"><div class="stack" style="gap:40px">
+    <div class="head-row"><div class="t-block">
+      <h1 class="title">Where Axon Server sits</h1>
+    </div></div>
+    <div class="dg grow">
+      <svg class="wires" aria-hidden="true">
+        <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L8,5 L0,9" fill="none" stroke="#98A2B3" stroke-width="1.8"/></marker></defs>
+        <line class="wire" x1="442" y1="140" x2="596" y2="140" marker-end="url(#arr)"/>
+        <line class="wire" x1="442" y1="560" x2="596" y2="560" marker-end="url(#arr)"/>
+        <line class="wire" x1="1164" y1="90" x2="1348" y2="90" marker-end="url(#arr)"/>
+        <line class="wire" x1="1164" y1="330" x2="1348" y2="330" marker-end="url(#arr)"/>
+        <line class="wire" x1="1164" y1="605" x2="1348" y2="605" marker-end="url(#arr)"/>
+        <text class="wire-lab" x="448" y="124">COMMANDS &middot; EVENTS</text>
+        <text class="wire-lab" x="448" y="544">APPEND</text>
+        <text class="wire-lab" x="1170" y="74">PUSH</text>
+        <text class="wire-lab" x="1170" y="314">QUERY</text>
+        <text class="wire-lab" x="1170" y="589">MANAGE</text>
+      </svg>
+      <div class="dg-box" style="left:0;top:40px;width:440px;height:200px"><span class="dg-sub">Axon Framework 5</span><h4>Spring Boot services</h4><p class="img-cap">Commands in, events out. DCB native.</p></div>
+      <div class="dg-box" style="left:0;top:520px;width:440px;height:210px"><span class="dg-sub">Axoniq Framework</span><h4>Agentic workflows</h4><p class="img-cap">Every agent decision logged as an event.</p></div>
+      <div class="dg-box dg-core" style="left:600px;top:0;width:560px;height:730px">
+        <span class="dg-sub">Event store and message router</span><h4 class="title-sm--c">Axon Server</h4>
+        <div class="dg-replicas"><span>REPLICA 1 &middot; LEADER</span><span>REPLICA 2</span><span>REPLICA 3</span></div>
+        <div class="dg-ctx"><span>context / payments</span><span>context / ledger</span><span>context / risk-scoring</span></div>
+        <div class="dg-note">No update. No delete. Append only.</div>
+      </div>
+      <div class="dg-box" style="left:1352px;top:20px;width:440px;height:155px"><span class="dg-sub">Read models</span><h4>Projections</h4></div>
+      <div class="dg-box" style="left:1352px;top:295px;width:440px;height:160px"><span class="dg-sub">Analysis</span><h4>Axoniq Insights</h4></div>
+      <div class="dg-box" style="left:1352px;top:570px;width:440px;height:160px"><span class="dg-sub">Operations</span><h4>Console</h4></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 35 · logo wall -->
+<section class="slide" data-name="logos/wall" data-chapter="Extras" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Extras &middot; Master Slide Deck &middot; #35</span></header>
+  <div class="body"><div class="stack" style="gap:48px">
+    <div class="head-row">
+      <div class="t-block">
+        <h1 class="title">The backbone of the world's most vital infrastructure</h1>
+      </div>
+      <p class="t-sub" style="max-width:470px;padding-bottom:6px">From open source to enterprise, Axoniq powers mission-critical software across global organizations.</p>
+    </div>
+    <div class="grid-cards g4 grow">
+      <div class="logo-tile"><span class="body1s" style="text-transform:uppercase;letter-spacing:.12em;color:var(--n500)">NORDPAY</span></div>
+      <div class="logo-tile"><span class="body1s" style="text-transform:uppercase;letter-spacing:.12em;color:var(--n500)">Caspia Re</span></div>
+      <div class="logo-tile"><span class="body1s" style="text-transform:uppercase;letter-spacing:.12em;color:var(--n500)">AURUM CLEARING</span></div>
+      <div class="logo-tile"><span class="body1s" style="text-transform:uppercase;letter-spacing:.12em;color:var(--n500)">veldt energy</span></div>
+      <div class="logo-tile"><span class="body1s" style="text-transform:uppercase;letter-spacing:.12em;color:var(--n500)">KAIROS FREIGHT</span></div>
+      <div class="logo-tile"><span class="body1s" style="text-transform:uppercase;letter-spacing:.12em;color:var(--n500)">Finch &amp; Mason</span></div>
+      <div class="logo-tile"><span class="body1s" style="text-transform:uppercase;letter-spacing:.12em;color:var(--n500)">ORBITAL RAIL</span></div>
+      <div class="logo-tile"><span class="body1s" style="text-transform:uppercase;letter-spacing:.12em;color:var(--n500)">Nimbus Health</span></div>
+    </div>
+    <div class="foot" style="position:static">Placeholder marks. Replace with customer logos.</div>
+  </div></div>
+</section>
+
+<!-- 36 · closing -->
+<section class="slide slide--dark cover-b" data-name="closing/cta" data-chapter="Extras" hidden>
+  <div class="bg"></div>
+  <span class="logo logo--light"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span>
+  <div class="cv-main" style="gap:40px">
+    <svg style="width:84px;height:84px;color:#fff" aria-hidden="true"><use href="#mk"/></svg>
+    <div class="cv-title">Start free today</div>
+    <div class="cv-sub" style="max-width:900px">Download Axon Server and log your first event in minutes, or book a session with our engineering team.</div>
+    <div class="label" style="color:rgba(255,255,255,.6);display:flex;gap:52px;margin-top:14px"><span>AXONIQ.IO</span><span>DISCUSS.AXONIQ.IO</span><span>GITHUB.COM/AXONIQ</span></div>
+  </div>
+  <div class="cv-meta"><span>&copy; 2026 Axoniq</span><span>Amsterdam</span><span>September 2026</span></div>
+</section>
+
+<!-- 37 · spec / text styles -->
+<section class="slide" data-name="spec/type" data-chapter="Spec" hidden>
+  <header class="hd"><span class="logo"><svg role="img" aria-label="Axoniq"><use href="#lockup"/></svg></span><span class="hd-meta">Spec &middot; Master Slide Deck &middot; #37</span></header>
+  <div class="body">
+    <div class="cols">
+      <div style="grid-column:1/7;display:flex;flex-direction:column">
+        <h1 class="title">Text styles</h1>
+        <p class="sub" style="margin-top:12px;margin-bottom:28px;max-width:760px">Every text node on a slide is exactly one of these. Only SVG chart labels are exempt.</p>
+        <div style="margin-top:auto"></div>
+        <div class="ts-row"><div class="display-sm">Display sm</div><span class="ts-spec">Display &middot; .display &middot; Inter 470 &middot; 122 / 1.07 &middot; ls -2.5% &middot; covers. Display sm &middot; .display-sm &middot; Inter 500 &middot; 88 / 1.08 &middot; statements, chapter titles</span></div>
+        <div class="ts-row"><h1 class="title">Title, one per slide</h1><span class="ts-spec">H1 &middot; .title &middot; Inter 530 &middot; 54 / 1.1 &middot; ls -1.5%</span></div>
+        <div class="ts-row"><div class="title-sm">Heading two, card and column titles</div><span class="ts-spec">H2 &middot; .title-sm &middot; Inter 540 &middot; 40 / 1.16 &middot; ls -1.2%</span></div>
+        <div class="ts-row"><div class="title-sm--c">Heading two compact, small cards and dense mode</div><span class="ts-spec">H2 compact &middot; .title-sm--c &middot; Inter 550 &middot; 33 / 1.2 &middot; ls -1%</span></div>
+        <div class="ts-row"><span class="num">3.6M</span><span class="ts-spec">Stat &middot; .num &middot; Inter 560 &middot; 96 / 1 &middot; tabular &middot; ls -3% &middot; also Stat sm .num-sm 58 and Stat xl .num-xl 220</span></div>
+        <div class="ts-row"><span class="numeral">04</span><span class="ts-spec">Numeral &middot; .numeral &middot; Geist Mono 400 &middot; 96 / 1</span></div>
+      </div>
+      <div style="grid-column:7/13;display:flex;flex-direction:column;justify-content:flex-end">
+        <div class="ts-row"><p class="lede" style="max-width:100%">Events are the heartbeat of your organization.</p><span class="ts-spec">Lede &middot; .lede &middot; Geist 400 &middot; 25 / 1.52 &middot; n800 &middot; the one lead line</span></div>
+        <div class="ts-row"><p class="sub" style="max-width:100%">Subtitle under a title, gray, on slides that need one.</p><span class="ts-spec">Subtitle &middot; .sub &middot; Geist 400 &middot; 25 / 1.52 &middot; n500</span></div>
+        <div class="ts-row"><p class="body1">Axon Server is the system of record that captures and makes sense of your event stream. Ordered, complete, and queryable.</p><span class="ts-spec">Body 1 &middot; .body1 &middot; Geist 400 &middot; 21 / 1.6 &middot; every paragraph, bullet, cell</span></div>
+        <div class="ts-row"><p class="body1s">Body 1 strong, for names, small card titles and table lead cells.</p><span class="ts-spec">Body 1 strong &middot; .body1s &middot; Geist 560 &middot; 21 / 1.4</span></div>
+        <div class="ts-row"><p class="body1--c">Body 1 compact, only when a composed slide still overflows at regular density.</p><span class="ts-spec">Body 1 compact &middot; .body1--c &middot; Geist 400 &middot; 17.5 / 1.5</span></div>
+        <div class="ts-row"><p class="img-cap">Caption for images, table notes and axis labels.</p><span class="ts-spec">Caption &middot; .img-cap &middot; Geist 400 &middot; 17 / 1.55</span></div>
+        <div class="ts-row"><span class="code">axoniq-neo4j-projector</span><span class="ts-spec">Code &middot; .code &middot; Geist Mono 400 &middot; 17 / 1.55 &middot; identifiers, mono table cells</span></div>
+        <div class="ts-row"><span class="label">Label for chips, tags and legends</span><span class="ts-spec">Label &middot; .label &middot; Geist Mono 500 &middot; 15 &middot; ls +14% &middot; caps</span></div>
+        <div class="ts-row"><span class="hd-meta">Spec &middot; Master Slide Deck &middot; #37</span><span class="ts-spec">Meta &middot; .hd-meta / .meta &middot; Geist Mono 500 &middot; 14 &middot; ls +9% &middot; caps &middot; header, table heads</span></div>
+        <div class="ts-row"><span class="foot" style="position:static">Sample data for layout. Wire to your monitoring export.</span><span class="ts-spec">Foot &middot; .foot &middot; Geist Mono 400 &middot; 12.5 &middot; ls +7%</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </div></div>
+</div>
+<div id="hud">
+  <div class="hud-brand"><svg><use href="#mk"/></svg></div>
+  <div class="hud-right">
+    <span class="hud-meta"><span id="counter">01/37</span><span class="sep">&middot;</span><span id="deckname">MASTER SLIDE DECK</span><span class="sep" id="sep2">&middot;</span><span id="slidename">cover/light</span></span>
+    <span class="hud-acts"><button class="hud-btn" id="btnEdit" aria-pressed="false">EDIT</button><button class="hud-btn" id="btnFull">FULL SCREEN &middot; F</button><button class="hud-btn" id="btnGrid">GRID &middot; G</button></span>
+  </div>
+</div>
+</div>
+<div id="overview" hidden>
+  <div class="ov-head"><b>AXONIQ MASTER SLIDE DECK</b><span>37 LAYOUTS &middot; CLICK TO OPEN &middot; ESC TO CLOSE</span></div>
+  <div id="ovgrid"></div>
+</div>
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('#scaler>.slide'));
+  var frame=document.getElementById('frame'),scaler=document.getElementById('scaler');
+  var counter=document.getElementById('counter'),slidename=document.getElementById('slidename');
+  var overview=document.getElementById('overview'),ovgrid=document.getElementById('ovgrid');
+  var cur=0,N=slides.length,built=false;
+  function pad(n){return (n<10?'0':'')+n}
+  function fit(){
+    var stage=document.getElementById('stage');
+    var pad2=document.body.classList.contains('fs')?0:72,padY=document.body.classList.contains('fs')?0:56;
+    var s=Math.min((stage.clientWidth-pad2)/1920,(stage.clientHeight-padY)/1080);
+    frame.style.width=1920*s+'px';frame.style.height=1080*s+'px';
+    scaler.style.transform='scale('+s+')';
+    var fr=frame.getBoundingClientRect(),aL=document.getElementById('arrowL'),aR=document.getElementById('arrowR');
+    if(aL&&aR){var lx=fr.left>72?Math.max(12,fr.left-52-14):12;var rx=fr.right<window.innerWidth-72?Math.min(window.innerWidth-64,fr.right+14):window.innerWidth-64;aL.style.left=lx+'px';aR.style.left=rx+'px';}
+  }
+  function go(i,push){
+    cur=Math.max(0,Math.min(N-1,i));
+    slides.forEach(function(sl,j){sl.hidden=j!==cur});
+    counter.textContent=pad(cur+1)+'/'+pad(N);
+    var nm=slides[cur].dataset.name||slides[cur].dataset.chapter||'';
+    slidename.textContent=nm;
+    var s2=document.getElementById('sep2');if(s2)s2.hidden=!nm;
+    if(push!==false){try{history.replaceState(null,'','#'+(cur+1))}catch(e){}}
+    if(!overview.hidden){[].forEach.call(ovgrid.children,function(t,j){t.classList.toggle('cur',j===cur)})}
+    var aL=document.getElementById('arrowL'),aR=document.getElementById('arrowR');
+    if(aL){aL.disabled=cur===0;aR.disabled=cur===N-1;}
+  }
+  function buildOverview(){
+    if(built)return;built=true;
+    slides.forEach(function(sl,i){
+      var b=document.createElement('button');b.className='th';b.setAttribute('aria-label','Slide '+(i+1));
+      var f=document.createElement('div');f.className='th-frame';
+      var c=sl.cloneNode(true);c.hidden=false;c.removeAttribute('id');c.style.pointerEvents='none';
+      f.appendChild(c);b.appendChild(f);
+      var cap=document.createElement('div');cap.className='th-cap';
+      cap.innerHTML='<b>'+pad(i+1)+'</b><span>'+(sl.dataset.name||'')+'</span>';
+      b.appendChild(cap);
+      b.addEventListener('click',function(){toggleOv(false);go(i)});
+      ovgrid.appendChild(b);
+    });
+    fitThumbs();
+  }
+  function fitThumbs(){
+    [].forEach.call(ovgrid.querySelectorAll('.th-frame'),function(f){
+      var s=f.clientWidth/1920;var sl=f.firstChild;
+      sl.style.transform='scale('+s+')';
+    });
+  }
+  function toggleOv(show){
+    var s=(typeof show==='boolean')?show:overview.hidden;
+    if(s){buildOverview();overview.hidden=false;fitThumbs();
+      [].forEach.call(ovgrid.children,function(t,j){t.classList.toggle('cur',j===cur)});
+    }else{overview.hidden=true}
+  }
+  document.getElementById('arrowL').addEventListener('click',function(){go(cur-1)});
+  document.getElementById('arrowR').addEventListener('click',function(){go(cur+1)});
+  document.getElementById('zoneL').addEventListener('click',function(){go(cur-1)});
+  document.getElementById('zoneR').addEventListener('click',function(){go(cur+1)});
+  document.getElementById('btnGrid').addEventListener('click',function(){toggleOv()});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(cur+1)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+    else if(e.key==='Home'){go(0)}else if(e.key==='End'){go(N-1)}
+    else if(e.key==='g'||e.key==='G'){toggleOv()}
+    else if(e.key==='Escape'){toggleOv(false)}
+  });
+  window.addEventListener('resize',function(){fit();if(!overview.hidden)fitThumbs()});
+
+  /* ---- full screen ---- */
+  var idleT=null;
+  function toggleFull(){
+    if(document.fullscreenElement){ (document.exitFullscreen||function(){}).call(document); }
+    else { var el=document.documentElement; (el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el); }
+  }
+  function fsIdle(){ document.body.classList.add('fs-idle'); }
+  document.addEventListener('fullscreenchange',function(){
+    var on=!!document.fullscreenElement;
+    document.body.classList.toggle('fs',on);
+    document.body.classList.remove('fs-idle');
+    clearTimeout(idleT); if(on) idleT=setTimeout(fsIdle,2600);
+    fit();
+  });
+  document.addEventListener('mousemove',function(){
+    if(!document.body.classList.contains('fs'))return;
+    document.body.classList.remove('fs-idle');
+    clearTimeout(idleT); idleT=setTimeout(fsIdle,2600);
+  });
+  document.getElementById('btnFull').addEventListener('click',toggleFull);
+
+  /* ---- editing: the button, and the notice shown the first time ---- */
+  var NKEY='rembrandt:notice:'+(document.title||'deck');
+  function noticeSeen(){ try{return localStorage.getItem(NKEY)==='1'}catch(e){return false} }
+  function showNotice(){
+    if(noticeSeen()||document.getElementById('rb-note'))return;
+    var n=document.createElement('div');
+    n.id='rb-note'; n.className='rb-ui';
+    n.innerHTML='<div><b>BEFORE YOU EDIT</b><ul>'+
+      '<li>Edits live in this browser, not in the file. Another browser or another machine will not see them.</li>'+
+      '<li>Save writes a file. Chromium writes back into this one, everything else downloads a copy.</li>'+
+      '<li>Rembrandt may overwrite these edits if you feed this file back into the skill.</li>'+
+      '</ul></div><button class="nx" type="button" aria-label="Dismiss">\u00d7</button>';
+    n.querySelector('.nx').onclick=function(){
+      try{localStorage.setItem(NKEY,'1')}catch(e){}
+      n.remove();
+    };
+    document.body.appendChild(n);
+  }
+  function toggleEdit(){
+    var ed=window.__rbEditor;
+    var b=document.getElementById('btnEdit');
+    if(!ed){ b.disabled=true; b.textContent='EDIT UNAVAILABLE'; return; }
+    var next=b.getAttribute('aria-pressed')!=='true';
+    ed.setMode(next);
+    b.setAttribute('aria-pressed',next?'true':'false');
+    if(next) showNotice(); else { var n=document.getElementById('rb-note'); if(n)n.remove(); }
+  }
+  document.getElementById('btnEdit').addEventListener('click',toggleEdit);
+  window.__rbToggleEdit=toggleEdit;
+
+  window.__go=function(n){go(n-1)};window.__count=N;
+  var h=parseInt((location.hash||'').replace('#',''),10);
+  fit();go(isNaN(h)?0:h-1,false);
+})();
+</script>
+<script id="rb-editor">
+/* Rembrandt editor. Injected into the shell; inert until the person turns it on.
+   Three jobs: edit text without breaking the type system, remove or hide an item,
+   and persist. It never lets an edit introduce a font, a size or a colour. */
+(function () {
+  'use strict';
+  var slides = function () { return [].slice.call(document.querySelectorAll('#scaler > .slide')); };
+  var KEY = 'rembrandt:' + (document.title || 'deck');
+  var patch = {};            // rid -> {t:"text"} | {d:1} | {h:1}
+  var undo = [];
+  var on = false;
+
+  /* ---------- stable ids, assigned from the untouched DOM on load ---------- */
+  function assignIds() {
+    slides().forEach(function (sl, i) {
+      var n = 0;
+      sl.querySelectorAll('*').forEach(function (el) { el.dataset.rid = i + '.' + (n++); });
+    });
+  }
+  function byRid(rid) { return document.querySelector('[data-rid="' + rid + '"]'); }
+
+  /* ---------- what may be edited, what may be removed ---------- */
+  var TEXT_SKIP = 'svg,.hd-meta,#hud,#overview,.navzone,.rb-ui';
+  function isTextLeaf(el) {
+    if (el.closest(TEXT_SKIP)) return false;
+    return [].some.call(el.childNodes, function (n) { return n.nodeType === 3 && n.textContent.trim(); });
+  }
+  var HIDEABLE = '.ico,img,.ph,.prodmark,.face,.sparkline,.quote-mark';
+  var UNIT = '.card,.stat,.idx-row,.cat-row,.plan-row,.def-row,.rm-row,.vs-item,.mini-li span,.tl-m,.dg-box,.logo-tile,.ch-rail span,.chip,tr';
+  function unitOf(el) {
+    var u = el.closest(UNIT);
+    if (!u || !u.parentElement) return null;
+    var sibs = [].filter.call(u.parentElement.children, function (c) { return c.matches(UNIT) && !c.hasAttribute('data-rb-gone'); });
+    return sibs.length > 1 ? u : null;          // never let the last one go
+  }
+
+  /* ---------- apply / persist ---------- */
+  function applyPatch() {
+    Object.keys(patch).forEach(function (rid) {
+      var el = byRid(rid), p = patch[rid];
+      if (!el) return;
+      if (p.t !== undefined) el.textContent = p.t;
+      if (p.h) el.classList.add('rb-hidden');
+      if (p.d) { el.setAttribute('data-rb-gone', '1'); el.style.display = 'none'; rebalance(el.parentElement); }
+    });
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(patch)); } catch (e) {} }
+  function load() { try { patch = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { patch = {}; } }
+
+  /* a fixed 3-up grid with one card removed leaves a hole; re-count the columns */
+  function rebalance(parent) {
+    if (!parent) return;
+    var cs = getComputedStyle(parent);
+    if (cs.display !== 'grid') return;
+    var cols = cs.gridTemplateColumns.split(' ').length;
+    var live = [].filter.call(parent.children, function (c) { return !c.hasAttribute('data-rb-gone'); }).length;
+    if (live < cols && live > 0) parent.style.gridTemplateColumns = 'repeat(' + live + ',1fr)';
+  }
+
+  /* ---------- the live guard: an edit must not break the frame ---------- */
+  function check(sl) {
+    var sr = sl.getBoundingClientRect(), sc = sr.width / 1920 || 1, problems = [];
+    var boxes = [];
+    sl.querySelectorAll('*').forEach(function (el) {
+      if (el.closest('svg') || el.closest('.rb-ui') || el.hasAttribute('data-rb-gone')) return;
+      if (!isTextLeaf(el)) return;
+      [].forEach.call(el.getClientRects(), function (r) {
+        if (r.width < 2 || r.height < 2) return;
+        boxes.push({ el: el, x: (r.left - sr.left) / sc, y: (r.top - sr.top) / sc,
+                     r: (r.right - sr.left) / sc, b: (r.bottom - sr.top) / sc });
+      });
+    });
+    boxes.forEach(function (bx) {
+      if (bx.b > 1016 && !bx.el.closest('header')) problems.push('overflows the frame');
+      if (bx.r > 1860) problems.push('past the right margin');
+    });
+    for (var i = 0; i < boxes.length && problems.length < 3; i++)
+      for (var j = i + 1; j < boxes.length; j++) {
+        var A = boxes[i], B = boxes[j];
+        if (A.el === B.el || A.el.contains(B.el) || B.el.contains(A.el)) continue;
+        var cs = getComputedStyle(A.el), cs2 = getComputedStyle(B.el);
+        if (cs.backgroundColor !== 'rgba(0, 0, 0, 0)' || cs2.backgroundColor !== 'rgba(0, 0, 0, 0)') continue;
+        if (cs.position === 'absolute' || cs2.position === 'absolute') continue;
+        var ix = Math.min(A.r, B.r) - Math.max(A.x, B.x), iy = Math.min(A.b, B.b) - Math.max(A.y, B.y);
+        if (ix > 1 && iy > 1 && ix * iy > 200) { problems.push('two lines collide'); break; }
+      }
+    return problems.filter(function (v, i, a) { return a.indexOf(v) === i; });
+  }
+  function status() {
+    var sl = slides().filter(function (s) { return !s.hidden; })[0];
+    var el = document.getElementById('rb-status');
+    if (!sl || !el) return;
+    var p = check(sl);
+    el.textContent = p.length ? p.join(' \u00b7 ') : 'layout ok';   // no glyphs: the house rules ban dingbats in a deck file
+    el.className = 'rb-ui rb-status' + (p.length ? ' bad' : '');
+  }
+
+  /* ---------- edit mode ---------- */
+  function setMode(v) {
+    on = v;
+    document.body.classList.toggle('rb-edit', on);
+    slides().forEach(function (sl) {
+      sl.querySelectorAll('*').forEach(function (el) {
+        if (el.closest('.rb-ui')) return;
+        if (isTextLeaf(el)) {
+          if (on) { el.setAttribute('contenteditable', 'plaintext-only'); el.spellcheck = false; }
+          else el.removeAttribute('contenteditable');
+        }
+      });
+    });
+    document.getElementById('rb-bar').hidden = !on;
+    var btn = document.getElementById('btnEdit');
+    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (!on) { var n = document.getElementById('rb-note'); if (n) n.remove(); }
+    if (on) status();
+  }
+
+  document.addEventListener('input', function (e) {
+    if (!on) return;
+    var el = e.target;
+    if (!el.dataset || !el.dataset.rid) return;
+    patch[el.dataset.rid] = { t: el.textContent };
+    save(); status();
+  });
+  // paste is where a type system dies: force plain text
+  document.addEventListener('paste', function (e) {
+    if (!on || !e.target.isContentEditable) return;
+    e.preventDefault();
+    var t = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\s*\n\s*/g, ' ');
+    document.execCommand('insertText', false, t);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && document.activeElement && document.activeElement.isContentEditable) { document.activeElement.blur(); return; }
+    if (e.target.isContentEditable) { e.stopPropagation(); if (e.key === 'Enter') e.preventDefault(); return; }
+    // route through the shell so the E key and the EDIT button behave identically
+    if (e.key === 'e' || e.key === 'E') { if (window.__rbToggleEdit) window.__rbToggleEdit(); else setMode(!on); }
+    if (on && (e.metaKey || e.ctrlKey) && e.key === 'z') { e.preventDefault(); undoLast(); }
+  }, true);
+
+  /* ---------- delete / hide, on hover ---------- */
+  var handle = null;
+  function ensureHandle() {
+    if (handle) return handle;
+    handle = document.createElement('button');
+    handle.className = 'rb-ui rb-x'; handle.type = 'button'; handle.title = 'Remove';
+    handle.textContent = '\u00d7';
+    handle.addEventListener('mousedown', function (ev) {
+      ev.preventDefault(); ev.stopPropagation();
+      var t = handle.__target; if (!t) return;
+      var rid = t.dataset.rid;
+      if (t.matches(HIDEABLE)) { t.classList.add('rb-hidden'); patch[rid] = { h: 1 }; undo.push({ rid: rid, kind: 'h' }); }
+      else { t.setAttribute('data-rb-gone', '1'); t.style.display = 'none'; rebalance(t.parentElement);
+             patch[rid] = { d: 1 }; undo.push({ rid: rid, kind: 'd', parent: t.parentElement }); }
+      handle.hidden = true; save(); status();
+    });
+    document.body.appendChild(handle);
+    return handle;
+  }
+  function undoLast() {
+    var u = undo.pop(); if (!u) return;
+    var el = byRid(u.rid); if (!el) return;
+    if (u.kind === 'h') el.classList.remove('rb-hidden');
+    else { el.removeAttribute('data-rb-gone'); el.style.display = ''; if (u.parent) u.parent.style.gridTemplateColumns = ''; }
+    delete patch[u.rid]; save(); status();
+  }
+  document.addEventListener('mousemove', function (e) {
+    if (!on) { if (handle) handle.hidden = true; return; }
+    var el = document.elementFromPoint(e.clientX, e.clientY);
+    if (!el || el.closest('.rb-ui,#hud,#overview')) return;
+    var t = el.closest(HIDEABLE) || unitOf(el);
+    var h = ensureHandle();
+    if (!t) { h.hidden = true; return; }
+    var r = t.getBoundingClientRect();
+    h.__target = t; h.hidden = false;
+    h.style.left = (r.right - 13) + 'px'; h.style.top = (r.top - 13) + 'px';
+  });
+
+  /* ---------- bake and save ---------- */
+  function bake() {
+    var doc = document.documentElement.cloneNode(true);
+    doc.querySelectorAll('[contenteditable]').forEach(function (el) { el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); });
+    doc.querySelectorAll('[data-rb-gone]').forEach(function (el) { el.remove(); });
+    doc.querySelectorAll('.rb-ui').forEach(function (el) { el.remove(); });
+    doc.querySelectorAll('.slide').forEach(function (sl, i) { if (i) sl.setAttribute('hidden', ''); else sl.removeAttribute('hidden'); });
+    doc.querySelectorAll('[data-rid]').forEach(function (el) { el.removeAttribute('data-rid'); });
+    var b = doc.querySelector('body'); if (b) b.classList.remove('rb-edit');
+    return '<!doctype html>\n<html lang="en">' + doc.innerHTML + '</html>';
+  }
+  async function saveInPlace() {
+    var html = bake();
+    if (window.showSaveFilePicker) {
+      try {
+        var h = window.__rbHandle;
+        if (!h) { h = await window.showSaveFilePicker({ suggestedName: (document.title || 'deck') + '.html',
+                    types: [{ description: 'HTML', accept: { 'text/html': ['.html'] } }] }); window.__rbHandle = h; }
+        var w = await h.createWritable(); await w.write(html); await w.close();
+        localStorage.removeItem(KEY);                 // the file now holds the edits
+        flash('Saved to file'); return;
+      } catch (err) { if (err && err.name === 'AbortError') return; }
+    }
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+    a.download = (document.title || 'deck') + '.html'; a.click();
+    URL.revokeObjectURL(a.href);
+    flash('Downloaded a copy');
+  }
+  function flash(msg) { var el = document.getElementById('rb-status'); if (!el) return; var old = el.textContent; el.textContent = msg; setTimeout(function () { status(); }, 1600); }
+
+  /* ---------- chrome ---------- */
+  function ui() {
+    var css = document.createElement('style');
+    css.className = 'rb-ui';   // stripped by bake(), re-added on load, so a bake cycle never duplicates it
+    css.textContent =
+      '.rb-edit [contenteditable]{outline:0;border-radius:3px;transition:background .12s}' +
+      '.rb-edit [contenteditable]:hover{background:rgba(46,144,250,.10)}' +
+      '.rb-edit [contenteditable]:focus{background:rgba(46,144,250,.16);box-shadow:0 0 0 2px rgba(46,144,250,.45)}' +
+      '.rb-hidden{opacity:0!important}' +
+      '.rb-edit .navzone{pointer-events:none}' +   // the nav strips sit over the slide and swallow every hover
+      '.rb-x{position:fixed;z-index:60;width:26px;height:26px;border-radius:999px;background:#0A0D14;color:#fff;' +
+        'font:600 15px/1 system-ui;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(16,24,40,.28);padding:0;cursor:pointer}' +
+      '#rb-bar{position:fixed;left:50%;bottom:66px;transform:translateX(-50%);z-index:60;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:560px;' +
+        'background:var(--ch-panel,#12151C);border:1px solid var(--ch-line,#232834);border-radius:12px;padding:10px 12px;box-shadow:0 18px 48px -12px rgba(0,0,0,.7);' +
+        "font-family:'Geist Mono',ui-monospace,monospace;font-size:11.5px;letter-spacing:.08em;color:var(--ch-dim,#7A8699)}" +
+      '#rb-bar button{border:1px solid var(--ch-line,#232834);border-radius:8px;padding:6px 10px;background:transparent;color:var(--ch-text,#C3CAD6);font:inherit;cursor:pointer}' +
+      '#rb-bar button:hover{border-color:#39414F;background:var(--ch-hover,#1B1F29);color:#fff}' +
+      '.rb-status{padding:0 6px;color:#47CD89}.rb-status.bad{color:#FDA29B}' +
+      '.rb-warn{flex-basis:100%;text-align:center;color:#98A2B3;letter-spacing:.05em;font-size:11px}';
+    document.head.appendChild(css);
+    var bar = document.createElement('div');
+    bar.id = 'rb-bar'; bar.className = 'rb-ui'; bar.hidden = true;
+    bar.innerHTML = '<span>EDITING</span><span id="rb-status" class="rb-ui rb-status">layout ok</span>' +
+      '<button id="rb-undo">Undo</button><button id="rb-save">Save</button><button id="rb-reset">Revert all</button><button id="rb-done">Done</button>' +
+      // the notice above is dismissible; this line is not, so the warning never fully disappears
+      '<span class="rb-warn">Edits are held in this browser until you save.</span>';
+    document.body.appendChild(bar);
+    bar.querySelector('#rb-undo').onclick = undoLast;
+    bar.querySelector('#rb-save').onclick = saveInPlace;
+    bar.querySelector('#rb-done').onclick = function () { setMode(false); };
+    bar.querySelector('#rb-reset').onclick = function () { localStorage.removeItem(KEY); location.reload(); };
+    // the shell owns the EDIT button. Only inject one if this deck predates that.
+    var acts = document.querySelector('#hud .hud-acts, #hud .hud-right');
+    if (acts && !document.getElementById('btnEdit')) {
+      var b = document.createElement('button'); b.className = 'hud-btn'; b.id = 'btnEdit'; b.textContent = 'EDIT';
+      b.onclick = function () { setMode(!on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); };
+      acts.insertBefore(b, acts.firstChild);
+    }
+  }
+
+  function boot() { assignIds(); load(); applyPatch(); ui(); window.__rbEditor = { setMode: setMode, patch: function () { return patch; }, bake: bake, check: check }; }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
+</body>
+</html>

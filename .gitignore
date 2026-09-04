@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# editor
+.vscode/
+.idea/
+
+# scratch renders
+*.png
+*.pdf
+/tmp/
+pptx_png/
+
+__pycache__/
+node_modules/
+out/
+_to_delete/
+_sync/
+dist/
+examples/
+_private/

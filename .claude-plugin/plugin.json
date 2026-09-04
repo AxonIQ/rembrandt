@@ -1,0 +1,16 @@
+{
+  "name": "rembrandt",
+  "version": "1.0.0",
+  "description": "Render any input into a presentation built to the Axoniq master standard: the real templates and tokens, always as a single self-contained HTML file.",
+  "author": {
+    "name": "Axoniq"
+  },
+  "homepage": "https://axoniq.io",
+  "keywords": [
+    "slides",
+    "presentation",
+    "deck",
+    "axoniq",
+    "brand"
+  ]
+}

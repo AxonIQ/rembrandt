@@ -1,0 +1,11 @@
+{
+  "name": "axoniq",
+  "owner": { "name": "Axoniq" },
+  "plugins": [
+    {
+      "name": "rembrandt",
+      "source": "./",
+      "description": "Render any input into a presentation built to the Axoniq master standard: real templates, real tokens, one self-contained HTML file."
+    }
+  ]
+}
