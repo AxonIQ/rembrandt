@@ -8,6 +8,12 @@ Releases are git tags from v1.0.0 on. Earlier history is not in this repository:
 from a single commit before publication, because the example decks it carried held internal
 figures and customer names. The entries below remain the full record of what changed and why.
 
+## 1.0.5
+
+- **Fixed the homepage container.** A stray closing tag left over from the 1.0.2 rewrite closed the
+  page wrapper early, so every section after the first ran the full width of the window instead of
+  sitting in the 1120px column. Checked now at 1600, 1240, 900 and 600 pixels.
+
 ## 1.0.4
 
 - **An example deck on the site.** A second hero button, secondary to Install, opens a finished
