@@ -132,7 +132,7 @@ const html = `<!doctype html>
 <link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap">
 <style>
 :root{
   color-scheme:light;
@@ -141,8 +141,9 @@ const html = `<!doctype html>
   --n950:#0C111D;
   --orange:#FF4405; --orange-50:#FFF4ED;
   --blue:#1570EF;
-  --f-disp:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
-  --f-body:'Geist','Inter','Helvetica Neue',Arial,sans-serif;
+  /* One family for everything on this page. Geist only. */
+  --f-disp:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --f-body:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;
   --f-mono:'Geist Mono','SF Mono',Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -172,7 +173,7 @@ a:hover{border-bottom-color:var(--blue)}
   gap:9px;margin-bottom:20px}
 .eyebrow::before{content:"";width:7px;height:7px;border-radius:999px;
   background:var(--orange);flex:none}
-h1{font-family:var(--f-disp);font-size:clamp(40px,5.4vw,64px);font-weight:400;
+h1{font-family:var(--f-disp);font-size:clamp(38px,5vw,58px);font-weight:500;
   line-height:1.06;letter-spacing:-.026em;color:var(--ink);margin-bottom:20px}
 .intro{max-width:70ch}
 .intro p{color:var(--g600);margin-bottom:14px}
