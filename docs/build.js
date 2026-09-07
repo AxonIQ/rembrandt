@@ -258,6 +258,20 @@ ${entries}
 
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, html);
+
+// The homepage is hand-written, so its footer version used to be edited by hand and
+// went stale. Stamp it from kit/VERSION here instead, since this runs every release.
+const HOME = path.join(ROOT, 'docs', 'index.html');
+if (fs.existsSync(HOME)) {
+  const before = fs.readFileSync(HOME, 'utf8');
+  const after = before.replace(/(<span>Rembrandt v)\d+\.\d+\.\d+(<\/span>)/, `$1${VERSION}$2`);
+  if (after !== before) {
+    fs.writeFileSync(HOME, after);
+    console.log(`build_changelog: stamped docs/index.html footer with ${VERSION}`);
+  } else if (!/<span>Rembrandt v\d+\.\d+\.\d+<\/span>/.test(before)) {
+    console.error('build_changelog: WARNING, no version span found in docs/index.html');
+  }
+}
 console.log(
   `build_changelog: wrote ${path.relative(ROOT, OUT)} ` +
   `(${releases.length} releases, current ${VERSION})`
