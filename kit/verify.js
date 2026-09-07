@@ -271,6 +271,25 @@ const SEL = '#scaler > .slide, section.slide';
     results.push({ name: 'layout', ok, out });
   }
 
+  /* ----------------------------------------------------------- deck shape */
+  // Read before the browser closes. Everything here is measured off the finished deck,
+  // so nothing about the payload depends on the agent remembering to report it.
+  const shape = await p.evaluate((SEL) => {
+    const slides = [...document.querySelectorAll(SEL)];
+    const chapters = new Set();
+    for (const sl of slides) {
+      const m = sl.querySelector('.hd-meta');
+      if (!m) continue;                                   // covers and dividers carry no header
+      const chapter = m.textContent.split('\u00b7')[0].trim();
+      if (chapter) chapters.add(chapter);
+    }
+    return {
+      slides:   slides.length,
+      chapters: chapters.size,
+      dense:    slides.filter(sl => sl.querySelector('.body1--c, .title-sm--c')).length,
+    };
+  }, SEL);
+
   await b.close();
 
   /* ---------------------------------------------------------------- house */
@@ -313,5 +332,22 @@ const SEL = '#scaler > .slide, section.slide';
   const failed = results.filter(r => !r.ok);
   if (!failed.length) console.log('VERIFY: PASS. Shell, styles, colour, layout and house rules all clean.');
   else console.log(`VERIFY: FAIL. ${failed.map(f => f.name).join(', ')}. Fix and run again; nothing ships on a FAIL.`);
+
+  /* ------------------------------------------------------------- telemetry */
+  // Only on PASS: a deck that failed was never delivered. Never throws, never changes
+  // the exit code. See kit/telemetry.js; REMBRANDT_TELEMETRY=0 turns it off.
+  if (!failed.length) {
+    let status;
+    try {
+      const version = fs.readFileSync(path.join(here, 'VERSION'), 'utf8').trim();
+      const base = path.basename(file);
+      const deck = (base.match(/^(.+) - Rembrandt v\d+\.\d+\.html$/) || [])[1] || path.basename(base, '.html');
+      status = await require('./telemetry.js').report({ file, deck, version, ...shape });
+    } catch (err) {
+      status = 'not recorded, ' + ((err && err.message) || 'unknown error');
+    }
+    console.log(`TELEMETRY: ${status}`);
+  }
+
   process.exit(failed.length ? 1 : 0);
 })();
