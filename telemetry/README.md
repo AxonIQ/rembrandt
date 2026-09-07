@@ -31,7 +31,8 @@ The log is a markdown table in Vercel Blob:
 ```bash
 cd telemetry
 npx vercel link          # or vercel project add
-npx vercel blob store add rembrandt-telemetry
+npx vercel blob create-store rembrandt-telemetry --access public   # answer y, then Enter,
+                                                                  # to link it to the project
 npx vercel env add TELEMETRY_SECRET
 npx vercel env add TELEMETRY_READ_KEY
 npx vercel deploy --prod
