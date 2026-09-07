@@ -8,6 +8,26 @@ Releases are git tags from v1.0.0 on. Earlier history is not in this repository:
 from a single commit before publication, because the example decks it carried held internal
 figures and customer names. The entries below remain the full record of what changed and why.
 
+## 1.0.2
+
+The model step is gone, and the site explains the actual workflow.
+
+- **Rembrandt no longer mentions which model is running.** It opens with its version and nothing
+  else. A session cannot verify what is serving it, the configured identifier can differ from the
+  model actually answering, and nothing downstream depends on it. Removed from the skill, the
+  README and the site.
+- **The site now walks the real flow.** "How to set up Rembrandt" and "How to use Rembrandt"
+  replace "Getting it" and "Then", the second as three steps with a screenshot each: invoke it,
+  answer the fidelity question and leave it for five to ten minutes, get an HTML file with the
+  presenting controls built in.
+- **A section on editing a deck**: ask Claude in the same thread and it checks each change against
+  the spec, or press E and retype text in place. With one thing said loudly, because it is the
+  thing people lose work to: inline edits are not saved until you press Save.
+- **No Inter on the site.** Its letter spacing was wrong at display sizes and two attempts did not
+  fix it, so the page is Geist and Geist Mono only. The deck itself is unaffected: the master's
+  type system is untouched.
+- Best practices reads before what it isn't. The raw-code bullet says which formats to use.
+
 ## 1.0.1
 
 Rembrandt is Cowork only, stated rather than implied, and one gap in the fit ladder closed.

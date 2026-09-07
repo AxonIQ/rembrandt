@@ -15,8 +15,7 @@ In Cowork: **Customize**, then **Plugins**, then **Add marketplace**, and enter 
 Leave **Sync automatically** on and new versions arrive by themselves.
 
 Start a new chat for each deck. Rembrandt reads the whole conversation, so leftovers from a previous
-run bleed into the next one and no check can catch it. It runs best on Opus 5 at Low effort; Haiku
-will not produce a usable deck.
+run bleed into the next one and no check can catch it.
 
 ## How it works
 

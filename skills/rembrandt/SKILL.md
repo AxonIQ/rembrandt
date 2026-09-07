@@ -25,11 +25,11 @@ Do not offer to build a deck without the checks, do not install a browser, and d
 something unverified. A deck that skipped the gate is not a Rembrandt deck, whatever its filename
 says. This is the one condition where the right answer is to build nothing.
 
-**2. Say which version you are, and name the model to use.** Read `kit/VERSION`, then open with one line:
+**2. Say which version you are.** Read `kit/VERSION` and open with one line:
 
-> Rembrandt v1.0. This runs best on Opus 5 at Low effort. Sonnet is not faster here, and Haiku will not produce a usable deck.
+> Rembrandt v1.0.
 
-That is a recommendation, not a question. Do not wait for an answer, and do not ask the person to confirm which model is running: a session cannot verify which model is serving it, the configured identifier can differ from the model actually answering, and the filename no longer records it. If the person says they are on Haiku, tell them plainly that the deck will not come out right, and let them decide.
+Nothing else. Do not name, ask about, or comment on which model is running: a session cannot verify which model is serving it, the configured identifier can differ from the model actually answering, and nothing downstream depends on it. The filename does not record it either.
 
 **3. One run per chat.** If this conversation has already done any of the following, **stop, tell the person to start a new chat, and wait** rather than proceeding:
 
@@ -275,7 +275,7 @@ Cohere is two parts: a gate you run, and a reading pass you do.
 **The gate.** One command, and it must print PASS before you deliver anything:
 
 ```bash
-node kit/verify.js "Bi-Weekly ONE House - Rembrandt v0.5 - Opus 5.html"
+node kit/verify.js "Bi-Weekly ONE House - Rembrandt v1.0.html"
 ```
 
 It runs five checks and fails closed on every one:

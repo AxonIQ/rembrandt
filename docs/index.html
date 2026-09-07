@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap">
 <style>
 /* Axoniq house style, as it runs on axoniq.io: white ground, Untitled UI
    neutrals, display type set large at regular weight with tight tracking.
@@ -24,8 +24,9 @@
   --orange:#FF4405; --orange-50:#FFF4ED;
   --success-50:#ECFDF3; --success-200:#ABEFC6; --success-700:#067647;
   --blue:#1570EF;
-  --f-disp:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
-  --f-body:'Geist','Inter','Helvetica Neue',Arial,sans-serif;
+  /* One family for everything on this page. Geist only. */
+  --f-disp:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --f-body:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;
   --f-mono:'Geist Mono','SF Mono',Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -58,8 +59,8 @@ a:hover{border-bottom-color:var(--blue)}
   border:1px solid var(--line-2);background:var(--surface);
   box-shadow:0 10px 26px -12px rgba(16,24,40,.18);margin-bottom:30px}
 .mark img{display:block;width:100%;height:100%;object-fit:cover}
-h1{font-family:var(--f-disp);font-optical-sizing:auto;font-size:clamp(46px,6.6vw,76px);font-weight:470;
-  line-height:1.07;letter-spacing:-.024em;color:var(--ink);
+h1{font-family:var(--f-disp);font-size:clamp(44px,6.2vw,70px);font-weight:500;
+  line-height:1.08;letter-spacing:-.021em;color:var(--ink);
   margin-bottom:22px;text-wrap:balance}
 .stand{font-size:20px;line-height:1.5;color:var(--g600);max-width:46ch;
   margin:0 auto 30px;text-wrap:pretty}
@@ -77,8 +78,8 @@ h1{font-family:var(--f-disp);font-optical-sizing:auto;font-size:clamp(46px,6.6vw
 /* ---------- sections ---------- */
 section{padding:74px 0;border-top:1px solid var(--line)}
 .shead{max-width:60ch;margin-bottom:40px}
-h2{font-family:var(--f-disp);font-optical-sizing:auto;font-size:clamp(32px,4vw,44px);font-weight:530;
-  line-height:1.12;letter-spacing:-.015em;color:var(--ink);margin-bottom:12px}
+h2{font-family:var(--f-disp);font-size:clamp(30px,3.6vw,40px);font-weight:560;
+  line-height:1.15;letter-spacing:-.014em;color:var(--ink);margin-bottom:12px}
 .lede{color:var(--g500);font-size:17px}
 
 /* an install route: full width, so the screenshot can breathe */
@@ -161,6 +162,30 @@ code{font-family:var(--f-mono);font-size:.87em;color:var(--ink);
 kbd{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--ink);
   background:var(--white);border:1px solid var(--line-2);border-bottom-width:2px;
   border-radius:5px;padding:2px 7px}
+
+/* ---------- how to use: three squares, one per step ---------- */
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;align-items:start}
+.fshot{aspect-ratio:1/1;border:1px solid var(--line-2);border-radius:12px;overflow:hidden;
+  background:var(--surface);margin-bottom:16px}
+.fshot img{display:block;width:100%;height:100%;object-fit:cover}
+.fhead{display:flex;align-items:center;gap:10px;margin-bottom:7px;flex-wrap:wrap}
+.fnum{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--white);
+  background:var(--ink);width:21px;height:21px;border-radius:999px;flex:none;
+  display:flex;align-items:center;justify-content:center}
+.fhead h3{font-family:var(--f-body);font-size:18px;font-weight:560;color:var(--ink)}
+.tchip{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:#B93815;background:var(--orange-50);box-shadow:inset 0 0 0 1px #F9DBAF;
+  border-radius:999px;padding:4px 9px}
+.flow p{font-size:15px;color:var(--g500)}
+.flow p + p{margin-top:9px}
+.flow code{font-size:.9em}
+
+/* ---------- an alert that must not be skimmed past ---------- */
+.alert{display:flex;gap:14px;align-items:flex-start;margin-top:20px;
+  background:var(--orange-50);border:1px solid #F9DBAF;border-radius:12px;padding:16px 18px}
+.alert .ic{font-size:18px;line-height:1.35;flex:none}
+.alert p{font-size:15px;color:#7A2E0E}
+.alert b{color:#7A2E0E;font-weight:560}
 
 /* ---------- scope: two boxes, what it isn't and how to feed it ---------- */
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
@@ -246,6 +271,7 @@ footer a:hover{color:var(--ink)}
       <span class="prod">Rembrandt</span>
     </div>
     <nav class="mnav">
+      <a href="#using">How to use</a>
       <a href="#editing">Editing</a>
       <a href="changelog.html">Changelog</a>
     </nav>
@@ -275,8 +301,7 @@ footer a:hover{color:var(--ink)}
 <div class="wrap">
   <section id="getting-it">
     <div class="shead">
-      <h2>Getting it</h2>
-      <p class="lede">Rembrandt runs in the Claude desktop app. It does not run in Claude Code, because the checks it has to pass before handing over a deck need a browser that Cowork provides and a laptop generally does not.</p>
+      <h2>How to set up Rembrandt</h2>
     </div>
 
     <div class="route rec-route">
@@ -316,89 +341,71 @@ footer a:hover{color:var(--ink)}
         <span class="where">Not supported</span>
       </div>
       <div class="rbody">
-        <p>Rembrandt is not available for Claude Code, because it needs a real browser to run the five checks a deck has to pass before delivery. Cowork has one; a laptop generally does not.</p>
+        <p>Rembrandt is not available in the terminal. Before it hands over a deck it has to pass automated checks in a real headless browser.</p>
       </div>
     </div>
     </div>
   </section>
 
-  <section>
+  <section id="using">
     <div class="shead">
-      <h2>Then</h2>
-      <p class="lede">Start a fresh chat for every deck. Rembrandt reads the whole conversation, so leftovers from the last one bleed into the next and nothing catches it. Ask for a deck and it opens with its version and a recommendation to run on Opus 5 at Low effort. No version line means it did not load.</p>
+      <h2>How to use Rembrandt</h2>
     </div>
-    <div class="gets">
-      <div class="get">
-        <h3>One file</h3>
-        <p>Named <code>Your Deck - Rembrandt v1.0.html</code>. Opens in any browser, works offline, nothing to install.</p>
+
+    <div class="flow">
+      <div class="fstep">
+        <div class="fshot"><img src="step-invoke.jpg" width="900" height="900"
+          alt="The Claude composer in Cowork, with a PowerPoint attached, and the slash rembrandt command typed."></div>
+        <div class="fhead"><span class="fnum">1</span><h3>Invoke Rembrandt</h3></div>
+        <p>Type <code>/rembrandt</code>, attach or paste your content, and press enter.</p>
+        <p>Start a new chat every time. Rembrandt reads the whole conversation, so leftovers from the last deck bleed into the next one.</p>
       </div>
-      <div class="get">
-        <h3>Present with the keyboard</h3>
-        <p>Arrows to move, <kbd>G</kbd> for every slide at once, <kbd>F</kbd> for full screen with the chrome out of the way.</p>
+
+      <div class="fstep">
+        <div class="fshot"><img src="step-process.jpg" width="900" height="900"
+          alt="Rembrandt asking how much editorial freedom it has over the source deck, offering high fidelity, verbatim and liberal."></div>
+        <div class="fhead"><span class="fnum">2</span><h3>Answer, then leave it</h3><span class="tchip">5 to 10 min</span></div>
+        <p>Rembrandt needs to know how much editorial liberty it has, and it will ask for anything your source leaves out: dates, names, roles, links.</p>
+        <p>Answer properly and then let it work. This is the part that takes the time.</p>
       </div>
-      <div class="get">
-        <h3>Fix your own typos</h3>
-        <p>Press <kbd>E</kbd>. Text becomes editable and the type system holds no matter what you paste into it.</p>
+
+      <div class="fstep">
+        <div class="fshot"><img src="step-output.jpg" width="900" height="900"
+          alt="A finished deck open in a browser: a slide of four key figures, with the presenter bar underneath showing the slide count, the deck name and the edit, full screen and grid buttons."></div>
+        <div class="fhead"><span class="fnum">3</span><h3>Get an HTML file</h3></div>
+        <p>One file holding your presentation and the controls to present it: arrows to move, <kbd>G</kbd> for every slide at once, <kbd>F</kbd> for full screen.</p>
+        <p>Opens in any browser, works offline, nothing to install.</p>
       </div>
     </div>
   </section>
 
   <section id="editing">
     <div class="shead">
-      <h2>Editing a finished deck</h2>
-      <p class="lede">Press <kbd>E</kbd>, or click EDIT in the bar at the bottom, and the deck becomes editable where it sits. Fix a typo, retype a card, drop an icon, without coming back to Claude. What you cannot do is break the design.</p>
+      <h2>How to edit a deck</h2>
     </div>
 
-    <p class="rule">Your edits live in the browser, not in the file. Nothing reaches the file until you press Save.</p>
+    <div class="flow">
+      <div class="fstep">
+        <div class="fhead"><span class="fnum">1</span><h3>Ask Claude</h3></div>
+        <p>In the same thread where you made the deck, describe your edits. All of them in one go, or one at a time, whichever suits you.</p>
+        <p>Rembrandt checks every change against the spec. If something you asked for would break the deck, it says so and lets you decide.</p>
+      </div>
 
-    <div class="xl">
-      <div class="cell">
-        <h3>Where your edits live</h3>
-        <p>In this browser, on this machine. Reloading the page keeps them, which means an accidental refresh costs you nothing.</p>
-        <p>Sending the file to a colleague does not. They will open the version you last saved, and see none of your unsaved changes.</p>
+      <div class="fstep">
+        <div class="fhead"><span class="fnum">2</span><h3>Edit inline</h3></div>
+        <p>Open the HTML and press <kbd>E</kbd>, or click the EDIT button. Now you can retype any text on any slide, to reword a line or fix a typo.</p>
       </div>
-      <div class="cell">
-        <h3>What Save does</h3>
-        <p>Chrome and Edge write straight back into the same file. It asks once which file, then remembers.</p>
-        <p>Every other browser downloads a copy instead, which lands in Downloads under the same name. Keep track of which one is current.</p>
-      </div>
-      <div class="cell">
-        <h3>Before you ask for changes</h3>
-        <p>Tell Claude what you edited by hand. Regenerating the deck can overwrite those edits, because Rembrandt rebuilds from the source rather than from your copy.</p>
-        <p>Save first, then ask.</p>
+
+      <div class="fstep">
+        <div class="fhead"><span class="fnum">3</span><h3>Share it</h3></div>
+        <p>Send the HTML file as it is. It needs nothing installed at the other end.</p>
+        <p>Or ask Claude to turn the slides into a PDF, for anywhere a web page will not do.</p>
       </div>
     </div>
 
-    <div class="duo">
-      <div class="box good">
-        <div class="boxhead">
-          <h3>What you can change</h3>
-          <span class="sub">In place, no Claude</span>
-        </div>
-        <div class="boxbody">
-          <ul class="dos">
-            <li><b>Any text on any slide.</b> Click and type. Paste from anywhere: it arrives as plain text, so a paste out of Word cannot drag a font, a size or a colour in with it.</li>
-            <li><b>Icons and images.</b> Hover one and a small button appears to take it out.</li>
-            <li><b>Repeated items.</b> Cards, stats, rows and chips go the same way, and the grid recounts itself so a three-up becomes a clean two-up with no hole where the third was.</li>
-            <li><b>Undo, and revert.</b> Undo steps back through your edits. Revert all puts the deck back to how Rembrandt delivered it.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="box">
-        <div class="boxhead">
-          <h3>What it will not let you do</h3>
-          <span class="sub">On purpose</span>
-        </div>
-        <div class="boxbody">
-          <ul class="nots">
-            <li><b>Change type, size or colour.</b> Every word stays one of the eighteen styles. This is the rule the whole deck is built on, and editing cannot get around it.</li>
-            <li><b>Move things.</b> Position comes from the template. If the arrangement is wrong, that is a question for Claude, not a drag.</li>
-            <li><b>Empty a slide.</b> The last card in a group will not delete.</li>
-            <li><b>Overflow quietly.</b> The bar turns red the moment an edit runs past the bottom of the slide or collides with something else.</li>
-          </ul>
-        </div>
-      </div>
+    <div class="alert">
+      <span class="ic">&#128680;</span>
+      <p><b>Inline edits are not saved until you press Save.</b> Saving gives you a new HTML file, and that new file is the one to share or to open in another browser. Until you save, your changes exist only in the browser you made them in.</p>
     </div>
   </section>
 
@@ -418,7 +425,7 @@ footer a:hover{color:var(--ink)}
           <ul class="dos">
             <li><b>Start in a text editor.</b> Markdown is king; Notion works too. Write paragraphs, tables, bullet points and lists, and use dividers for pages. Do not get bogged down in layout.</li>
             <li><b>Attach raw Excel data, not screenshots.</b> For tables and for graphs alike.</li>
-            <li><b>Add raw code, not screenshots of code.</b> Paste the real thing. That is part of why markdown or Notion is best, though Word and Google Docs work too.</li>
+            <li><b>Add raw code, not screenshots of code.</b> Markdown, Notion, or even Docs are the best input if your deck has code in it.</li>
             <li><b>Use bold and underline to emphasise.</b> That is the signal Rembrandt reads to decide what carries weight on the slide.</li>
           </ul>
         </div>

@@ -129,8 +129,25 @@ footer a:hover{color:var(--ink)}
 
       <article class="rel current">
         <div class="relv">
-          <h2 id="v1-0-1">1.0.1</h2>
+          <h2 id="v1-0-2">1.0.2</h2>
           <span class="tag">Current</span>
+        </div>
+        <div class="relbody">
+<p>The model step is gone, and the site explains the actual workflow.</p>
+<ul>
+<li><strong>Rembrandt no longer mentions which model is running.</strong> It opens with its version and nothing else. A session cannot verify what is serving it, the configured identifier can differ from the model actually answering, and nothing downstream depends on it. Removed from the skill, the README and the site.</li>
+<li><strong>The site now walks the real flow.</strong> "How to set up Rembrandt" and "How to use Rembrandt" replace "Getting it" and "Then", the second as three steps with a screenshot each: invoke it, answer the fidelity question and leave it for five to ten minutes, get an HTML file with the presenting controls built in.</li>
+<li><strong>A section on editing a deck</strong>: ask Claude in the same thread and it checks each change against the spec, or press E and retype text in place. With one thing said loudly, because it is the thing people lose work to: inline edits are not saved until you press Save.</li>
+<li><strong>No Inter on the site.</strong> Its letter spacing was wrong at display sizes and two attempts did not fix it, so the page is Geist and Geist Mono only. The deck itself is unaffected: the master's type system is untouched.</li>
+<li>Best practices reads before what it isn't. The raw-code bullet says which formats to use.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="v1-0-1">1.0.1</h2>
+          
         </div>
         <div class="relbody">
 <p>Rembrandt is Cowork only, stated rather than implied, and one gap in the fit ladder closed.</p>
@@ -314,7 +331,7 @@ footer a:hover{color:var(--ink)}
 <path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
 <path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
 </svg>
-    <span>Rembrandt v1.0.1</span>
+    <span>Rembrandt v1.0.2</span>
     <span class="push"><a href="https://axoniq.io">axoniq.io</a></span>
   </div>
 </footer>
