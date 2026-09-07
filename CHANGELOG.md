@@ -8,6 +8,16 @@ Releases are git tags from v1.0.0 on. Earlier history is not in this repository:
 from a single commit before publication, because the example decks it carried held internal
 figures and customer names. The entries below remain the full record of what changed and why.
 
+## 1.0.3
+
+Two fixes in the presenter chrome.
+
+- **The F key now works.** The button has advertised `FULL SCREEN . F` since 0.4, but the key was
+  never added to the viewer's keyboard handler, so only the button did anything. Typing an f while
+  editing text still types an f, because the editor's handler claims the key first.
+- **The edit button names its shortcut**, `EDIT . E`, like the other two. It was the only button in
+  the bar whose keyboard shortcut was hidden.
+
 ## 1.0.2
 
 The model step is gone, and the site explains the actual workflow.

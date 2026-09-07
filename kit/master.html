@@ -1246,7 +1246,7 @@ table{border-collapse:collapse;width:100%}
   <div class="hud-brand"><svg><use href="#mk"/></svg></div>
   <div class="hud-right">
     <span class="hud-meta"><span id="counter">01/37</span><span class="sep">&middot;</span><span id="deckname">MASTER SLIDE DECK</span><span class="sep" id="sep2">&middot;</span><span id="slidename">cover/light</span></span>
-    <span class="hud-acts"><button class="hud-btn" id="btnEdit" aria-pressed="false">EDIT</button><button class="hud-btn" id="btnFull">FULL SCREEN &middot; F</button><button class="hud-btn" id="btnGrid">GRID &middot; G</button></span>
+    <span class="hud-acts"><button class="hud-btn" id="btnEdit" aria-pressed="false">EDIT &middot; E</button><button class="hud-btn" id="btnFull">FULL SCREEN &middot; F</button><button class="hud-btn" id="btnGrid">GRID &middot; G</button></span>
   </div>
 </div>
 </div>
@@ -1320,6 +1320,7 @@ table{border-collapse:collapse;width:100%}
     else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
     else if(e.key==='Home'){go(0)}else if(e.key==='End'){go(N-1)}
     else if(e.key==='g'||e.key==='G'){toggleOv()}
+    else if(e.key==='f'||e.key==='F'){e.preventDefault();toggleFull()}
     else if(e.key==='Escape'){toggleOv(false)}
   });
   window.addEventListener('resize',function(){fit();if(!overview.hidden)fitThumbs()});
@@ -1622,7 +1623,7 @@ table{border-collapse:collapse;width:100%}
     // the shell owns the EDIT button. Only inject one if this deck predates that.
     var acts = document.querySelector('#hud .hud-acts, #hud .hud-right');
     if (acts && !document.getElementById('btnEdit')) {
-      var b = document.createElement('button'); b.className = 'hud-btn'; b.id = 'btnEdit'; b.textContent = 'EDIT';
+      var b = document.createElement('button'); b.className = 'hud-btn'; b.id = 'btnEdit'; b.textContent = 'EDIT \u00b7 E';
       b.onclick = function () { setMode(!on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); };
       acts.insertBefore(b, acts.firstChild);
     }
