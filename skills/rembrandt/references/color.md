@@ -9,7 +9,7 @@ in the master's `:root`; never write a hex.
 
 | Step | What it is for |
 |---|---|
-| **500** — `--blue-500` `--orange-500` `--success-500` `--warning-500` `--error-500` `--violet-500` | Every accent. An icon, a bar, a rule, a dot, a chart series, a colored word, a status glyph. This is the default and usually the only step a slide needs. |
+| **500**, meaning `--blue-500` `--orange-500` `--success-500` `--warning-500` `--error-500` `--violet-500` | Every accent. An icon, a bar, a rule, a dot, a chart series, a colored word, a status glyph. This is the default and usually the only step a slide needs. |
 | **25 / 50 / 100 / 200** | Surfaces and the borders on them: a tinted card, a chip background, a highlighted table column, a code pill. Never text. |
 | **600 / 700** | Text or a glyph **on** one of those surfaces, where the tint underneath leaves the 500 too faint. A chip's label on its own 50 ground. Nothing else. |
 | **Neutrals** `--n25` … `--n950`, `--ink` | Not "using color". Unrestricted, and most slide text is one of these. |

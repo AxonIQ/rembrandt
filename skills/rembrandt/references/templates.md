@@ -1,6 +1,6 @@
 # Template catalog and selection guide
 
-Select by what the slide is **trying to say**. Budgets only veto a choice; they never make it. Every template below is a section in `kit/master.html` — copy it from there, do not rebuild it. Open the master's grid overview (press `G`) to see them all.
+Select by what the slide is **trying to say**. Budgets only veto a choice; they never make it. Every template below is a section in `kit/master.html`. Copy it from there, do not rebuild it. Open the master's grid overview (press `G`) to see them all.
 
 ## How to choose
 
@@ -18,16 +18,16 @@ Ask, in order: What is this slide's job? What shape is the content? How much of 
 | Here is work and its status | plan | detailed (with descriptions) / compact |
 | Here is how things unfold | roadmap | quarters (spans) / timeline (moments) |
 | Here are the people | team | 1 / 3 / 5 / 6 by headcount |
-| Here is one idea that must land | statement, quote, numbers/hero | — |
-| Here are two things set against each other | versus, or table/matrix if more than two columns | — |
-| Here is how the pieces connect | diagram | — |
+| Here is one idea that must land | statement, quote, numbers/hero | n/a |
+| Here are two things set against each other | versus, or table/matrix if more than two columns | n/a |
+| Here is how the pieces connect | diagram | n/a |
 | It fits none of these | free/body (the escape hatch) | used sparingly, flagged |
 
 ## Semantics matter more than shape
 
 The same visual template carries different meaning depending on the content. Read the intent, not the form:
 
-- **A timeline** is not only dates. It can be a **user journey** (steps a person takes), an **adoption path** (how a customer grows into the product), a **plan** (what happens when), or a **release calendar**. Same axis, different story — write the labels to match the story, and pick `roadmap/timeline` for moments, `roadmap/quarters` for spans.
+- **A timeline** is not only dates. It can be a **user journey** (steps a person takes), an **adoption path** (how a customer grows into the product), a **plan** (what happens when), or a **release calendar**. Same axis, different story, so write the labels to match the story, and pick `roadmap/timeline` for moments, `roadmap/quarters` for spans.
 - **A versus** is not only competition. It can be **before / after**, **old way / new way**, **open source / commercial**, or **their approach / our approach**.
 - **Cards** are not only features. They can be **reasons**, **steps**, **audiences**, **risks**, or **principles**.
 - **Numbers** are not only metrics. A single hero number can be a **claim**, a **milestone**, or a **headline**; a grid can be a **scorecard** or an **operations snapshot**.
@@ -35,14 +35,14 @@ The same visual template carries different meaning depending on the content. Rea
 
 When two templates could carry the meaning, prefer the one that shows the *relationship* the slide is about (sequence, contrast, magnitude, hierarchy) rather than the one that merely holds the words.
 
-## `not_for` — when NOT to use a family
+## `not_for`, when NOT to use a family
 
-- **cards** — not for a sequence where order matters (use roadmap or a numbered plan) and not for two things in contrast (use versus).
-- **numbers** — not for a number that needs its supporting rows to make sense (use a table); not to dress up a figure the audience will not remember.
-- **table/matrix** — not for two columns (use versus); not when the cells are prose (use cards or definitions).
-- **chapter cover** — never render the chapter list on any other slide type; the chapter cover owns the index. Do not use a chapter cover as a content slide. Never build it from the source deck's own agenda or from `chap-a`/`chap-b` (those are title dividers).
-- **numbers** (again) — a target-vs-actual or before-vs-after figure is never two numerals and a caption; it is drawn (gauge, bars, delta) with the hero numeral and the reading line anchored under it.
-- **free/body** — not a convenience. Reach for it only when no template fits, and flag every use.
+- **cards**. Not for a sequence where order matters (use roadmap or a numbered plan) and not for two things in contrast (use versus).
+- **numbers**. Not for a number that needs its supporting rows to make sense (use a table); not to dress up a figure the audience will not remember.
+- **table/matrix**. Not for two columns (use versus); not when the cells are prose (use cards or definitions).
+- **chapter cover**. Never render the chapter list on any other slide type; the chapter cover owns the index. Do not use a chapter cover as a content slide. Never build it from the source deck's own agenda or from `chap-a`/`chap-b` (those are title dividers).
+- **numbers** (again). A target-vs-actual or before-vs-after figure is never two numerals and a caption; it is drawn (gauge, bars, delta) with the hero numeral and the reading line anchored under it.
+- **free/body**. Not a convenience. Reach for it only when no template fits, and flag every use.
 
 ## The chapter cover, exactly
 
@@ -66,5 +66,5 @@ The master anchors content to the bottom of the frame and pins the title to the 
 
 - Open with a cover; close with the closing layout.
 - Over ten slides: chapters, with the master `index/spread` as the chapter cover (`.cur` on the current chapter, `.past` on those already shown). No separate index slide.
-- Never place the same template on two consecutive content slides — vary the family or the variant.
+- Never place the same template on two consecutive content slides. Vary the family or the variant.
 - Aim for at least six distinct template families across a fifteen-slide deck. Monotony is a defect Cohere checks for.

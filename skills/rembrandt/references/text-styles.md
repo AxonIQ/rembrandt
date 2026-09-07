@@ -1,12 +1,12 @@
 # Text styles and density
 
-The master's spec slide (`spec/type`, the last slide of `kit/master.html`) renders every one of these at true size with its class name and metrics. That slide is the source of truth — edit the token there and every layout follows. This file is the quick reference.
+The master's spec slide (`spec/type`, the last slide of `kit/master.html`) renders every one of these at true size with its class name and metrics. That slide is the source of truth: edit the token there and every layout follows. This file is the quick reference.
 
 ## Fonts (never any others)
 
-- **Inter** — display headlines (the Helvetica Now stand-in).
-- **Geist** — body and UI text.
-- **Geist Mono** — meta labels, the header, stat numerals, footnotes.
+- **Inter**. Display headlines (the Helvetica Now stand-in).
+- **Geist**. Body and UI text.
+- **Geist Mono**. Meta labels, the header, stat numerals, footnotes.
 
 ## The hard rule
 
@@ -62,8 +62,8 @@ Caption, Code, Label, Meta and Foot are never used for reading text. A bullet at
 
 Every content template runs in one of two densities.
 
-- **Regular** — H2 (`.title-sm`) + Body 1 (`.body1`). Budget ≈ 100 words on the slide. **The default.** If the content fits at regular with room to spare, the room stays: it is the design, not a problem to fill or shrink around.
-- **Dense** — H2 compact (`.title-sm--c`) + Body 1 compact (`.body1--c`). Budget ≈ 150 words. Allowed only when a slide has been composed at regular (see Composer in SKILL.md) and still overflows. Never chosen for tidiness, balance, or to make a slide "look designed". Every dense slide is listed in the report.
+- **Regular**. H2 (`.title-sm`) + Body 1 (`.body1`). Budget ≈ 100 words on the slide. **The default.** If the content fits at regular with room to spare, the room stays: it is the design, not a problem to fill or shrink around.
+- **Dense**. H2 compact (`.title-sm--c`) + Body 1 compact (`.body1--c`). Budget ≈ 150 words. Allowed only when a slide has been composed at regular (see Composer in SKILL.md) and still overflows. Never chosen for tidiness, balance, or to make a slide "look designed". Every dense slide is listed in the report.
 
 Escalation when copy overflows: compose → rewrite tighter → switch to dense → switch to a higher-capacity template variant → split the slide. Scoped CSS is the last resort, and only for spacing. Shrinking type off the scale is never a step.
 

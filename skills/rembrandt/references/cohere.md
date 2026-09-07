@@ -1,4 +1,4 @@
-# Cohere — the final check
+# Cohere, the final check
 
 Cohere is the last step before delivery. It is a **reading and checking pass, not a visual one. Do not take or look at screenshots.** Work from the HTML source, the DOM, and the text. You are checking the finished deck two ways: against the original material, and against itself.
 
@@ -10,22 +10,22 @@ Run it, fix everything it finds, then run it again. Report what it caught.
 
 Completion and fidelity. Go back to the content inventory you built at Ingest.
 
-- [ ] Every point, metric, table, name, date, and quote from the inventory appears in the deck — or was explicitly a note-to-self you dropped, or is a placeholder the person approved in the questionnaire.
-- [ ] Nothing was added beyond what the fidelity level allows. Verbatim: no rewording at all. High fidelity: no meaning changed — spot-check three rewritten lines against their source. Liberal: every invented fact is in the report.
+- [ ] Every point, metric, table, name, date, and quote from the inventory appears in the deck, or was explicitly a note-to-self you dropped, or is a placeholder the person approved in the questionnaire.
+- [ ] Nothing was added beyond what the fidelity level allows. Verbatim: no rewording at all. High fidelity: no meaning changed, so spot-check three rewritten lines against their source. Liberal: every invented fact is in the report.
 - [ ] Every questionnaire answer is in the deck, in the right place (dates on the event slide, roles on the team slide, URLs where they were promised).
 - [ ] Nothing invented silently. Grep your own copy for numbers, dates, and names that were not in the source or the answers.
 
 ## B. In itself
 
-Structure, completion, coherence — checkable from the DOM and text.
+Structure, completion and coherence, all checkable from the DOM and text.
 
 **Zero. The gate**
 - [ ] `node kit/verify.js "<your file>"` prints `VERIFY: PASS`. That single command runs all four audits and the house rules, and every one of them fails closed:
-  - **shell** — the deck was copied from the master: slides are `section.slide` inside `#scaler`, `symbol#lockup` and `symbol#mk` are present, the logo is a `<use>` and not typed text, `window.__go` and `window.__count` exist, `#frame` gets a real size, no invented or stale classes. It also checks the v0.4 chrome: dark presenter surface, the `.hud-meta` group (`#counter`, `#deckname`, `#slidename`), the EDIT and FULL SCREEN buttons, and `script#rb-editor` with a live `window.__rbEditor`. A deck that fails this is not a Rembrandt deck, and the other audits cannot be trusted on it.
-  - **styles** — every text node is exactly one of the 18 (family, size, weight); SVG chart labels are the only exemption.
-  - **colour** — accents are the 500; a 600/700 only on a coloured surface; no tint as text; nothing outside the palette. See `references/color.md`.
-  - **layout** — geometry, which no style audit can see: no two pieces of text overlap (a `.num` without its `.stat` wrapper collides with its own label), nothing falls outside the 64px margins or below y=1012, and no content slide stops more than one grid row short of the bottom.
-  - **house rules** — no em dash, no emoji or dingbats as content, Axoniq spelled correctly, header numbers zero-padded, no placeholder text, filename matching `kit/VERSION`.
+  - **shell**. The deck was copied from the master: slides are `section.slide` inside `#scaler`, `symbol#lockup` and `symbol#mk` are present, the logo is a `<use>` and not typed text, `window.__go` and `window.__count` exist, `#frame` gets a real size, no invented or stale classes. It also checks the v0.4 chrome: dark presenter surface, the `.hud-meta` group (`#counter`, `#deckname`, `#slidename`), the EDIT and FULL SCREEN buttons, and `script#rb-editor` with a live `window.__rbEditor`. A deck that fails this is not a Rembrandt deck, and the other audits cannot be trusted on it.
+  - **styles**. Every text node is exactly one of the 18 (family, size, weight); SVG chart labels are the only exemption.
+  - **colour**. Accents are the 500; a 600/700 only on a coloured surface; no tint as text; nothing outside the palette. See `references/color.md`.
+  - **layout**. Geometry, which no style audit can see: no two pieces of text overlap (a `.num` without its `.stat` wrapper collides with its own label), nothing falls outside the 64px margins or below y=1012, and no content slide stops more than one grid row short of the bottom.
+  - **house rules**. No em dash, no emoji or dingbats as content, Axoniq spelled correctly, header numbers zero-padded, no placeholder text, filename matching `kit/VERSION`.
 - [ ] The audits are only meaningful on a deck built from the master. If `shell` fails, fix that first: the style and colour audits measure the master's classes, and a retyped deck can pass them by having none.
 
 **Structure**
@@ -39,7 +39,7 @@ Structure, completion, coherence — checkable from the DOM and text.
 - [ ] The counter total equals the slide count.
 
 **Completion**
-- [ ] No slide overflows. Check character counts per slot against `references/text-styles.md` budgets; check that no text node's content length exceeds its slot's max. (This is why Cohere needs no screenshot — fit is a measured property of the text, not a look.)
+- [ ] No slide overflows. Check character counts per slot against `references/text-styles.md` budgets; check that no text node's content length exceeds its slot's max. (This is why Cohere needs no screenshot: fit is a measured property of the text, not a look.)
 - [ ] No empty slots and no leftover placeholder text. Grep for: `xxx`, `lorem`, `ipsum`, `TODO`, `\[insert`, `Vestibulum`, `Lorem`, `{{`, `}}`.
 - [ ] No broken images: every `<img>` has a real `src` (data URI or the checkerboard placeholder), none point at a missing file.
 
@@ -62,7 +62,7 @@ Structure, completion, coherence — checkable from the DOM and text.
 - [ ] No em dashes (`—`) anywhere in the copy. Use periods, commas, or restructured sentences.
 - [ ] The company is written **Axoniq** everywhere. Grep for `AxonIQ` and fix any hit.
 - [ ] Only Geist, Inter, and Geist Mono are referenced; no other `font-family`.
-- [ ] No raw hex colors or off-scale font sizes introduced in scoped CSS — only tokens.
+- [ ] No raw hex colors or off-scale font sizes introduced in scoped CSS. Only tokens.
 - [ ] The HUD names the deck, not the shell it was copied from. `#deckname` and the overview header both read the presentation's name, and `<title>` matches. `set_deck_name()` does all three.
 - [ ] The delivered filename is `<Presentation name> - Rembrandt v<version>.html`, with the version read from `kit/VERSION`.
 

@@ -1,6 +1,6 @@
 ---
 name: rembrandt
-description: Turn any slide deck, markdown, PDF, or plain description into a presentation rendered to the Axoniq master standard — the real templates and tokens, always as a single self-contained HTML file. Use whenever someone at Axoniq wants to make, build, format, rebrand, or clean up a slide deck, presentation, or slides.
+description: Turn any slide deck, markdown, PDF, or plain description into a presentation rendered to the Axoniq master standard: the real templates and tokens, always as a single self-contained HTML file. Use whenever someone at Axoniq wants to make, build, format, rebrand, or clean up a slide deck, presentation, or slides.
 ---
 
 # Rembrandt
@@ -53,22 +53,22 @@ The styles are the 18 classes documented in `references/text-styles.md` and rend
 
 **You do not design. You select, fill, compose, and cohere.**
 
-All design already exists in the kit — 37 layouts, the tokens, the header, the viewer shell, the type system, the icon library. The kit lives at the Rembrandt root: `${CLAUDE_PLUGIN_ROOT}/kit/master.html` when installed as a plugin, or `kit/master.html` from the repo. (Every `kit/...` and `references/...` path below is relative to that root.) Your job is editorial:
+All design already exists in the kit: 37 layouts, the tokens, the header, the viewer shell, the type system, the icon library. The kit lives at the Rembrandt root: `${CLAUDE_PLUGIN_ROOT}/kit/master.html` when installed as a plugin, or `kit/master.html` from the repo. (Every `kit/...` and `references/...` path below is relative to that root.) Your job is editorial:
 
 1. Decide **what each slide is trying to say**.
 2. Pick the master template that says that.
 3. Write the content to fit it.
-4. **Cohere** — check the finished deck against the source and against itself.
+4. **Cohere**. Check the finished deck against the source and against itself.
 
-You may write **scoped CSS** for spacing and fit, and you may **invent a layout as a last resort**, but the master is always the source of truth. When the master has a template for the job, use it exactly — never restyle it or substitute a look-alike.
+You may write **scoped CSS** for spacing and fit, and you may **invent a layout as a last resort**, but the master is always the source of truth. When the master has a template for the job, use it exactly, and never restyle it or substitute a look-alike.
 
 ## The flow
 
 Run these in order. Do not skip 2 or 3 for existing material, and never skip 7 or 9.
 
 1. **Ingest.** Extract the text, then look at the source only where the text is ambiguous. See **Ingest** below for the exact procedure and its stopping rule. Build a content inventory: every point, metric, table, name, date, quote, sequence, and image. Note what is a real content point versus a note-to-self ("show sample", "keep this?", "dates").
-2. **Fidelity** (existing material only — skip when building from scratch). Ask which level applies, once, before writing anything. See **Fidelity** below.
-3. **Questionnaire.** Collect **all** missing information in one pass. See **Questionnaire** below. Do this before outlining — a deck built on holes wastes everyone's time.
+2. **Fidelity** (existing material only, skipped when building from scratch). Ask which level applies, once, before writing anything. See **Fidelity** below.
+3. **Questionnaire.** Collect **all** missing information in one pass. See **Questionnaire** below. Do this before outlining. A deck built on holes wastes everyone's time.
 4. **Outline.** Map the inventory to templates by meaning (see `references/templates.md`). Apply the deck rhythm rules: open with a cover, use chapters once the deck passes ten slides, never repeat a template back to back, close with the closing layout.
 5. **Fill.** Write each slide's copy to the template's density budget (see `references/text-styles.md`). This is where most of the work is: it is writing, not layout.
 6. **Assemble.** **Copy** the shell out of `kit/master.html` with a script. Do not retype it. See **Assemble** below for the exact method; it is three lines of Python and it is not optional.
@@ -200,15 +200,15 @@ worked cases.
 
 For existing material, ask which level applies before writing:
 
-- **Verbatim** — zero rewriting. The source words land on slides as written. Fit comes only from template choice, density, and splitting. Never reword, even to fix a widow.
-- **High fidelity** — your content, minimal edits for aesthetic fit, no semantic changes. Compress and tighten, never change meaning. Finish with a short change report: old line, new line, why.
-- **Liberal** — full editorial control. Rewrite freely to make each slide land.
+- **Verbatim**. Zero rewriting. The source words land on slides as written. Fit comes only from template choice, density, and splitting. Never reword, even to fix a widow.
+- **High fidelity**. Your content, minimal edits for aesthetic fit, no semantic changes. Compress and tighten, never change meaning. Finish with a short change report: old line, new line, why.
+- **Liberal**. Full editorial control. Rewrite freely to make each slide land.
 
 When the source is speaker notes rather than prose ("Show sample", "Dates", "Tickets CTA"), say so when you ask, because Verbatim is meaningless against notes-to-self.
 
 ## Questionnaire
 
-Rembrandt's first real interaction is collecting what the source is missing. Scan the inventory for holes — undated events, unnamed people, "show URL", "show sample", empty roles, TBD figures — and ask for **all of them at once**, grouped, before you outline.
+Rembrandt's first real interaction is collecting what the source is missing. Scan the inventory for holes (undated events, unnamed people, "show URL", "show sample", empty roles, TBD figures) and ask for **all of them at once**, grouped, before you outline.
 
 - Accept a **URL as an answer**. If the person answers "https://axoniq.io/our-people" or a concept page, go fetch it and use what it says. A pasted link is a complete answer, not a deferral.
 - Offer a visible **placeholder** option for anything genuinely not-yet-known ("DATES · TBD" in mono), so the deck can ship with the hole marked rather than blocked.
@@ -218,7 +218,7 @@ Never invent a date, a name, a figure, or a URL silently. Either ask, use a mark
 
 ## Template selection
 
-Select by what the slide is **trying to say**, then let budgets veto — never the other way around. A timeline is not "events across time"; it can be a user journey, an adoption path, or a plan, and each reads differently. `references/templates.md` is the catalog: each template carries what it is for, what it is *not* for, and worked examples. Read it before outlining.
+Select by what the slide is **trying to say**, then let budgets veto, never the other way around. A timeline is not "events across time"; it can be a user journey, an adoption path, or a plan, and each reads differently. `references/templates.md` is the catalog: each template carries what it is for, what it is *not* for, and worked examples. Read it before outlining.
 
 ## Density and type
 
@@ -260,7 +260,7 @@ Do not build a chapter cover from any other source: not the source deck's agenda
 
 ## Assets
 
-Use the real brand assets in `kit/assets/` — the company lockup and icon, and the product marks (Axon Framework `#FF4405`, Axoniq Framework and Server `#2E90FA`, Insights `#7A5AF8`). Embed images the deck needs as data URIs so the output stays a single file. When an image is missing, use the checkerboard placeholder; never leave a raw broken image.
+Use the real brand assets in `kit/assets/`: the company lockup and icon, and the product marks (Axon Framework `#FF4405`, Axoniq Framework and Server `#2E90FA`, Insights `#7A5AF8`). Embed images the deck needs as data URIs so the output stays a single file. When an image is missing, use the checkerboard placeholder; never leave a raw broken image.
 
 The company mark appears at two sizes and no others: the header lockup, and the 84px icon on the closing slide. A dark cover carries its own backdrop gradient; it does not need a decorative sphere or an enlarged mark behind the title, and the master no longer has one.
 
@@ -280,22 +280,22 @@ node kit/verify.js "Bi-Weekly ONE House - Rembrandt v0.5 - Opus 5.html"
 
 It runs five checks and fails closed on every one:
 
-- **shell** — the deck was copied from the master: slides are `section.slide` in `#scaler`, the sprite and viewer are intact, no invented classes.
-- **styles** — every text node is exactly one of the 18.
-- **colour** — accents are the 500.
-- **layout** — geometry a style audit cannot see: no two pieces of text **collide**, nothing sits **outside the frame** (past the 64px margins or below y=1012), and no content slide leaves a **dead band** more than one grid row short of the bottom. This is the check that catches a stat built without its `.stat` wrapper, a card that overflows, and a slide that is a title floating above nothing.
-- **house rules** — no em dash, no emoji, Axoniq spelled right, `#NN` padded, filename correct for `kit/VERSION`.
+- **shell**. The deck was copied from the master: slides are `section.slide` in `#scaler`, the sprite and viewer are intact, no invented classes.
+- **styles**. Every text node is exactly one of the 18.
+- **colour**. Accents are the 500.
+- **layout**. Geometry a style audit cannot see: no two pieces of text **collide**, nothing sits **outside the frame** (past the 64px margins or below y=1012), and no content slide leaves a **dead band** more than one grid row short of the bottom. This is the check that catches a stat built without its `.stat` wrapper, a card that overflows, and a slide that is a title floating above nothing.
+- **house rules**. No em dash, no emoji, Axoniq spelled right, `#NN` padded, filename correct for `kit/VERSION`.
 
 If it says FAIL, you have not finished; fix and run it again. Never report a deck as done without pasting its PASS line.
 
-**The reading pass.** The gate cannot read. Everything below is your job, and it is **not a visual one — do not use screenshots**. Work from the HTML, the DOM, and the text. Check two things:
+**The reading pass.** The gate cannot read. Everything below is your job, and it is **not a visual one, so do not use screenshots**. Work from the HTML, the DOM, and the text. Check two things:
 
-**Against the original material** — completion and fidelity.
+**Against the original material**, for completion and fidelity.
 - Every content point, metric, table, name, and date from the inventory is present in the deck (or was explicitly dropped as a note-to-self, or is a marked placeholder the person approved).
 - Nothing was invented beyond what the fidelity level allows; for High fidelity, no meaning changed.
 - Every questionnaire answer landed where it belongs.
 
-**In itself** — coherence, completion, and structure.
+**In itself**, for coherence, completion, and structure.
 - Structure: cover first; chapters used if over ten slides; each chapter cover is the master `index/spread` with `.cur` and `.past` correct for its position; closing slide last. No kicker anywhere.
 - Styles and colour: `node kit/verify.js deck.html` passes. Every text node is exactly one style; every accent is a 500, with the deep steps only on coloured surfaces.
 - Numbering: header meta (`Chapter · Title · #N`) matches actual slide order; the counter total is right.

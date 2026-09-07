@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap">
 <style>
 /* Axoniq house style, as it runs on axoniq.io: white ground, Untitled UI
    neutrals, display type set large at regular weight with tight tracking.
@@ -58,10 +58,10 @@ a:hover{border-bottom-color:var(--blue)}
   border:1px solid var(--line-2);background:var(--surface);
   box-shadow:0 10px 26px -12px rgba(16,24,40,.18);margin-bottom:30px}
 .mark img{display:block;width:100%;height:100%;object-fit:cover}
-h1{font-family:var(--f-disp);font-size:clamp(46px,6.6vw,76px);font-weight:400;
-  line-height:1.06;letter-spacing:-.026em;color:var(--ink);
+h1{font-family:var(--f-disp);font-optical-sizing:auto;font-size:clamp(46px,6.6vw,76px);font-weight:470;
+  line-height:1.07;letter-spacing:-.024em;color:var(--ink);
   margin-bottom:22px;text-wrap:balance}
-.stand{font-size:19px;line-height:1.55;color:var(--g600);max-width:46ch;
+.stand{font-size:20px;line-height:1.5;color:var(--g600);max-width:46ch;
   margin:0 auto 30px;text-wrap:pretty}
 .cta{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:34px}
 .cta a{font-size:14.5px;font-weight:500;border-radius:8px;padding:11px 18px;border:0}
@@ -77,8 +77,8 @@ h1{font-family:var(--f-disp);font-size:clamp(46px,6.6vw,76px);font-weight:400;
 /* ---------- sections ---------- */
 section{padding:74px 0;border-top:1px solid var(--line)}
 .shead{max-width:60ch;margin-bottom:40px}
-h2{font-family:var(--f-disp);font-size:clamp(32px,4vw,44px);font-weight:400;
-  line-height:1.1;letter-spacing:-.024em;color:var(--ink);margin-bottom:12px}
+h2{font-family:var(--f-disp);font-optical-sizing:auto;font-size:clamp(32px,4vw,44px);font-weight:530;
+  line-height:1.12;letter-spacing:-.015em;color:var(--ink);margin-bottom:12px}
 .lede{color:var(--g500);font-size:17px}
 
 /* an install route: full width, so the screenshot can breathe */
@@ -87,7 +87,7 @@ h2{font-family:var(--f-disp);font-size:clamp(32px,4vw,44px);font-weight:400;
 .route:last-child{margin-bottom:0}
 .rhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
   padding:20px 26px;border-bottom:1px solid var(--line);background:var(--surface)}
-.rhead h3{font-family:var(--f-body);font-size:19px;font-weight:600;color:var(--ink)}
+.rhead h3{font-family:var(--f-body);font-size:19px;font-weight:560;color:var(--ink)}
 .rhead .where{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.13em;
   text-transform:uppercase;color:var(--g500);background:var(--white);
   box-shadow:inset 0 0 0 1px var(--line-2);border-radius:999px;padding:4px 10px}
@@ -155,7 +155,7 @@ code{font-family:var(--f-mono);font-size:.87em;color:var(--ink);
 /* what you get */
 .gets{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
 .get{border-top:2px solid var(--ink);padding-top:18px}
-.get h3{font-family:var(--f-body);font-size:17px;font-weight:600;color:var(--ink);
+.get h3{font-family:var(--f-body);font-size:17px;font-weight:560;color:var(--ink);
   margin-bottom:6px}
 .get p{font-size:15px;color:var(--g500)}
 kbd{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--ink);
@@ -169,13 +169,13 @@ kbd{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--ink);
 .box.good{box-shadow:0 0 0 1px var(--line-2), 0 10px 30px -18px rgba(16,24,40,.22)}
 .boxhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
   padding:20px 26px;border-bottom:1px solid var(--line);background:var(--surface)}
-.boxhead h3{font-family:var(--f-body);font-size:19px;font-weight:600;color:var(--ink)}
+.boxhead h3{font-family:var(--f-body);font-size:19px;font-weight:560;color:var(--ink)}
 .boxhead .sub{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.13em;
   text-transform:uppercase;color:var(--g500)}
 .boxbody{padding:26px}
 .boxbody > ul{list-style:none;display:flex;flex-direction:column;gap:18px}
 .boxbody li{position:relative;padding-left:32px;font-size:15.5px;color:var(--g600)}
-.boxbody b{color:var(--ink);font-weight:600}
+.boxbody b{color:var(--ink);font-weight:560}
 /* A ruled-out point gets a struck circle; a practice gets a check. Same size,
    so the two columns line up across the gap. */
 ul.nots li::before{content:"";position:absolute;left:0;top:9px;width:19px;height:19px;
@@ -195,12 +195,12 @@ ul.dos li::after{content:"";position:absolute;left:6px;top:14px;width:7px;height
   padding:15px 18px;margin-bottom:34px}
 .xl{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-bottom:38px}
 .xl .cell{border-top:2px solid var(--ink);padding-top:18px}
-.xl h3{font-family:var(--f-body);font-size:17px;font-weight:600;color:var(--ink);
+.xl h3{font-family:var(--f-body);font-size:17px;font-weight:560;color:var(--ink);
   margin-bottom:7px}
 .xl p{font-size:15px;color:var(--g500)}
 .xl p + p{margin-top:10px}
 .prep{border:1px solid var(--line);border-radius:14px;background:var(--white);padding:26px}
-.prep h3{font-family:var(--f-body);font-size:17px;font-weight:600;color:var(--ink);
+.prep h3{font-family:var(--f-body);font-size:17px;font-weight:560;color:var(--ink);
   margin-bottom:16px}
 .prep ol{list-style:none;counter-reset:p;display:flex;flex-direction:column;gap:15px}
 .prep li{counter-increment:p;position:relative;padding-left:34px;font-size:15.5px;
@@ -209,7 +209,7 @@ ul.dos li::after{content:"";position:absolute;left:6px;top:14px;width:7px;height
   font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--white);
   background:var(--orange);width:21px;height:21px;border-radius:999px;
   display:flex;align-items:center;justify-content:center}
-.prep b{color:var(--ink);font-weight:600}
+.prep b{color:var(--ink);font-weight:560}
 
 footer{border-top:1px solid var(--line);background:var(--surface)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:center;
@@ -246,6 +246,7 @@ footer a:hover{color:var(--ink)}
       <span class="prod">Rembrandt</span>
     </div>
     <nav class="mnav">
+      <a href="#editing">Editing</a>
       <a href="changelog.html">Changelog</a>
     </nav>
   </div>
@@ -315,9 +316,9 @@ footer a:hover{color:var(--ink)}
         <span class="where">Not supported</span>
       </div>
       <div class="rbody">
-        <p>Rembrandt is not available in the terminal. Before it hands over a deck it has to pass five automated checks, and those measure the rendered page in a real browser: that every piece of text is exactly one of the eighteen type styles, that nothing collides or falls outside the frame, that every accent uses the right colour step. Cowork has that browser ready. A laptop usually does not, and a deck that skipped the checks is not a Rembrandt deck.</p>
-        <p class="note">If you live in the terminal, use the desktop app for decks and stay in the terminal for everything else.</p>
+        <p>Rembrandt is not available for Claude Code, because it needs a real browser to run the five checks a deck has to pass before delivery. Cowork has one; a laptop generally does not.</p>
       </div>
+    </div>
     </div>
   </section>
 
@@ -342,6 +343,65 @@ footer a:hover{color:var(--ink)}
     </div>
   </section>
 
+  <section id="editing">
+    <div class="shead">
+      <h2>Editing a finished deck</h2>
+      <p class="lede">Press <kbd>E</kbd>, or click EDIT in the bar at the bottom, and the deck becomes editable where it sits. Fix a typo, retype a card, drop an icon, without coming back to Claude. What you cannot do is break the design.</p>
+    </div>
+
+    <p class="rule">Your edits live in the browser, not in the file. Nothing reaches the file until you press Save.</p>
+
+    <div class="xl">
+      <div class="cell">
+        <h3>Where your edits live</h3>
+        <p>In this browser, on this machine. Reloading the page keeps them, which means an accidental refresh costs you nothing.</p>
+        <p>Sending the file to a colleague does not. They will open the version you last saved, and see none of your unsaved changes.</p>
+      </div>
+      <div class="cell">
+        <h3>What Save does</h3>
+        <p>Chrome and Edge write straight back into the same file. It asks once which file, then remembers.</p>
+        <p>Every other browser downloads a copy instead, which lands in Downloads under the same name. Keep track of which one is current.</p>
+      </div>
+      <div class="cell">
+        <h3>Before you ask for changes</h3>
+        <p>Tell Claude what you edited by hand. Regenerating the deck can overwrite those edits, because Rembrandt rebuilds from the source rather than from your copy.</p>
+        <p>Save first, then ask.</p>
+      </div>
+    </div>
+
+    <div class="duo">
+      <div class="box good">
+        <div class="boxhead">
+          <h3>What you can change</h3>
+          <span class="sub">In place, no Claude</span>
+        </div>
+        <div class="boxbody">
+          <ul class="dos">
+            <li><b>Any text on any slide.</b> Click and type. Paste from anywhere: it arrives as plain text, so a paste out of Word cannot drag a font, a size or a colour in with it.</li>
+            <li><b>Icons and images.</b> Hover one and a small button appears to take it out.</li>
+            <li><b>Repeated items.</b> Cards, stats, rows and chips go the same way, and the grid recounts itself so a three-up becomes a clean two-up with no hole where the third was.</li>
+            <li><b>Undo, and revert.</b> Undo steps back through your edits. Revert all puts the deck back to how Rembrandt delivered it.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="boxhead">
+          <h3>What it will not let you do</h3>
+          <span class="sub">On purpose</span>
+        </div>
+        <div class="boxbody">
+          <ul class="nots">
+            <li><b>Change type, size or colour.</b> Every word stays one of the eighteen styles. This is the rule the whole deck is built on, and editing cannot get around it.</li>
+            <li><b>Move things.</b> Position comes from the template. If the arrangement is wrong, that is a question for Claude, not a drag.</li>
+            <li><b>Empty a slide.</b> The last card in a group will not delete.</li>
+            <li><b>Overflow quietly.</b> The bar turns red the moment an edit runs past the bottom of the slide or collides with something else.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="scope">
     <div class="shead">
       <h2>What it is, and what it isn't</h2>
@@ -349,6 +409,21 @@ footer a:hover{color:var(--ink)}
     </div>
 
     <div class="duo">
+      <div class="box good">
+        <div class="boxhead">
+          <h3>Best practices</h3>
+          <span class="sub">How to hand it over</span>
+        </div>
+        <div class="boxbody">
+          <ul class="dos">
+            <li><b>Start in a text editor.</b> Markdown is king; Notion works too. Write paragraphs, tables, bullet points and lists, and use dividers for pages. Do not get bogged down in layout.</li>
+            <li><b>Attach raw Excel data, not screenshots.</b> For tables and for graphs alike.</li>
+            <li><b>Add raw code, not screenshots of code.</b> Paste the real thing. That is part of why markdown or Notion is best, though Word and Google Docs work too.</li>
+            <li><b>Use bold and underline to emphasise.</b> That is the signal Rembrandt reads to decide what carries weight on the slide.</li>
+          </ul>
+        </div>
+      </div>
+
       <div class="box">
         <div class="boxhead">
           <h3>What it isn't</h3>
@@ -363,21 +438,6 @@ footer a:hover{color:var(--ink)}
           </ul>
         </div>
       </div>
-
-      <div class="box good">
-        <div class="boxhead">
-          <h3>Best practices</h3>
-          <span class="sub">How to hand it over</span>
-        </div>
-        <div class="boxbody">
-          <ul class="dos">
-            <li><b>Start in a text editor.</b> Markdown is king; Notion works too. Write paragraphs, tables, bullet points and lists, and use dividers for pages. Do not get bogged down in layout.</li>
-            <li><b>Attach raw Excel data, not screenshots.</b> For tables and for graphs alike.</li>
-            <li><b>Add raw code, not screenshots of code.</b></li>
-            <li><b>Use bold and underline to emphasise.</b> That is the signal Rembrandt reads to decide what carries weight on the slide.</li>
-          </ul>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -386,8 +446,6 @@ footer a:hover{color:var(--ink)}
       <h2>Using data from Excel</h2>
       <p class="lede">Send the sheet, not a picture of the sheet. This is the single change that most improves what comes back.</p>
     </div>
-
-    <p class="rule">Text is the content of record. A picture of the source is a lookup, not a reading pass, and Rembrandt will never guess a number off a chart it could not read.</p>
 
     <div class="xl">
       <div class="cell">
