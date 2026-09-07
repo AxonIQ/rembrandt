@@ -275,14 +275,13 @@ footer a:hover{color:var(--ink)}
   <section id="getting-it">
     <div class="shead">
       <h2>Getting it</h2>
-      <p class="lede">Two apps, two different doors. The terminal has slash commands; the desktop app does not, which is the mistake everyone makes first.</p>
+      <p class="lede">Rembrandt runs in the Claude desktop app. It does not run in Claude Code, because the checks it has to pass before handing over a deck need a browser that Cowork provides and a laptop generally does not.</p>
     </div>
 
     <div class="route rec-route">
       <div class="rhead">
         <h3>Claude desktop</h3>
         <span class="where">Cowork</span>
-        <span class="rec">Recommended</span>
       </div>
       <div class="rbody">
         <figure class="lead">
@@ -294,7 +293,6 @@ footer a:hover{color:var(--ink)}
         </figure>
 
         <div class="col">
-          <p class="warn">There is no <code>/plugin</code> command here. Typing one gets you <em>Unknown skill: plugin</em>. Everything happens in the sidebar instead.</p>
           <ol class="steps">
             <li>Open <b>Customize</b> at the bottom of the sidebar.</li>
             <li>Switch to the <b>Plugins</b> tab.</li>
@@ -314,26 +312,11 @@ footer a:hover{color:var(--ink)}
     <div class="route">
       <div class="rhead">
         <h3>Claude Code</h3>
-        <span class="where">Terminal</span>
+        <span class="where">Not supported</span>
       </div>
       <div class="rbody">
-        <div class="rgrid">
-          <div>
-            <p>Two commands, sent one at a time. Both on one line is the other classic mistake.</p>
-            <p>Send the first, wait for it to confirm the marketplace was added, then send the second.</p>
-          </div>
-          <div>
-            <div class="snip">
-              <div class="cap"><span>1</span> Add the marketplace</div>
-              <pre>/plugin marketplace add <b>AxonIQ/rembrandt</b></pre>
-            </div>
-            <div class="snip">
-              <div class="cap"><span>2</span> Then, as a separate message</div>
-              <pre>/plugin install <b>rembrandt@axoniq</b></pre>
-            </div>
-          </div>
-        </div>
-        <p class="note">Later, when a new version ships, <code>/plugin marketplace update axoniq</code> picks it up.</p>
+        <p>Rembrandt is not available in the terminal. Before it hands over a deck it has to pass five automated checks, and those measure the rendered page in a real browser: that every piece of text is exactly one of the eighteen type styles, that nothing collides or falls outside the frame, that every accent uses the right colour step. Cowork has that browser ready. A laptop usually does not, and a deck that skipped the checks is not a Rembrandt deck.</p>
+        <p class="note">If you live in the terminal, use the desktop app for decks and stay in the terminal for everything else.</p>
       </div>
     </div>
   </section>
@@ -346,7 +329,7 @@ footer a:hover{color:var(--ink)}
     <div class="gets">
       <div class="get">
         <h3>One file</h3>
-        <p>Named <code>Your Deck - Rembrandt v1.0.0.html</code>. Opens in any browser, works offline, nothing to install.</p>
+        <p>Named <code>Your Deck - Rembrandt v1.0.html</code>. Opens in any browser, works offline, nothing to install.</p>
       </div>
       <div class="get">
         <h3>Present with the keyboard</h3>
@@ -448,7 +431,7 @@ footer a:hover{color:var(--ink)}
       <path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
       <path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
     </svg>
-    <span>Rembrandt v1.0.0</span>
+    <span>Rembrandt v1.0.1</span>
     <span class="push"><a href="https://axoniq.io">axoniq.io</a></span>
   </div>
 </footer>

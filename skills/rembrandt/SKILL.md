@@ -12,15 +12,26 @@ Rembrandt turns raw material into an Axoniq-branded presentation. The output is 
 
 ## Before you start
 
-Two things, in order, before you touch the input.
+Three things, in order, before you touch the input.
 
-**1. Say which version you are, and name the model to use.** Read `kit/VERSION`, then open with one line:
+**1. Rembrandt only runs in Cowork.** Before anything else, confirm you can launch a browser:
+`node -e "require('playwright')"`. If that fails, you are not in Cowork, and you must **stop**:
+
+> Rembrandt only works in the Claude desktop app. The checks a deck has to pass before delivery
+> measure the rendered page in a real browser, and this environment has none. Open this in Cowork
+> and I will render it there.
+
+Do not offer to build a deck without the checks, do not install a browser, and do not deliver
+something unverified. A deck that skipped the gate is not a Rembrandt deck, whatever its filename
+says. This is the one condition where the right answer is to build nothing.
+
+**2. Say which version you are, and name the model to use.** Read `kit/VERSION`, then open with one line:
 
 > Rembrandt v1.0. This runs best on Opus 5 at Low effort. Sonnet is not faster here, and Haiku will not produce a usable deck.
 
 That is a recommendation, not a question. Do not wait for an answer, and do not ask the person to confirm which model is running: a session cannot verify which model is serving it, the configured identifier can differ from the model actually answering, and the filename no longer records it. If the person says they are on Haiku, tell them plainly that the deck will not come out right, and let them decide.
 
-**2. One run per chat.** If this conversation has already done any of the following, **stop, tell the person to start a new chat, and wait** rather than proceeding:
+**3. One run per chat.** If this conversation has already done any of the following, **stop, tell the person to start a new chat, and wait** rather than proceeding:
 
 - run Rembrandt before, on this source or any other;
 - loaded, quoted, or discussed an earlier version of these rules;
@@ -62,7 +73,7 @@ Run these in order. Do not skip 2 or 3 for existing material, and never skip 7 o
 5. **Fill.** Write each slide's copy to the template's density budget (see `references/text-styles.md`). This is where most of the work is: it is writing, not layout.
 6. **Assemble.** **Copy** the shell out of `kit/master.html` with a script. Do not retype it. See **Assemble** below for the exact method; it is three lines of Python and it is not optional.
 7. **Compose.** Distribute every slide vertically the way the master does: title at the top, content anchored to the bottom, air in between. See **Composer** below. Composition comes before any fit decision, because most "does not fit" and most "looks empty" problems are composition problems.
-8. **Adjust for fit.** Only if a composed slide still overflows at regular density, in this order: rewrite tighter, switch to the dense density mode, switch to a higher-capacity template variant, or split the slide. Only then touch scoped CSS. Never let text spill, and never shrink type to make it fit.
+8. **Adjust for fit.** Only if a composed slide still overflows at regular density, in this order: rewrite tighter, switch to the dense density mode, switch to a higher-capacity template variant, or split the slide. **At Verbatim the first rung does not exist**, so the order there is density, then template, then split: never reword to make something fit. Only then touch scoped CSS. Never let text spill, and never shrink type to make it fit.
 9. **Cohere.** Run `node kit/verify.js "<your file>"` until it prints PASS, then do the reading checks. See **Cohere** below.
 10. **Deliver.** Name the file, publish as an artifact, hand over the HTML. See **Deliver** below. Report every gap you filled, every place you invented content, and every slide that went dense.
 

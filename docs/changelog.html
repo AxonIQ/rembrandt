@@ -129,8 +129,23 @@ footer a:hover{color:var(--ink)}
 
       <article class="rel current">
         <div class="relv">
-          <h2 id="v1-0-0">1.0.0</h2>
+          <h2 id="v1-0-1">1.0.1</h2>
           <span class="tag">Current</span>
+        </div>
+        <div class="relbody">
+<p>Rembrandt is Cowork only, stated rather than implied, and one gap in the fit ladder closed.</p>
+<ul>
+<li><strong>Cowork only.</strong> The gate measures the rendered page in a real browser, and Cowork has one ready while a laptop generally does not. Claude Code was never able to run the checks, and the failure was silent: <code>chromium.launch()</code> threw a stack trace rather than printing FAIL, so a model that could not verify a deck would likely have delivered it anyway. That turned a hard gate into no gate through the back door. The skill now checks for a browser before it touches the input and stops outright if there is none, rather than building something it cannot check. The landing page and the README say so plainly instead of offering terminal instructions that half work.</li>
+<li><strong>The fit ladder no longer contradicts Verbatim.</strong> Step 8 led with "rewrite tighter" while the Fidelity section says Verbatim means zero rewriting, fit from template, density and splitting only. A model reading the flow in order would reach for the first rung and reword a Verbatim deck, and no check would catch it: the five checks measure type, colour, geometry and house rules, never whether the words still match the source. Step 8 now names the exception.</li>
+<li><strong>Fixed the filename shown on the landing page</strong>, which advertised a three-digit version. Decks are stamped with major and minor only, which is what <code>verify.js</code> enforces.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="v1-0-0">1.0.0</h2>
+          
         </div>
         <div class="relbody">
 <p>The cleanup. Nothing was added; a lot was taken away. Five versions of solving problems left a repository where scaffolding outnumbered the tool, so this release removes everything that was true once and is now archaeology, without dropping a single check.</p>
@@ -299,7 +314,7 @@ footer a:hover{color:var(--ink)}
 <path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
 <path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
 </svg>
-    <span>Rembrandt v1.0.0</span>
+    <span>Rembrandt v1.0.1</span>
     <span class="push"><a href="https://axoniq.io">axoniq.io</a></span>
   </div>
 </footer>

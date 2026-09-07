@@ -1,7 +1,7 @@
 {
   "name": "rembrandt",
-  "version": "1.0.0",
-  "description": "Render any input into a presentation built to the Axoniq master standard: the real templates and tokens, always as a single self-contained HTML file.",
+  "version": "1.0.1",
+  "description": "Render any input into a presentation built to the Axoniq master standard: the real templates and tokens, always as a single self-contained HTML file. Cowork only.",
   "author": {
     "name": "Axoniq"
   },

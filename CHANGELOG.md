@@ -8,6 +8,25 @@ Releases are git tags from v1.0.0 on. Earlier history is not in this repository:
 from a single commit before publication, because the example decks it carried held internal
 figures and customer names. The entries below remain the full record of what changed and why.
 
+## 1.0.1
+
+Rembrandt is Cowork only, stated rather than implied, and one gap in the fit ladder closed.
+
+- **Cowork only.** The gate measures the rendered page in a real browser, and Cowork has one ready
+  while a laptop generally does not. Claude Code was never able to run the checks, and the failure
+  was silent: `chromium.launch()` threw a stack trace rather than printing FAIL, so a model that
+  could not verify a deck would likely have delivered it anyway. That turned a hard gate into no
+  gate through the back door. The skill now checks for a browser before it touches the input and
+  stops outright if there is none, rather than building something it cannot check. The landing page
+  and the README say so plainly instead of offering terminal instructions that half work.
+- **The fit ladder no longer contradicts Verbatim.** Step 8 led with "rewrite tighter" while the
+  Fidelity section says Verbatim means zero rewriting, fit from template, density and splitting
+  only. A model reading the flow in order would reach for the first rung and reword a Verbatim
+  deck, and no check would catch it: the five checks measure type, colour, geometry and house
+  rules, never whether the words still match the source. Step 8 now names the exception.
+- **Fixed the filename shown on the landing page**, which advertised a three-digit version. Decks
+  are stamped with major and minor only, which is what `verify.js` enforces.
+
 ## 1.0.0
 
 The cleanup. Nothing was added; a lot was taken away. Five versions of solving problems left a

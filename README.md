@@ -5,19 +5,14 @@ PDF, or a plain description, into an Axoniq-branded presentation built to the ma
 real templates, the real tokens, the real brand assets. The output is always **one self-contained
 HTML file** you can present from any browser.
 
-Rembrandt ships as a Claude plugin. It works in Cowork and in Claude Code.
+Rembrandt ships as a Claude plugin for **Cowork**, the Claude desktop app. It does not run in
+Claude Code: the five checks a deck must pass before delivery measure the rendered page in a real
+browser, which Cowork provides and a laptop generally does not.
 
 ## Install
 
 In Cowork: **Customize**, then **Plugins**, then **Add marketplace**, and enter `AxonIQ/rembrandt`.
 Leave **Sync automatically** on and new versions arrive by themselves.
-
-In Claude Code:
-
-```
-/plugin marketplace add AxonIQ/rembrandt
-/plugin install rembrandt@axoniq
-```
 
 Start a new chat for each deck. Rembrandt reads the whole conversation, so leftovers from a previous
 run bleed into the next one and no check can catch it. It runs best on Opus 5 at Low effort; Haiku
