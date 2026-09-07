@@ -37,6 +37,32 @@ Blob, and a README covering deploy, the three environment variables, and why the
 a secret. Its domain has to be on Axoniq's network allowlist or the sandbox proxy refuses the
 POST and every run reports `not recorded`.
 
+## 1.0.6
+
+**The kit now lives inside the skill folder.** Until this release Rembrandt could not work for
+anyone who installed it as a plugin.
+
+`kit/` sat at the plugin root, a sibling of `skills/`. But a Cowork session mounts the skill
+directory, not the plugin root: a teammate's session showed
+`/mnt/skills/plugins/rembrandt:rembrandt/` containing `SKILL.md` and `references/` and nothing
+else. Every layout, the type system, the brand assets, the icon library and the gate were all
+outside what the skill could reach. SKILL.md pointed at `${CLAUDE_PLUGIN_ROOT}/kit/master.html`,
+and that variable is not set, so the path resolved to `/kit/master.html`.
+
+It worked for exactly one person: whoever had the repository checked out on disk. Every other
+install was a skill with no kit, and the correct response was the one the skill got: stop, because
+a deck that skipped the gate is not a Rembrandt deck.
+
+- `kit/` moved to `skills/rembrandt/kit/`, so whatever carries the skill carries everything.
+  Every `kit/...` path in the skill stays as written, now relative to the skill's own folder.
+- SKILL.md says the kit is a sibling of SKILL.md, and drops `${CLAUDE_PLUGIN_ROOT}` entirely. It
+  also gives a one-line `find` for locating the folder from an unknown working directory.
+- `verify.js` walks up to find `.claude-plugin/plugin.json` for the version cross-check, rather
+  than assuming it is one level above the kit.
+- `package.json` and `docs/build.js` follow the new path.
+- Verified by copying the skill folder alone into an empty directory, named the way a Cowork mount
+  names it, with no repository and nothing above it. The gate runs and prints PASS.
+
 ## 1.0.5
 
 - **Fixed the homepage container.** A stray closing tag left over from the 1.0.2 rewrite closed the

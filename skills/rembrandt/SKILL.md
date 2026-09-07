@@ -60,7 +60,7 @@ The styles are the 18 classes documented in `references/text-styles.md` and rend
 
 **You do not design. You select, fill, compose, and cohere.**
 
-All design already exists in the kit: 37 layouts, the tokens, the header, the viewer shell, the type system, the icon library. The kit lives at the Rembrandt root: `${CLAUDE_PLUGIN_ROOT}/kit/master.html` when installed as a plugin, or `kit/master.html` from the repo. (Every `kit/...` and `references/...` path below is relative to that root.) Your job is editorial:
+All design already exists in the kit: 37 layouts, the tokens, the header, the viewer shell, the type system, the icon library. **The kit sits in this skill's own folder, beside this file**, so `kit/master.html` and `references/templates.md` are both siblings of `SKILL.md`. Every `kit/...` and `references/...` path below is relative to that folder. If your working directory is elsewhere, find it once and keep the absolute path: `find / -name master.html -path '*/kit/*' 2>/dev/null | head -1`. Your job is editorial:
 
 1. Decide **what each slide is trying to say**.
 2. Pick the master template that says that.

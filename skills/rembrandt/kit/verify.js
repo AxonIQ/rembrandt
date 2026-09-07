@@ -309,8 +309,17 @@ const SEL = '#scaler > .slide, section.slide';
     if (ph) h.push(`placeholder text: ${ph[0]}`);
 
     const version = fs.readFileSync(path.join(here, 'VERSION'), 'utf8').trim();
-    const manifest = path.join(here, '..', '.claude-plugin', 'plugin.json');
-    if (fs.existsSync(manifest)) {
+    // The kit lives inside the skill folder, so the manifest is a few levels up. Walk to
+    // find it rather than hard-coding a depth; absent is fine, a mismatch is not.
+    let dir = here, manifest = null;
+    for (let i = 0; i < 5 && !manifest; i++) {
+      const c = path.join(dir, '.claude-plugin', 'plugin.json');
+      if (fs.existsSync(c)) manifest = c;
+      const up = path.dirname(dir);
+      if (up === dir) break;
+      dir = up;
+    }
+    if (manifest) {
       const pv = JSON.parse(fs.readFileSync(manifest, 'utf8')).version;
       if (pv !== version) h.push(`kit/VERSION says ${version} but plugin.json says ${pv}`);
     }

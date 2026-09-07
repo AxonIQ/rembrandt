@@ -128,10 +128,43 @@ footer a:hover{color:var(--ink)}
 <div class="wrap">
   <div class="rels">
 
+      <article class="rel">
+        <div class="relv">
+          <h2 id="vUnreleased: usage telemetry">Unreleased: usage telemetry</h2>
+          
+        </div>
+        <div class="relbody">
+<p><strong>One line per delivered deck, from inside the gate.</strong> <code>kit/verify.js</code> now calls <code>kit/telemetry.js</code> after it prints PASS, and posts who ran it, the deck's name, the time, the version, and the slide, chapter and dense counts to a collector. A prose instruction to report usage would have been advisory, and the model would have skipped it on some runs and not others, which is the one failure mode that makes a usage log worse than no log: you cannot tell a quiet week from a week the instruction lost. Putting it in the gate makes it code.</p>
+<p>Everything in the payload is measured, not remembered. The runner comes from the signed-in Claude account, the deck's name from the filename the house check already validates, the counts from the DOM the layout check already walks. Nothing depends on the agent passing a value through, so nothing in the log is a guess.</p>
+<p>The account email is read from <code>CLAUDE_CODE_USER_EMAIL</code> when it is set and from <code>~/.claude.json</code> when it is not. Both were needed: the environment variable is present in some Cowork shells and absent in others, so the file is what actually carries the identity most runs.</p>
+<p>Three properties it holds to: it never changes the exit code, so a collector that is down or unreachable cannot block a deck; it only fires on PASS, because a deck that failed was never delivered and is not a data point; and it fires once per deck rather than once per gate run, keyed by the deck's own bytes, because Cohere runs the gate repeatedly. <code>REMBRANDT_TELEMETRY=0</code> turns it off, and the skill now discloses what is logged in its opening line.</p>
+<p>The collector is a small Vercel project in <code>telemetry/</code>: two routes, a markdown table in Vercel Blob, and a README covering deploy, the three environment variables, and why the write key is not a secret. Its domain has to be on Axoniq's network allowlist or the sandbox proxy refuses the POST and every run reports <code>not recorded</code>.</p>
+        </div>
+      </article>
+
       <article class="rel current">
         <div class="relv">
-          <h2 id="v1-0-5">1.0.5</h2>
+          <h2 id="v1-0-6">1.0.6</h2>
           <span class="tag">Current</span>
+        </div>
+        <div class="relbody">
+<p><strong>The kit now lives inside the skill folder.</strong> Until this release Rembrandt could not work for anyone who installed it as a plugin.</p>
+<p><code>kit/</code> sat at the plugin root, a sibling of <code>skills/</code>. But a Cowork session mounts the skill directory, not the plugin root: a teammate's session showed <code>/mnt/skills/plugins/rembrandt:rembrandt/</code> containing <code>SKILL.md</code> and <code>references/</code> and nothing else. Every layout, the type system, the brand assets, the icon library and the gate were all outside what the skill could reach. SKILL.md pointed at <code>${CLAUDE_PLUGIN_ROOT}/kit/master.html</code>, and that variable is not set, so the path resolved to <code>/kit/master.html</code>.</p>
+<p>It worked for exactly one person: whoever had the repository checked out on disk. Every other install was a skill with no kit, and the correct response was the one the skill got: stop, because a deck that skipped the gate is not a Rembrandt deck.</p>
+<ul>
+<li><code>kit/</code> moved to <code>skills/rembrandt/kit/</code>, so whatever carries the skill carries everything. Every <code>kit/...</code> path in the skill stays as written, now relative to the skill's own folder.</li>
+<li>SKILL.md says the kit is a sibling of SKILL.md, and drops <code>${CLAUDE_PLUGIN_ROOT}</code> entirely. It also gives a one-line <code>find</code> for locating the folder from an unknown working directory.</li>
+<li><code>verify.js</code> walks up to find <code>.claude-plugin/plugin.json</code> for the version cross-check, rather than assuming it is one level above the kit.</li>
+<li><code>package.json</code> and <code>docs/build.js</code> follow the new path.</li>
+<li>Verified by copying the skill folder alone into an empty directory, named the way a Cowork mount names it, with no repository and nothing above it. The gate runs and prints PASS.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="v1-0-5">1.0.5</h2>
+          
         </div>
         <div class="relbody">
 <ul>
@@ -370,7 +403,7 @@ footer a:hover{color:var(--ink)}
 <path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
 <path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
 </svg>
-    <span>Rembrandt v1.0.5</span>
+    <span>Rembrandt v1.0.6</span>
     <span class="push"><a href="https://axoniq.io">axoniq.io</a></span>
   </div>
 </footer>

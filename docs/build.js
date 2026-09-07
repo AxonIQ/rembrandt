@@ -21,7 +21,7 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const SRC = path.join(ROOT, 'CHANGELOG.md');
 const OUT = path.join(ROOT, 'docs', 'changelog.html');
-const VERSION = fs.readFileSync(path.join(ROOT, 'kit', 'VERSION'), 'utf8').trim();
+const VERSION = fs.readFileSync(path.join(ROOT, 'skills', 'rembrandt', 'kit', 'VERSION'), 'utf8').trim();
 
 const esc = (s) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -100,7 +100,7 @@ if (!releases.length) {
   process.exit(1);
 }
 
-const wordmark = fs.readFileSync(path.join(ROOT, 'kit', 'assets', 'Axoniq - company.svg'), 'utf8')
+const wordmark = fs.readFileSync(path.join(ROOT, 'skills', 'rembrandt', 'kit', 'assets', 'Axoniq - company.svg'), 'utf8')
   .replace(/^<svg[^>]*>/, '<svg viewBox="0 0 1185 300" fill="currentColor" aria-label="Axoniq" role="img">')
   .replace(/ fill="black"/g, '')
   .replace(/\s*fill="none"\s*/g, ' ')
@@ -260,7 +260,7 @@ fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, html);
 
 // The homepage is hand-written, so its footer version used to be edited by hand and
-// went stale. Stamp it from kit/VERSION here instead, since this runs every release.
+// went stale. Stamp it from the kit's VERSION here instead, since this runs every release.
 const HOME = path.join(ROOT, 'docs', 'index.html');
 if (fs.existsSync(HOME)) {
   const before = fs.readFileSync(HOME, 'utf8');

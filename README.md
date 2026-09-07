@@ -1,6 +1,6 @@
 # Rembrandt
 
-**Version 1.0.0** (`kit/VERSION`). Rembrandt renders any input, a slide deck, a markdown file, a
+**Version 1.0.6** (`skills/rembrandt/kit/VERSION`). Rembrandt renders any input, a slide deck, a markdown file, a
 PDF, or a plain description, into an Axoniq-branded presentation built to the master standard: the
 real templates, the real tokens, the real brand assets. The output is always **one self-contained
 HTML file** you can present from any browser.
@@ -36,19 +36,19 @@ rembrandt/
 ├── .claude-plugin/
 │   ├── plugin.json                 # plugin manifest
 │   └── marketplace.json            # this repo is its own marketplace
-├── skills/rembrandt/
+├── skills/rembrandt/               # everything the skill needs, in one folder
 │   ├── SKILL.md                    # the flow, the rules, fidelity, the questionnaire, Cohere
-│   └── references/
-│       ├── templates.md            # the template catalogue, selected by meaning
-│       ├── text-styles.md          # the 18 styles and the two density modes
-│       ├── color.md                # when to use the 500, and what the other steps are for
-│       └── cohere.md               # the final-check checklist
-├── kit/
-│   ├── master.html                 # 37 layouts, tokens, header, viewer, editor, type spec
-│   ├── verify.js                   # THE GATE: five checks, one command
-│   ├── VERSION                     # the version every rendered deck is stamped with
-│   ├── assets/                     # official brand assets (logos, product marks)
-│   └── icons/                      # Lucide icons (ISC, see icons/LICENSE)
+│   ├── references/
+│   │   ├── templates.md            # the template catalogue, selected by meaning
+│   │   ├── text-styles.md          # the 18 styles and the two density modes
+│   │   ├── color.md                # when to use the 500, and what the other steps are for
+│   │   └── cohere.md               # the final-check checklist
+│   └── kit/
+│       ├── master.html             # 37 layouts, tokens, header, viewer, editor, type spec
+│       ├── verify.js               # THE GATE: five checks, one command
+│       ├── VERSION                 # the version every rendered deck is stamped with
+│       ├── assets/                 # official brand assets (logos, product marks)
+│       └── icons/                  # Lucide icons (ISC, see icons/LICENSE)
 ├── CHANGELOG.md
 └── README.md
 ```
@@ -57,7 +57,7 @@ rembrandt/
 
 ```
 npm install && npx playwright install chromium     # once
-node kit/verify.js "My Deck - Rembrandt v1.0.html" # must print VERIFY: PASS
+node skills/rembrandt/kit/verify.js "My Deck - Rembrandt v1.0.html"   # must print VERIFY: PASS
 ```
 
 Five checks, one browser, all failing closed. An empty or unrecognisable deck is a FAIL, never a
@@ -65,7 +65,7 @@ quiet pass.
 
 | Check | What it catches |
 | --- | --- |
-| shell | the deck was copied from `kit/master.html`, not retyped from memory |
+| shell | the deck was copied from the master, not retyped from memory |
 | styles | every text node is exactly one of the 18 styles |
 | colour | accents use the 500; deep steps only on coloured surfaces; nothing off-palette |
 | layout | collisions, text outside the frame, content stopping short of the bottom |
