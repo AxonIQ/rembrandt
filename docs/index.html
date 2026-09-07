@@ -68,6 +68,9 @@ h1{font-family:var(--f-disp);font-size:clamp(44px,6.2vw,70px);font-weight:500;
 .cta a{font-size:14.5px;font-weight:500;border-radius:8px;padding:11px 18px;border:0}
 .cta .solid{background:var(--ink);color:var(--white)}
 .cta .solid:hover{background:#000}
+/* secondary: an outline, so the primary keeps the weight */
+.cta .ghost{background:var(--white);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2)}
+.cta .ghost:hover{background:var(--surface);box-shadow:inset 0 0 0 1px var(--g500)}
 .facts{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
 .pill{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;
   text-transform:uppercase;color:var(--g600);background:var(--white);
@@ -287,6 +290,7 @@ footer a:hover{color:var(--ink)}
     <p class="stand">Hand it a deck, a document, or a paragraph. It hands back an Axoniq presentation as one HTML file.</p>
     <div class="cta">
       <a class="solid" href="#getting-it">Install Rembrandt</a>
+      <a class="ghost" href="example-deck.html">See an example deck</a>
     </div>
     <div class="facts">
       <span class="pill live">v1.0 live</span>
@@ -496,7 +500,7 @@ footer a:hover{color:var(--ink)}
       <path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
       <path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
     </svg>
-    <span>Rembrandt v1.0.3</span>
+    <span>Rembrandt v1.0.1</span>
     <span class="push"><a href="https://axoniq.io">axoniq.io</a></span>
   </div>
 </footer>

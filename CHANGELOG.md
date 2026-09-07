@@ -8,6 +8,13 @@ Releases are git tags from v1.0.0 on. Earlier history is not in this repository:
 from a single commit before publication, because the example decks it carried held internal
 figures and customer names. The entries below remain the full record of what changed and why.
 
+## 1.0.4
+
+- **An example deck on the site.** A second hero button, secondary to Install, opens a finished
+  24-slide deck straight in the browser: `docs/example-deck.html`. It is entirely synthetic, with
+  invented figures, invented people and initials in place of photographs, and it passes all five
+  checks. It carries the 1.0.3 chrome fix, so the F key works in the deck people judge Rembrandt by.
+
 ## 1.0.3
 
 Two fixes in the presenter chrome.
