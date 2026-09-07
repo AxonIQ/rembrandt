@@ -25,11 +25,18 @@ Do not offer to build a deck without the checks, do not install a browser, and d
 something unverified. A deck that skipped the gate is not a Rembrandt deck, whatever its filename
 says. This is the one condition where the right answer is to build nothing.
 
-**2. Say which version you are.** Read `kit/VERSION` and open with one line:
+**2. Say which version you are, and what gets logged.** Read `kit/VERSION` and open with two lines:
 
 > Rembrandt v1.0.
+> When a deck passes the gate I add one line to Axoniq's Rembrandt log: your email, the deck's name, the time, this version, and how many slides and chapters it came to. Nothing from inside the deck.
 
-Nothing else. Do not name, ask about, or comment on which model is running: a session cannot verify which model is serving it, the configured identifier can differ from the model actually answering, and nothing downstream depends on it. The filename does not record it either.
+Say it at the start, before any work happens, and say it once. It is a notice, not a question: do not
+ask permission, do not offer to skip it, and do not repeat it at delivery. The gate prints what it
+actually did, and that line is part of what you paste at the end. If someone would rather not be in
+the log, `REMBRANDT_TELEMETRY=0` in the environment turns it off and the deck is built exactly the
+same way.
+
+Do not name, ask about, or comment on which model is running: a session cannot verify which model is serving it, the configured identifier can differ from the model actually answering, and nothing downstream depends on it. The filename does not record it either.
 
 **3. One run per chat.** If this conversation has already done any of the following, **stop, tell the person to start a new chat, and wait** rather than proceeding:
 
@@ -286,7 +293,7 @@ It runs five checks and fails closed on every one:
 - **layout**. Geometry a style audit cannot see: no two pieces of text **collide**, nothing sits **outside the frame** (past the 64px margins or below y=1012), and no content slide leaves a **dead band** more than one grid row short of the bottom. This is the check that catches a stat built without its `.stat` wrapper, a card that overflows, and a slide that is a title floating above nothing.
 - **house rules**. No em dash, no emoji, Axoniq spelled right, `#NN` padded, filename correct for `kit/VERSION`.
 
-If it says FAIL, you have not finished; fix and run it again. Never report a deck as done without pasting its PASS line.
+If it says FAIL, you have not finished; fix and run it again. Never report a deck as done without pasting its PASS line, and paste the `TELEMETRY:` line under it unchanged. That line is the only honest account of whether the run was logged, and `not recorded` is a normal thing to report, not a failure to fix or hide.
 
 **The reading pass.** The gate cannot read. Everything below is your job, and it is **not a visual one, so do not use screenshots**. Work from the HTML, the DOM, and the text. Check two things:
 

@@ -8,6 +8,35 @@ Releases are git tags from v1.0.0 on. Earlier history is not in this repository:
 from a single commit before publication, because the example decks it carried held internal
 figures and customer names. The entries below remain the full record of what changed and why.
 
+## Unreleased: usage telemetry
+
+**One line per delivered deck, from inside the gate.** `kit/verify.js` now calls
+`kit/telemetry.js` after it prints PASS, and posts who ran it, the deck's name, the time, the
+version, and the slide, chapter and dense counts to a collector. A prose instruction to report
+usage would have been advisory, and the model would have skipped it on some runs and not others,
+which is the one failure mode that makes a usage log worse than no log: you cannot tell a quiet
+week from a week the instruction lost. Putting it in the gate makes it code.
+
+Everything in the payload is measured, not remembered. The runner comes from the signed-in Claude
+account, the deck's name from the filename the house check already validates, the counts from the
+DOM the layout check already walks. Nothing depends on the agent passing a value through, so
+nothing in the log is a guess.
+
+The account email is read from `CLAUDE_CODE_USER_EMAIL` when it is set and from
+`~/.claude.json` when it is not. Both were needed: the environment variable is present in some
+Cowork shells and absent in others, so the file is what actually carries the identity most runs.
+
+Three properties it holds to: it never changes the exit code, so a collector that is down or
+unreachable cannot block a deck; it only fires on PASS, because a deck that failed was never
+delivered and is not a data point; and it fires once per deck rather than once per gate run,
+keyed by the deck's own bytes, because Cohere runs the gate repeatedly. `REMBRANDT_TELEMETRY=0`
+turns it off, and the skill now discloses what is logged in its opening line.
+
+The collector is a small Vercel project in `telemetry/`: two routes, a markdown table in Vercel
+Blob, and a README covering deploy, the three environment variables, and why the write key is not
+a secret. Its domain has to be on Axoniq's network allowlist or the sandbox proxy refuses the
+POST and every run reports `not recorded`.
+
 ## 1.0.5
 
 - **Fixed the homepage container.** A stray closing tag left over from the 1.0.2 rewrite closed the
