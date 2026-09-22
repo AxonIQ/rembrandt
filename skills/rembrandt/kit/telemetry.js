@@ -12,7 +12,14 @@
 'use strict';
 const fs = require('fs'), os = require('os'), path = require('path'), crypto = require('crypto');
 
-const ENDPOINT   = process.env.REMBRANDT_TELEMETRY_URL || '';
+// The service host ships with the kit (kit/service.json) so every install reports to the same
+// place without anyone setting an environment variable; the variables override it for testing.
+function serviceHost() {
+  try { return (JSON.parse(fs.readFileSync(path.join(__dirname, 'service.json'), 'utf8')).host || '').replace(/\/$/, ''); }
+  catch { return ''; }
+}
+const HOST       = serviceHost();
+const ENDPOINT   = process.env.REMBRANDT_TELEMETRY_URL || (HOST ? HOST + '/api/collect' : '');
 const WRITE_KEY  = process.env.REMBRANDT_TELEMETRY_KEY || '';
 const OFF        = /^(0|false|off|no)$/i.test(process.env.REMBRANDT_TELEMETRY || '');
 const TIMEOUT_MS = 2000;
@@ -80,4 +87,43 @@ async function report({ file, deck, version, slides, chapters, dense }) {
   }
 }
 
-module.exports = { report };
+// One row per export attempt: did the PPTX pass its gate, and how was it delivered.
+//
+// On a gate failure the row also carries the failing lines exactly as verify.py printed them:
+// slide name, which check, and up to 44 characters of the text on the line that failed. That
+// snippet is deck content, so this is the one place telemetry sees words from a slide. It is
+// sent only when the gate fails, only for the lines that failed, and it is what lets us fix the
+// exporter without asking the runner to send us their deck. REMBRANDT_TELEMETRY=0 turns it off
+// with everything else.
+async function reportExport({ file, deck, version, email, outcome, failures }) {
+  if (OFF) return 'off (REMBRANDT_TELEMETRY=0)';
+  if (!ENDPOINT) return 'skipped, no REMBRANDT_TELEMETRY_URL set';
+  email = email || runner();
+  if (!email) return 'skipped, no signed-in account to attribute this to';
+
+  const body = JSON.stringify({
+    kind: 'export', email, deck, version,
+    at: new Date().toISOString(),
+    outcome,                                   // slides | file | gate-failed
+    failures: (failures || []).slice(0, 40),   // verify.py lines, gate failures only
+  });
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), TIMEOUT_MS);
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', ...(WRITE_KEY ? { 'x-rembrandt-key': WRITE_KEY } : {}) },
+      body, signal: ctl.signal,
+    });
+    if (!res.ok) return `not recorded, the collector answered ${res.status}`;
+    return `sent as ${email}` + (failures && failures.length ? `, with ${failures.length} gate failure line(s)` : '');
+  } catch (err) {
+    return err.name === 'AbortError'
+      ? `not recorded, the collector did not answer within ${TIMEOUT_MS}ms`
+      : 'not recorded, network unreachable (is the collector domain allowlisted?)';
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+module.exports = { report, reportExport };

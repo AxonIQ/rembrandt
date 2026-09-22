@@ -3,7 +3,8 @@
 // Reads the markdown log back. Token-gated, because the log is a list of who at Axoniq
 // made which deck and when, and that is not something to leave on an open URL.
 //
-//   curl -H "authorization: Bearer $TELEMETRY_READ_KEY" https://<host>/api/log
+//   curl -H "authorization: Bearer $TELEMETRY_READ_KEY" https://<host>/api/log            # decks
+//   curl -H "authorization: Bearer $TELEMETRY_READ_KEY" https://<host>/api/log?which=exports # PPTX exports and gate failures
 import { head } from '@vercel/blob';
 import { logPath } from './collect.js';
 
@@ -17,7 +18,8 @@ export default async function handler(req, res) {
   if (bearer !== READ_KEY) return res.status(401).json({ error: 'unauthorized' });
 
   try {
-    const meta = await head(logPath());
+    const which = req.query && req.query.which === 'exports' ? 'exports' : 'log';
+    const meta = await head(logPath(which));
     const md = await fetch(meta.url, { cache: 'no-store' }).then((r) => r.text());
     res.setHeader('content-type', 'text/markdown; charset=utf-8');
     return res.status(200).send(md);

@@ -8,6 +8,42 @@ Releases are git tags from v1.0.0 on. Earlier history is not in this repository:
 from a single commit before publication, because the example decks it carried held internal
 figures and customer names. The entries below remain the full record of what changed and why.
 
+## Unreleased: PPTX export and Google Slides delivery (Rembrandt 2.0)
+
+**Every run now ends with a Google Slides file, and nobody has to connect anything.** The HTML stays
+the deck and the thing Cohere checks. After Cohere passes, `kit/export/export.js` measures the
+finished HTML in a headless browser, writes a PPTX against Google Slides' own text model, proves the
+PPTX against the browser, and posts it to the Rembrandt service, which converts it to Slides as
+`rembrandt@axoniq.io` and shares it with the runner. When the service is unreachable the run
+delivers the `.pptx` with a one-line drop-in instruction instead. `ROLLOUT-2.0.md` is the plan.
+
+Why a study came first: Google Slides does not lay text out the way PowerPoint or a browser does.
+Measured on real imports, its 100% line spacing is 1.2 times the font size for every font, its first
+baseline sits 0.96 em below the box top, its default text insets are 0.1 by 0.05 in, it drops letter
+spacing entirely, it misconverts exact line spacing, and it resolves weights only through typeface
+names such as `Inter Medium`. A naive export lands text 9 px right and 3 px low and turns every
+mid-weight bold. The exporter writes to the measured model and lands within 0.05 px.
+
+- `kit/export/extract.js` measures each slide word by word and records the rendered lines; runs
+  are tagged by the line they were drawn on, so an explicit `<br>`, a balanced wrap and a soft
+  wrap are one mechanism and none can be lost.
+- `kit/export/build.py` replays those lines as explicit breaks, sizes every box from the shaped
+  width of its widest line (`shape.py`, HarfBuzz with the exact font file), writes whole-point sizes
+  on a 1 px = 1 pt canvas, zero insets, whole-percent spacing.
+- `kit/export/verify.py` reads the package back and checks TEXT, FIT, GEOM and HOUSE; the build
+  fails on any of them. `test_export.py` breaks the exporter six ways and asserts the gate catches
+  each. It caught a real re-wrap on its first run.
+- Text set in Inter ships as Inter Tight at zero tracking; 470 to 540 as Medium, 550 and 560 as
+  SemiBold. Gradients, dot patterns and SVG icons ship as 2x rasters. Fonts are vendored (OFL).
+- `kit/telemetry.js` gains `reportExport`: one row per export attempt with the outcome and, on a
+  gate failure, the failing lines, so the exporter can be fixed from the log alone. The collector
+  keeps a second log for it and `/api/log?which=exports` reads it.
+- `telemetry/api/slides.js` is the delivery route; `telemetry/scripts/authorize.js` obtains the
+  one `drive.file` refresh token. `kit/service.json` carries the service host so no install needs
+  an environment variable.
+- SKILL.md: step 10 is **Export**, Deliver is 11, and the reply carries the Slides link or the
+  `.pptx` beside the HTML.
+
 ## Unreleased: usage telemetry
 
 **One line per delivered deck, from inside the gate.** `kit/verify.js` now calls
