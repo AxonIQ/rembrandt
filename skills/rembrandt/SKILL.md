@@ -71,7 +71,7 @@ You may write **scoped CSS** for spacing and fit, and you may **invent a layout 
 
 ## The flow
 
-Run these in order. Do not skip 2 or 3 for existing material, and never skip 7 or 9.
+Run these in order. Do not skip 2 or 3 for existing material, and never skip 7, 9 or 10.
 
 1. **Ingest.** Extract the text, then look at the source only where the text is ambiguous. See **Ingest** below for the exact procedure and its stopping rule. Build a content inventory: every point, metric, table, name, date, quote, sequence, and image. Note what is a real content point versus a note-to-self ("show sample", "keep this?", "dates").
 2. **Fidelity** (existing material only, skipped when building from scratch). Ask which level applies, once, before writing anything. See **Fidelity** below.
@@ -82,7 +82,8 @@ Run these in order. Do not skip 2 or 3 for existing material, and never skip 7 o
 7. **Compose.** Distribute every slide vertically the way the master does: title at the top, content anchored to the bottom, air in between. See **Composer** below. Composition comes before any fit decision, because most "does not fit" and most "looks empty" problems are composition problems.
 8. **Adjust for fit.** Only if a composed slide still overflows at regular density, in this order: rewrite tighter, switch to the dense density mode, switch to a higher-capacity template variant, or split the slide. **At Verbatim the first rung does not exist**, so the order there is density, then template, then split: never reword to make something fit. Only then touch scoped CSS. Never let text spill, and never shrink type to make it fit.
 9. **Cohere.** Run `node kit/verify.js "<your file>"` until it prints PASS, then do the reading checks. See **Cohere** below.
-10. **Deliver.** Name the file, publish as an artifact, hand over the HTML. See **Deliver** below. Report every gap you filled, every place you invented content, and every slide that went dense.
+10. **Export.** Run `node kit/export/export.js "<your file>"`. It builds a PPTX from the finished HTML, proves it against the browser, and turns it into a Google Slides link for the runner. See **Export** below. Paste its block unchanged.
+11. **Deliver.** Name the file, publish as an artifact, hand over the HTML and the Slides link (or the PPTX when the link could not be made). See **Deliver** below. Report every gap you filled, every place you invented content, and every slide that went dense.
 
 ## Ingest
 
@@ -313,6 +314,37 @@ If it says FAIL, you have not finished; fix and run it again. Never report a dec
 
 `references/cohere.md` is the concrete checklist with the exact commands and DOM checks. Fix everything Cohere finds, then re-run it. Report what it caught.
 
+## Export (required, after Cohere)
+
+The HTML is the deck. The PPTX is derived from it, for people who work in Google Slides, and it is
+made by measurement, not by rebuilding: the exporter renders the finished HTML in a headless browser,
+records where every line of text actually sits, and writes a PPTX that Google Slides lays out on the
+same lines and baselines. Run it once Cohere prints PASS, never before:
+
+```bash
+node kit/export/export.js "Bi-Weekly ONE House - Rembrandt v2.0.html"
+```
+
+It prints a block. Paste it under the Cohere lines, unchanged. It has four parts:
+
+- `EXPORT GATE: PASS` or `FAIL`. The exporter checks its own output against the browser (every
+  rendered line present as its own line, every line fits its box in the font Slides will use, every
+  baseline where the browser put it, house rules). On FAIL there is no PPTX and the lines that failed
+  are listed; report them as you would a Cohere failure. Do not retry blindly and never hand over a
+  PPTX the gate rejected.
+- `GOOGLE SLIDES: <link>` when the Rembrandt service created the file and shared it with the runner,
+  or `GOOGLE SLIDES: not created (<reason>)` followed by `PPTX: <path>`. In the second case, deliver
+  the `.pptx` and tell the person to drop it into Google Drive and open it with Google Slides; that
+  is the whole procedure, and it needs no permissions.
+- One note that always goes to the person: the deck is 26.67 by 15 in, so every size is a whole
+  point; pasting its slides into a 10 in Google deck rescales them.
+- `TELEMETRY (export): ...`. Paste it as it is, like the Cohere telemetry line.
+
+What the export cannot carry, and you do not need to fix: letter spacing (Slides drops it, so Inter
+ships as Inter Tight), variable weights (470 to 540 ship as Medium, 550 and 560 as SemiBold), CSS
+gradients, dot patterns and SVG icons (rasterised at 2x). The exporter handles all of that; the
+reading pass is about the HTML.
+
 ## Output contract
 
 - One self-contained `.html` file, named `<Presentation name> - Rembrandt v<version>.html`. Fonts from Google Fonts with real fallback stacks; all CSS, JS, and images inline.
@@ -320,3 +352,4 @@ If it says FAIL, you have not finished; fix and run it again. Never report a dec
 - Every non-cover slide carries the header: Axoniq logo on the dotted pattern, spark gradient as the bottom border, and on the right `Chapter · Presentation title · #N` (the part that changes goes first, so the title and number never shift).
 - Keyboard navigation, the grid overview, full screen, and the editor come from the shell. Keep all of it; see **The shell chrome**.
 - Publish it as an artifact and deliver the file.
+- Beside it, the Google Slides link from **Export**, or the `.pptx` with the one-line drop-in instruction.

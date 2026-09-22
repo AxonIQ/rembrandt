@@ -1,0 +1,4 @@
+{
+  "host": "",
+  "note": "Base URL of the Rembrandt service (telemetry collector and Slides delivery), for example https://rembrandt.axoniq.io. Empty means: no telemetry, PPTX delivered as a file. Environment variables REMBRANDT_TELEMETRY_URL and REMBRANDT_SLIDES_URL override it."
+}
