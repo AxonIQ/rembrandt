@@ -82,7 +82,7 @@ Run these in order. Do not skip 2 or 3 for existing material, and never skip 7, 
 7. **Compose.** Distribute every slide vertically the way the master does: title at the top, content anchored to the bottom, air in between. See **Composer** below. Composition comes before any fit decision, because most "does not fit" and most "looks empty" problems are composition problems.
 8. **Adjust for fit.** Only if a composed slide still overflows at regular density, in this order: rewrite tighter, switch to the dense density mode, switch to a higher-capacity template variant, or split the slide. **At Verbatim the first rung does not exist**, so the order there is density, then template, then split: never reword to make something fit. Only then touch scoped CSS. Never let text spill, and never shrink type to make it fit.
 9. **Cohere.** Run `node kit/verify.js "<your file>"` until it prints PASS, then do the reading checks. See **Cohere** below.
-10. **Export.** Run `node kit/export/export.js "<your file>"`. It builds a PPTX from the finished HTML, proves it against the browser, and turns it into a Google Slides link for the runner. See **Export** below. Paste its block unchanged.
+10. **Export.** Run `node kit/export/export.js "<your file>"`. It builds a PPTX from the finished HTML, proves it against the browser, and uploads it to the runner's own Google Drive as Slides. See **Export** below. Paste its block unchanged.
 11. **Deliver.** Name the file, publish as an artifact, hand over the HTML and the Slides link (or the PPTX when the link could not be made). See **Deliver** below. Report every gap you filled, every place you invented content, and every slide that went dense.
 
 ## Ingest
@@ -325,17 +325,24 @@ same lines and baselines. Run it once Cohere prints PASS, never before:
 node kit/export/export.js "Bi-Weekly ONE House - Rembrandt v2.0.html"
 ```
 
-It prints a block. Paste it under the Cohere lines, unchanged. It has four parts:
+It prints a block. Paste it under the Cohere lines, unchanged. It has five parts:
 
 - `EXPORT GATE: PASS` or `FAIL`. The exporter checks its own output against the browser (every
   rendered line present as its own line, every line fits its box in the font Slides will use, every
   baseline where the browser put it, house rules). On FAIL there is no PPTX and the lines that failed
   are listed; report them as you would a Cohere failure. Do not retry blindly and never hand over a
   PPTX the gate rejected.
-- `GOOGLE SLIDES: <link>` when the Rembrandt service created the file and shared it with the runner,
-  or `GOOGLE SLIDES: not created (<reason>)` followed by `PPTX: <path>`. In the second case, deliver
+- `GOOGLE SLIDES: <link>` when the deck was uploaded to the runner's own Google Drive, or
+  `GOOGLE SLIDES: not created (<reason>)` followed by `PPTX: <path>`. In the second case, deliver
   the `.pptx` and tell the person to drop it into Google Drive and open it with Google Slides; that
   is the whole procedure, and it needs no permissions.
+- `CONNECT GOOGLE ...`, only when this person has never connected their Google account, or has
+  revoked it. Relay it, and if they say yes, run `node kit/export/authorize.js`, give them the link
+  it prints, and when they paste the code back run `node kit/export/authorize.js "<code>"`. It is
+  once per person, ever. Do not push: a `.pptx` is a complete deliverable, and someone who would
+  rather not connect an account keeps getting one. Never ask for their password; the only thing
+  they ever paste is that one code, and the only permission asked for is `drive.file`, which covers
+  the files Rembrandt itself creates and nothing else in their Drive.
 - One note that always goes to the person: the deck is 26.67 by 15 in, so every size is a whole
   point; pasting its slides into a 10 in Google deck rescales them.
 - `TELEMETRY (export): ...`. Paste it as it is, like the Cohere telemetry line.
@@ -352,4 +359,4 @@ reading pass is about the HTML.
 - Every non-cover slide carries the header: Axoniq logo on the dotted pattern, spark gradient as the bottom border, and on the right `Chapter · Presentation title · #N` (the part that changes goes first, so the title and number never shift).
 - Keyboard navigation, the grid overview, full screen, and the editor come from the shell. Keep all of it; see **The shell chrome**.
 - Publish it as an artifact and deliver the file.
-- Beside it, the Google Slides link from **Export**, or the `.pptx` with the one-line drop-in instruction.
+- Beside it, the Google Slides link from **Export** (in the runner's own Drive), or the `.pptx` with the one-line drop-in instruction.

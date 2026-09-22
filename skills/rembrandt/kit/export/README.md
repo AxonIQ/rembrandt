@@ -9,9 +9,28 @@ node kit/export/export.js "Deck name - Rembrandt v2.0.html"
 # the pieces:
 node kit/export/extract.js deck.html out            # every section.slide; or name slides: "cover/light" "cards/3-up"
 python3 kit/export/build.py out/scene.json out/deck.pptx        # builds, then verifies; non-zero exit on any failure
-python3 kit/export/test_export.py out/scene.json                # the checks themselves, on known-bad decks
+python3 kit/export/test_export.py out/scene.json                # the gate itself, on known-bad decks
+python3 kit/export/test_delivery.py                             # the delivery path, against a stubbed Google
 python3 kit/export/measure.py out/scene.json google-export.pdf  # optional: diff against a real Slides PDF export
+
+# once per person, to connect their Google account:
+node kit/export/authorize.js            # prints the link to approve
+node kit/export/authorize.js "<code>"   # finishes it with the code from the address bar
+node kit/export/authorize.js --forget   # disconnects
 ```
+
+## Where the deck goes
+
+Straight from the sandbox to the runner's own Drive, into a folder called `Rembrandt decks`, owned
+by them. `gdrive.js` holds all of it: the consent URL, the one-time code exchange, the refresh, and
+a resumable upload that asks Drive for a Slides mimeType, which is what performs the conversion. The
+scope is `drive.file`, so Rembrandt can see the files it made and nothing else in anyone's Drive.
+
+The only thing kept on a server is the refresh token, because the sandbox is wiped between sessions.
+The deck itself never passes through our service, which is why there is no size cap and no function
+timeout anywhere in this path. `test_delivery.py` stubs Google and asserts on what the runner would
+see: never authorised, authorisation revoked, a normal upload, the first upload that has to make the
+folder, a deck Google refuses, and a service that is not on the allowlist yet.
 
 Fonts are vendored in `fonts/` (Inter, Inter Tight, Geist, Geist Mono, variable, OFL). Playwright and
 Chromium are preinstalled in Cowork; `export.js` installs `uharfbuzz`, `fonttools` and `brotli` from

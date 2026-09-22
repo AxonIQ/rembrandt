@@ -1,4 +1,6 @@
 {
   "host": "https://rembrandt-telemetry.vercel.app",
-  "note": "Base URL of the Rembrandt service (telemetry collector and Slides delivery). Empty means: no telemetry, PPTX delivered as a file. The host must be on Axoniq's Anthropic network allowlist or the sandbox proxy refuses the request and the run falls back to the file. Environment variables REMBRANDT_TELEMETRY_URL and REMBRANDT_SLIDES_URL override it."
+  "googleClientId": "",
+  "googleClientSecret": "",
+  "note": "host: the Rembrandt service (usage log and the per-person Google token store). googleClientId/googleClientSecret: the Axoniq OAuth client, installed-app type, whose secret is not confidential by design. Empty values mean the deck is delivered as a .pptx file. The host, www.googleapis.com and oauth2.googleapis.com must all be on Axoniq's Anthropic network allowlist or the sandbox proxy refuses the requests. REMBRANDT_SERVICE_URL, REMBRANDT_GOOGLE_CLIENT_ID and REMBRANDT_GOOGLE_CLIENT_SECRET override."
 }
