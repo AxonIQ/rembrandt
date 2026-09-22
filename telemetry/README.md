@@ -61,13 +61,17 @@ npx vercel env add SLIDES_FOLDER_ID
 npx vercel deploy --prod
 ```
 
-Then set, in the environment Rembrandt runs in, `REMBRANDT_TELEMETRY_URL=https://<host>/api/collect`
-and `REMBRANDT_SLIDES_URL=https://<host>/api/slides`.
+The host lives in `skills/rembrandt/kit/service.json`, which ships with the kit, so no install needs
+an environment variable. It is `https://rembrandt-telemetry.vercel.app` today.
+`REMBRANDT_TELEMETRY_URL` and `REMBRANDT_SLIDES_URL` override it for testing.
 
-Then set `REMBRANDT_TELEMETRY_URL` to `https://<host>/api/collect` in the environment
-Rembrandt runs in, and give the deployment's domain to an Axoniq admin so it can be added to
-the network allowlist. Until that allowlist entry exists the POST is refused by the sandbox
-proxy and every run reports `skipped (network unreachable)`.
+The host must be on Axoniq's Anthropic network allowlist. Until it is, the sandbox proxy refuses
+`CONNECT` with a 403 before the request leaves, every run reports `not recorded`, and the PPTX is
+delivered as a file. Keep the project on an Axoniq Pro team: Hobby is non-commercial personal use
+only.
+
+`/api/slides` sets `maxDuration: 60`. One request refreshes a token, uploads a few megabytes to
+Drive and sets a permission, which does not fit the 10 second Hobby default.
 
 ## Three things worth knowing
 

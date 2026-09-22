@@ -17,7 +17,10 @@
 // Returns { url, id, note }. Every error is a JSON { error } with a status the client can act on.
 import { createHash } from 'node:crypto';
 
-export const config = { api: { bodyParser: false } };
+// bodyParser off: the body is raw PPTX bytes, not JSON. maxDuration because one request does a
+// token refresh, a multi-megabyte upload to Drive and a permissions call; the 10s Hobby / 15s Pro
+// default is not enough for a real deck. 60s is the Hobby ceiling and matches the kit's own timeout.
+export const config = { api: { bodyParser: false }, maxDuration: 60 };
 
 const WRITE_KEY  = process.env.TELEMETRY_WRITE_KEY || '';
 const ALLOW      = (process.env.TELEMETRY_EMAIL_DOMAIN || 'axoniq.io').toLowerCase();

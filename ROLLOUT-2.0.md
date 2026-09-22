@@ -109,12 +109,17 @@ No dependency is fetched at run time except three Python wheels from PyPI (`uhar
 
 **B. Anthropic allowlist** [Axoniq org owner in claude.ai]
 
-4. Decide the service domain. Suggestion: `rembrandt.axoniq.io`, a CNAME to Vercel. The same domain
-   serves telemetry and Slides delivery, so this is one entry, once.
-5. Admin settings, Capabilities, add the domain to the network allowlist.
-6. Until this is done, every Rembrandt run reports `TELEMETRY: not recorded` and delivers the
-   PPTX as a file. That is the designed fallback, not a failure, and it is how we can ship the code
-   before the allowlist lands.
+4. The service already exists: `rembrandt-telemetry.vercel.app`, the Vercel project that has been
+   holding the telemetry collector. Slides delivery is another route on the same project, so this is
+   one entry and it covers both. Worth doing first, though: put a custom domain in front of it,
+   `rembrandt.axoniq.io` as a CNAME to the same project. An admin can judge an Axoniq host on sight,
+   and the allowlist entry then survives a project rename.
+5. Admin settings, Capabilities, add that host to the network allowlist.
+6. It is not on the list today. Checked from inside a Cowork sandbox on 22 September 2026, the proxy
+   answers `CONNECT rembrandt-telemetry.vercel.app:443` with `403 Forbidden`, which means no
+   telemetry row has ever been recorded and every run so far reported `not recorded`. Until the
+   entry exists, runs deliver the PPTX as a file. That is the designed fallback, not a failure, and
+   it is why the code can ship before the allowlist lands.
 
 **C. Google Workspace** [Workspace admin, then Ayadi]
 
@@ -129,6 +134,12 @@ No dependency is fetched at run time except three Python wheels from PyPI (`uhar
     rembrandt@, approves the single `drive.file` scope, and receives the refresh token.
 
 **D. Deploy the service** [Ayadi]
+
+The project must sit on an Axoniq Pro team, not a personal Hobby account. Hobby is restricted to
+non-commercial personal use, and a company tool written by a paid consultant is commercial by
+Vercel's own definition; it also puts a shared service on one person's account. Cost is not the
+reason: a run costs two function invocations and a few megabytes, so at any volume Axoniq will
+reach, this stays inside the free allowances either way.
 
 11. In `telemetry/`: `vercel link`, create the Blob store, add the environment variables listed in
     `telemetry/README.md` (secret, read key, Google client id and secret, refresh token, folder id,
@@ -173,6 +184,11 @@ connected, or approved on their side. If the service is down or unreachable that
   Medium, 550 and 560 as SemiBold. The study doc has the measurements.
 - The canvas is 26.67 by 15 in so that every size is a whole point. Slides pasted into a 10 in deck
   are rescaled by Slides.
-- The delivery route accepts up to 4 MB (Vercel's function limit). Bigger decks fall back to the file.
+- The delivery route accepts up to 4 MB (Vercel's function limit). Bigger decks fall back to the
+  file. If that starts happening often the fix is not a bigger plan: the service hands the sandbox a
+  short-lived Google resumable upload URL and the bytes never touch Vercel, which needs
+  `googleapis.com` on the allowlist as a second entry.
+- The route is pinned to a 60 second `maxDuration`, the Hobby ceiling. The default 10 seconds is not
+  enough to refresh a token and push a few megabytes to Drive.
 - Gradients, dot patterns and icons are 2x rasters in the PPTX; they look right and are not editable.
 - The export runs after Cohere and adds about 40 seconds for a 37-slide deck.
