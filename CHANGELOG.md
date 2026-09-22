@@ -10,12 +10,13 @@ figures and customer names. The entries below remain the full record of what cha
 
 ## Unreleased: PPTX export and Google Slides delivery (Rembrandt 2.0)
 
-**Every run now ends with a Google Slides file, and nobody has to connect anything.** The HTML stays
-the deck and the thing Cohere checks. After Cohere passes, `kit/export/export.js` measures the
-finished HTML in a headless browser, writes a PPTX against Google Slides' own text model, proves the
-PPTX against the browser, and posts it to the Rembrandt service, which converts it to Slides as
-`rembrandt@axoniq.io` and shares it with the runner. When the service is unreachable the run
-delivers the `.pptx` with a one-line drop-in instruction instead. `ROLLOUT-2.0.md` is the plan.
+**Every run now ends with a Google Slides file, in the runner's own Drive.** The HTML stays the deck
+and the thing Cohere checks. After Cohere passes, `kit/export/export.js` measures the finished HTML
+in a headless browser, writes a PPTX against Google Slides' own text model, proves the PPTX against
+the browser, and uploads it straight to the runner's Google Drive, where Drive converts it to
+Slides. Each person connects their Google account once, with one `drive.file` consent, and owns
+every deck they make. When they have not connected, or anything fails, the run delivers the `.pptx`
+with a one-line drop-in instruction instead. `ROLLOUT-2.0.md` is the plan.
 
 Why a study came first: Google Slides does not lay text out the way PowerPoint or a browser does.
 Measured on real imports, its 100% line spacing is 1.2 times the font size for every font, its first
@@ -38,9 +39,13 @@ mid-weight bold. The exporter writes to the measured model and lands within 0.05
 - `kit/telemetry.js` gains `reportExport`: one row per export attempt with the outcome and, on a
   gate failure, the failing lines, so the exporter can be fixed from the log alone. The collector
   keeps a second log for it and `/api/log?which=exports` reads it.
-- `telemetry/api/slides.js` is the delivery route; `telemetry/scripts/authorize.js` obtains the
-  one `drive.file` refresh token. `kit/service.json` carries the service host so no install needs
-  an environment variable.
+- `kit/export/gdrive.js` is everything that talks to Google: consent, code exchange, refresh, and a
+  resumable upload with conversion to Slides. `kit/export/authorize.js` is the one-time connect.
+  `test_delivery.py` drives both through a stubbed Google and asserts on what the runner would see.
+- `telemetry/api/token.js` keeps one refresh token per person, encrypted with AES-256-GCM, because
+  the sandbox is wiped between sessions. The deck itself never passes through the service, so there
+  is no size cap and no function timeout in the path. `kit/service.json` carries the host and the
+  OAuth client so no install needs an environment variable.
 - SKILL.md: step 10 is **Export**, Deliver is 11, and the reply carries the Slides link or the
   `.pptx` beside the HTML.
 

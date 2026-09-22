@@ -1,8 +1,11 @@
 # Rembrandt service
 
-One small Vercel project, one domain, three routes. Two record usage; one turns a Rembrandt PPTX
-into a Google Slides file for the person who ran Rembrandt. Rembrandt's kit calls these; nothing
-else does. Keeping them on one host means Axoniq's network allowlist needs exactly one entry.
+One small Vercel project, one domain, three routes. Two record usage. The third keeps one Google
+refresh token per person, so that connecting an account is something they do once rather than once
+per session. Rembrandt's kit calls these; nothing else does.
+
+The service never sees a deck. Rembrandt uploads straight from its sandbox to the person's own
+Google Drive, so nothing here is bounded by a function timeout or a request size cap.
 
 Two logs, both markdown tables in Vercel Blob:
 
@@ -17,13 +20,13 @@ exports.md  | when | who | deck | version | outcome | failures | detail |       
 | --- | --- | --- | --- |
 | `/api/collect` | POST | `x-rembrandt-key` header, if `TELEMETRY_WRITE_KEY` is set | appends a row to `log.md`, or with `kind: "export"` to `exports.md` |
 | `/api/log` | GET | `Authorization: Bearer $TELEMETRY_READ_KEY` | returns `log.md`; `?which=exports` returns `exports.md` |
-| `/api/slides` | POST | `x-rembrandt-key` header, if set | body is a `.pptx`; creates a Google Slides file in the Rembrandt shared drive as rembrandt@axoniq.io, shares it with `x-rembrandt-email` as editor, returns `{ url }` |
+| `/api/token` | GET, POST, DELETE | `x-rembrandt-key` header, if set | stores, returns or forgets one person's Google refresh token, encrypted at rest |
 
 ## What the export log holds and why
 
-`outcome` is one of `slides` (a link was created), `file` (the service was unreachable or refused,
-the runner got the `.pptx` and dropped it into Drive by hand), or `gate-failed` (the exporter's own
-checker rejected the PPTX and nothing was handed over).
+`outcome` is one of `slides` (the deck landed in the person's Drive), `file` (they got the `.pptx`
+and dropped it into Drive by hand), or `gate-failed` (the exporter's own checker rejected the PPTX
+and nothing was handed over).
 
 On `gate-failed` the row carries `verify.py`'s failing lines: which slide, which check (TEXT, FIT,
 GEOM, HOUSE), and up to 44 characters of the text on the line that failed. That snippet is deck
@@ -38,11 +41,13 @@ from the log alone, without asking anyone to send us their deck. A run that pass
 | `BLOB_READ_WRITE_TOKEN` | yes | injected automatically once a Blob store is linked to the project |
 | `TELEMETRY_SECRET` | yes | any long random string. Only used to derive the blob pathname, so the log is not sitting on a guessable public URL. Changing it starts a new empty log. |
 | `TELEMETRY_READ_KEY` | yes | bearer token for `/api/log` |
-| `TELEMETRY_WRITE_KEY` | no | if set, `/api/collect` requires it. See the note below on what this is and is not worth. |
-| `TELEMETRY_EMAIL_DOMAIN` | no | defaults to `axoniq.io`. Rows and Slides requests from other domains are rejected. |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | for `/api/slides` | an OAuth client (Desktop type) in a Google Cloud project that has the Drive API enabled |
-| `GOOGLE_REFRESH_TOKEN` | for `/api/slides` | rembrandt@axoniq.io's refresh token for the `drive.file` scope, from `node scripts/authorize.js` |
-| `SLIDES_FOLDER_ID` | for `/api/slides` | the folder in the Rembrandt shared drive that new decks land in |
+| `TOKEN_SECRET` | for `/api/token` | a different long random string. Encrypts the stored tokens and derives their pathname. Changing it makes every person reconnect. |
+| `TELEMETRY_WRITE_KEY` | no | if set, `/api/collect` and `/api/token` require it. See the note below on what this is and is not worth. |
+| `TELEMETRY_EMAIL_DOMAIN` | no | defaults to `axoniq.io`. Rows and token requests from other domains are rejected. |
+
+The Google client id and secret are not here. They live in `skills/rembrandt/kit/service.json` and
+ship with the kit, because the OAuth exchange happens in the person's own sandbox, not on the
+server. It is an installed-app client, whose secret is not confidential by design.
 
 ## Deploy
 
@@ -53,45 +58,43 @@ npx vercel blob create-store rembrandt-telemetry --access public   # answer y, t
                                                                   # to link it to the project
 npx vercel env add TELEMETRY_SECRET
 npx vercel env add TELEMETRY_READ_KEY
-npx vercel env add GOOGLE_CLIENT_ID
-npx vercel env add GOOGLE_CLIENT_SECRET
-GOOGLE_CLIENT_ID=... GOOGLE_CLIENT_SECRET=... node scripts/authorize.js   # sign in as rembrandt@axoniq.io
-npx vercel env add GOOGLE_REFRESH_TOKEN
-npx vercel env add SLIDES_FOLDER_ID
+npx vercel env add TOKEN_SECRET
 npx vercel deploy --prod
 ```
 
 The host lives in `skills/rembrandt/kit/service.json`, which ships with the kit, so no install needs
 an environment variable. It is `https://rembrandt-telemetry.vercel.app` today.
-`REMBRANDT_TELEMETRY_URL` and `REMBRANDT_SLIDES_URL` override it for testing.
+`REMBRANDT_SERVICE_URL` overrides it for testing.
 
-The host must be on Axoniq's Anthropic network allowlist. Until it is, the sandbox proxy refuses
-`CONNECT` with a 403 before the request leaves, every run reports `not recorded`, and the PPTX is
-delivered as a file. Keep the project on an Axoniq Pro team: Hobby is non-commercial personal use
-only.
+Three hosts have to be on Axoniq's Anthropic network allowlist: this one,
+`www.googleapis.com` and `oauth2.googleapis.com`. Until they are, the sandbox proxy refuses
+`CONNECT` with a 403 before the request leaves, every run reports `not recorded`, and the deck is
+delivered as a `.pptx` file. The project is on a personal Hobby account for the trial; Hobby is
+non-commercial personal use only, so it moves to an Axoniq Pro team or to Axoniq's own
+infrastructure before this stops being a trial.
 
-`/api/slides` sets `maxDuration: 60`. One request refreshes a token, uploads a few megabytes to
-Drive and sets a permission, which does not fit the 10 second Hobby default.
-
-## Three things worth knowing
+## Four things worth knowing
 
 **The write key is not a secret.** Rembrandt ships to everyone at Axoniq, so anything the
 plugin has to send is readable by anyone who installs it. `TELEMETRY_WRITE_KEY` keeps random
 internet traffic out of the log. It does not make a row trustworthy, and the log should be
 read as usage data, not as a system of record.
 
+**`/api/token` trusts the caller's own word about who it is.** That follows from the line above:
+anyone at Axoniq holding the plugin can ask for a colleague's token. Three things bound it. The
+tokens are encrypted with `TOKEN_SECRET` and only ciphertext is stored, so the public blob URL is
+worth nothing. The scope is `drive.file`, so a token can create files and manage the files
+Rembrandt created, and cannot read anything else in that person's Drive. And anyone can revoke it
+at https://myaccount.google.com/permissions, or with `node kit/export/authorize.js --forget`.
+That is an acceptable trust boundary for an internal trial tool and not for anything wider: before
+Rembrandt goes past Axoniq, this route needs real per-user authentication.
+
 **Concurrent writes can drop a row.** Blob has no append operation, so `/api/collect` reads
 the whole log, adds a line, and writes it back. Two deliveries landing in the same moment
 means one overwrites the other. At Axoniq's volume this is unlikely. If it ever matters, write
 one blob per event under the same prefix and stitch them together on read, which cannot
-conflict.
+conflict. `/api/token` is one blob per person and does not have this problem.
 
-**`/api/slides` acts as one account, on purpose.** rembrandt@axoniq.io holds a `drive.file` token,
-which lets it create files and manage the files it created, nothing else. Files land in the
-Rembrandt shared drive and are shared to the runner as editor, so the runner's own Drive is never
-touched and no runner ever sees a consent screen. Vercel functions cap the request at 4.5 MB; a
-bigger deck is handed over as a file instead, which the kit does on its own.
-
-**The log holds work email addresses.** That is personal data. The pathname is unguessable
-and `/api/log` is token-gated, but if this ever grows past internal usage counting, it wants a
-retention rule and a line in the internal privacy notice.
+**The log holds work email addresses.** That is personal data, and so is the token store. The
+pathnames are unguessable and `/api/log` is token-gated, but if this ever grows past internal usage
+counting, it wants a retention rule and a line in the internal privacy notice.
