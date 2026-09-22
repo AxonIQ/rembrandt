@@ -10,6 +10,7 @@
 *.pdf
 # the site's own images are not scratch
 !docs/*.png
+!telemetry/public/*.png
 /tmp/
 pptx_png/
 

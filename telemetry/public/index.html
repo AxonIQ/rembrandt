@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rembrandt service · Axoniq</title>
+<meta name="description" content="What this host does for Rembrandt, what it stores, and how to disconnect.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Axoniq house style, as it runs on axoniq.io and on the Rembrandt homepage:
+   white ground, Untitled UI neutrals, display type large at regular weight.
+   Committed to light, so every colour is painted. */
+:root{
+  color-scheme:light;
+  --ink:#181D27; --g700:#414651; --g600:#535862; --g500:#717680;
+  --line:#E9EAEB; --line-2:#D5D7DA; --surface:#FAFAFA; --white:#FFFFFF;
+  --orange-50:#FFF4ED; --orange-200:#F9DBAF; --orange-700:#B93815;
+  --success-50:#ECFDF3; --success-200:#ABEFC6; --success-700:#067647;
+  --blue:#1570EF;
+  --f-disp:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --f-body:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --f-mono:'Geist Mono','SF Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--white);color:var(--g600);font-family:var(--f-body);
+  font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:0 28px}
+a{color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(21,112,239,.3)}
+a:hover{border-bottom-color:var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+code,kbd{font-family:var(--f-mono);font-size:.88em;background:var(--surface);
+  box-shadow:inset 0 0 0 1px var(--line);border-radius:5px;padding:2px 6px;color:var(--g700)}
+
+.masthead{border-bottom:1px solid var(--line)}
+.masthead .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px}
+.brand{display:flex;align-items:center;gap:11px;color:var(--ink)}
+.brand svg{display:block;height:19px;width:auto;color:var(--ink)}
+.brand .sep{width:1px;height:20px;background:var(--line-2);flex:none}
+.brand .prod{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--g500);white-space:nowrap}
+.mnav a{font-size:14px;font-weight:500;color:var(--ink);background:var(--white);
+  border:0;box-shadow:inset 0 0 0 1px var(--line-2);border-radius:8px;padding:8px 14px}
+.mnav a:hover{background:var(--surface)}
+
+.hero{padding-top:74px;padding-bottom:62px}
+h1{font-family:var(--f-disp);font-size:clamp(38px,5.4vw,58px);font-weight:500;
+  line-height:1.1;letter-spacing:-.021em;color:var(--ink);margin-bottom:20px;text-wrap:balance}
+.stand{font-size:19px;line-height:1.55;color:var(--g600);max-width:56ch;text-wrap:pretty}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.pill{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--g600);background:var(--white);box-shadow:inset 0 0 0 1px var(--line-2);
+  border-radius:999px;padding:6px 12px}
+.pill.warm{color:var(--orange-700);background:var(--orange-50);
+  box-shadow:inset 0 0 0 1px var(--orange-200);font-weight:500}
+
+section{padding:58px 0;border-top:1px solid var(--line)}
+h2{font-family:var(--f-disp);font-size:clamp(26px,3.2vw,34px);font-weight:560;line-height:1.18;
+  letter-spacing:-.014em;color:var(--ink);margin-bottom:12px}
+h3{font-family:var(--f-disp);font-size:18px;font-weight:560;color:var(--ink);
+  margin:30px 0 8px;letter-spacing:-.006em}
+section > .wrap > p{max-width:64ch;margin-bottom:14px}
+.lede{color:var(--g500);font-size:17px;max-width:62ch;margin-bottom:26px}
+
+table{width:100%;border-collapse:collapse;margin:22px 0 6px;font-size:15px}
+th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11.5px;font-family:var(--f-mono);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--g500);font-weight:400;border-bottom:1px solid var(--line-2)}
+td:first-child{color:var(--ink);font-weight:500;white-space:nowrap}
+td code{white-space:nowrap}
+
+.note{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:20px 22px;margin:24px 0}
+.note p{max-width:none}
+.note p + p{margin-top:10px}
+.note strong{color:var(--ink);font-weight:560}
+.good{background:var(--success-50);border-color:var(--success-200)}
+.good strong{color:var(--success-700)}
+
+.cmd{font-family:var(--f-mono);font-size:14px;color:var(--ink);background:var(--surface);
+  border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0 4px;
+  overflow-x:auto;white-space:pre}
+
+/* Phones: the tables are the only thing that wants to be wider than the screen.
+   Long hostnames get to break, and the two-column rows stack. */
+@media (max-width:560px){
+  .wrap{padding:0 20px}
+  body{font-size:16px}
+  table{font-size:14.5px}
+  th,td{padding:11px 0}
+  td:first-child,td code{white-space:normal}
+  code{overflow-wrap:anywhere}
+  thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  tr{display:block;border-bottom:1px solid var(--line);padding:6px 0}
+  td{display:block;border:0}
+  td:first-child{font-weight:560;padding-bottom:2px}
+  .hero{padding-top:52px;padding-bottom:44px}
+  section{padding:46px 0}
+}
+
+footer{border-top:1px solid var(--line);padding:30px 0 56px}
+footer .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  font-size:13.5px;color:var(--g500)}
+footer svg{height:15px;width:auto;color:var(--g500)}
+footer .push{margin-left:auto}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 1185 300" fill="currentColor" aria-label="Axoniq" role="img">
+        <path d="M60.0002 155.5V133.5C60.0002 116.932 60.0002 100 90.0002 100C120 100 120 82.5 120 60V37C120 20.4315 120 0 150 0C180 0 180 20.4315 180 37V65.9314C180 82.5 180 100 210 100C240 100 240 82.5 240 65.9314V37C240 20.4315 240 0 270 0C300 0 300 20.4315 300 37V60C300 83 300 100 270 100C240 100 240 116.931 240 133.5V155.5C240 172.069 240 200 270 200C300 200 300 222.432 300 239L300 261C300 287.5 300 300 270 300C240 300 240 288 240 271.431L240 239C240 222.432 240 200 210 200C180 200 180 222.432 180 239L180 261C180 288 180 300 150 300C120 300 120 287.5 120 270.931L120 239C120 222.432 120 200 150 200C180 200 180 172.069 180 155.5V133.5C180 116.932 180 100 150 100C120 100 120 116.931 120 133.5V155.5C120 172.069 120 200 90.0002 200C60.0002 200 59.9999 222.432 59.9999 239L60.0002 270.931C60.0002 287.5 60.0002 300 30.0002 300C0.000272751 300 0.000273227 287.5 0.000273227 261L0 239C0 222.432 0.000272751 200 30.0002 200C60.0002 200 60.0002 172.069 60.0002 155.5Z"/>
+        <path d="M1184.66 203.654V222.182H1106.3C1064.61 222.182 1040.68 190.53 1040.68 149.421C1040.68 109.084 1062.87 77.8184 1107.07 77.8184C1148.76 77.8184 1174.04 107.347 1174.04 148.649C1174.04 172.388 1163.62 194.583 1146.25 207.9C1158.79 205.391 1171.15 203.654 1184.66 203.654ZM1069.43 149.228C1069.43 180.687 1080.24 206.742 1107.07 206.742C1135.63 206.742 1145.28 177.792 1145.28 149.421C1145.28 117.19 1133.12 94.2234 1107.07 94.2234C1080.44 94.2234 1069.43 119.892 1069.43 149.228Z"/>
+        <path d="M989.636 220.059V79.748H1016.85V220.059H989.636Z"/>
+        <path d="M955.168 79.748V220.059H922.937L856.159 103.101L857.51 220.059H830.297V79.748H862.528L929.306 196.513L927.955 79.748H955.168Z"/>
+        <path d="M807.677 150C807.677 191.302 783.745 222.182 740.899 222.182C697.86 222.182 674.121 191.302 674.121 150C674.121 108.505 697.86 77.8184 740.899 77.8184C783.745 77.8184 807.677 108.505 807.677 150ZM702.878 150C702.878 177.599 712.721 205.777 740.899 205.777C769.077 205.777 778.92 177.599 778.92 150C778.92 122.208 769.077 94.2234 740.899 94.2234C712.721 94.2234 702.878 122.208 702.878 150Z"/>
+        <path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
+        <path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
+      </svg>
+      <span class="sep"></span>
+      <span class="prod">Rembrandt service</span>
+    </div>
+    <nav class="mnav"><a href="https://github.com/AxonIQ/rembrandt">Source</a></nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <h1>This host does two small things for Rembrandt</h1>
+    <p class="stand">Rembrandt is the Claude skill that turns any material into an Axoniq deck.
+      This service records that a deck was made, and remembers which Google account you connected
+      so you only ever connect it once. It never receives a deck.</p>
+    <div class="facts">
+      <span class="pill">Axoniq internal</span>
+      <span class="pill">drive.file only</span>
+      <span class="pill warm">Trial</span>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <h2>If you arrived here from a link</h2>
+      <p class="lede">You probably ran Rembrandt and wondered what this address is. There is
+        nothing to do on this page.</p>
+      <p>When Rembrandt finishes a deck it writes one line to an internal usage log, so we can see
+        whether the tool is being used and whether it is working. If you connected a Google
+        account, it also asks this service for the token that lets it put your deck in your own
+        Drive. Both requests are made by Rembrandt itself, in the background, and neither can
+        change or delay your deck.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>What it stores</h2>
+      <p class="lede">Three things, and nothing else.</p>
+      <table>
+        <thead><tr><th>What</th><th>When</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Deck log</td>
+            <td>Once per finished deck</td>
+            <td>Your work address, the deck's name, the time, the Rembrandt version, and how many
+              slides and chapters it came to. Nothing from inside the deck.</td>
+          </tr>
+          <tr>
+            <td>Export log</td>
+            <td>Once per Slides export</td>
+            <td>The same, plus whether the export succeeded. When Rembrandt's own checker rejects an
+              export it also records the lines that failed, up to 44 characters each, so the bug can
+              be fixed without asking you for your deck. A successful export records no text at all.</td>
+          </tr>
+          <tr>
+            <td>Google token</td>
+            <td>When you connect an account</td>
+            <td>One refresh token per person, encrypted. It exists only because Rembrandt runs in a
+              sandbox that is erased when your session ends, so there is nowhere else to keep it.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>What it never has</h3>
+      <p>Your deck. The file goes straight from Rembrandt to Google and does not pass through this
+        service at any point.</p>
+      <p>Your password, at any time. Connecting Google happens on Google's own sign-in page, in your
+        browser. The only thing you ever paste back is a short one-time code.</p>
+      <p>The rest of your Drive. The permission Rembrandt asks for is <code>drive.file</code>, the
+        narrowest one Google offers. It covers the files Rembrandt itself creates. Everything that
+        was already in your Drive stays invisible to it.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Your controls</h2>
+
+      <h3>Disconnect your Google account</h3>
+      <p>Either of these is enough, and you can do both.</p>
+      <div class="cmd">node kit/export/authorize.js --forget</div>
+      <p>Or revoke Rembrandt directly at
+        <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.
+        Decks you already made stay where they are, in your Drive, owned by you.</p>
+
+      <h3>Keep your runs out of the log</h3>
+      <p>Set <code>REMBRANDT_TELEMETRY=0</code> in your environment. The deck is built exactly the
+        same way, and nothing is recorded.</p>
+
+      <h3>Have something removed</h3>
+      <p>Ask Ghaith Ayadi. The logs are small markdown tables and a row can be deleted on request.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>For administrators</h2>
+      <p class="lede">What to check before allowing this domain, and what the code actually does.</p>
+
+      <h3>Routes</h3>
+      <table>
+        <thead><tr><th>Route</th><th>Does</th></tr></thead>
+        <tbody>
+          <tr><td><code>/api/collect</code></td><td>Appends one row to a log. Rejects addresses outside axoniq.io.</td></tr>
+          <tr><td><code>/api/log</code></td><td>Returns a log. Requires a bearer token.</td></tr>
+          <tr><td><code>/api/token</code></td><td>Stores, returns or deletes one person's encrypted Google refresh token.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Hosts Rembrandt needs reached</h3>
+      <p>Three, on the Claude network allowlist. The Claude sandbox can reach package registries and
+        nothing else, so without these the export falls back to handing over a PowerPoint file.</p>
+      <table>
+        <thead><tr><th>Host</th><th>For</th></tr></thead>
+        <tbody>
+          <tr><td><code>rembrandt-telemetry.vercel.app</code></td><td>this service</td></tr>
+          <tr><td><code>www.googleapis.com</code></td><td>creating the file in the person's Drive</td></tr>
+          <tr><td><code>oauth2.googleapis.com</code></td><td>exchanging and refreshing their token</td></tr>
+        </tbody>
+      </table>
+      <p>Google's sign-in page is deliberately not among them. Consent happens in the person's own
+        browser, never in the sandbox.</p>
+
+      <div class="note">
+        <p><strong>Where this is honest about itself.</strong> The token route trusts the caller's
+          own word about who it is, which means anyone at Axoniq holding the plugin could ask for a
+          colleague's token. Three things bound that: the tokens are encrypted and only ciphertext
+          is stored, the scope reaches nothing but files Rembrandt created, and any person can
+          revoke theirs in one click. That is an acceptable trust boundary for an internal trial and
+          not for anything wider. Before Rembrandt goes past Axoniq, this route needs real per-user
+          authentication.</p>
+        <p>The service also runs on a personal Vercel account for the length of the trial. It moves
+          to an Axoniq account or onto Axoniq infrastructure before general use.</p>
+      </div>
+
+      <div class="note good">
+        <p><strong>The code is the documentation.</strong> Everything above is readable at
+          <a href="https://github.com/AxonIQ/rembrandt">github.com/AxonIQ/rembrandt</a>.
+          <code>ROLLOUT-2.0.md</code> is the plan and the reasoning,
+          <code>telemetry/README.md</code> the operational detail.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <svg viewBox="0 0 1185 300" fill="currentColor" aria-hidden="true">
+        <path d="M60.0002 155.5V133.5C60.0002 116.932 60.0002 100 90.0002 100C120 100 120 82.5 120 60V37C120 20.4315 120 0 150 0C180 0 180 20.4315 180 37V65.9314C180 82.5 180 100 210 100C240 100 240 82.5 240 65.9314V37C240 20.4315 240 0 270 0C300 0 300 20.4315 300 37V60C300 83 300 100 270 100C240 100 240 116.931 240 133.5V155.5C240 172.069 240 200 270 200C300 200 300 222.432 300 239L300 261C300 287.5 300 300 270 300C240 300 240 288 240 271.431L240 239C240 222.432 240 200 210 200C180 200 180 222.432 180 239L180 261C180 288 180 300 150 300C120 300 120 287.5 120 270.931L120 239C120 222.432 120 200 150 200C180 200 180 172.069 180 155.5V133.5C180 116.932 180 100 150 100C120 100 120 116.931 120 133.5V155.5C120 172.069 120 200 90.0002 200C60.0002 200 59.9999 222.432 59.9999 239L60.0002 270.931C60.0002 287.5 60.0002 300 30.0002 300C0.000272751 300 0.000273227 287.5 0.000273227 261L0 239C0 222.432 0.000272751 200 30.0002 200C60.0002 200 60.0002 172.069 60.0002 155.5Z"/>
+        <path d="M1184.66 203.654V222.182H1106.3C1064.61 222.182 1040.68 190.53 1040.68 149.421C1040.68 109.084 1062.87 77.8184 1107.07 77.8184C1148.76 77.8184 1174.04 107.347 1174.04 148.649C1174.04 172.388 1163.62 194.583 1146.25 207.9C1158.79 205.391 1171.15 203.654 1184.66 203.654ZM1069.43 149.228C1069.43 180.687 1080.24 206.742 1107.07 206.742C1135.63 206.742 1145.28 177.792 1145.28 149.421C1145.28 117.19 1133.12 94.2234 1107.07 94.2234C1080.44 94.2234 1069.43 119.892 1069.43 149.228Z"/>
+        <path d="M989.636 220.059V79.748H1016.85V220.059H989.636Z"/>
+        <path d="M955.168 79.748V220.059H922.937L856.159 103.101L857.51 220.059H830.297V79.748H862.528L929.306 196.513L927.955 79.748H955.168Z"/>
+        <path d="M807.677 150C807.677 191.302 783.745 222.182 740.899 222.182C697.86 222.182 674.121 191.302 674.121 150C674.121 108.505 697.86 77.8184 740.899 77.8184C783.745 77.8184 807.677 108.505 807.677 150ZM702.878 150C702.878 177.599 712.721 205.777 740.899 205.777C769.077 205.777 778.92 177.599 778.92 150C778.92 122.208 769.077 94.2234 740.899 94.2234C712.721 94.2234 702.878 122.208 702.878 150Z"/>
+        <path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
+        <path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
+      </svg>
+    <span>Rembrandt service</span>
+    <span class="push"><a href="https://axoniq.io">axoniq.io</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
