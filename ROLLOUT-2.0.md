@@ -14,16 +14,16 @@ This document is the whole plan, in order. Owner is in brackets.
 
 ```mermaid
 flowchart LR
-  A[/rembrandt in Cowork] --> B[HTML deck<br/>Cohere gate PASS]
-  B --> C[export.js<br/>measure the HTML in a browser]
-  C --> D[build.py<br/>write PPTX to Google's text model]
-  D --> E{verify.py<br/>export gate}
-  E -->|FAIL| F[no PPTX<br/>failing lines reported and logged]
-  E -->|PASS| G{has this person<br/>connected Google?}
-  G -->|no| H[.pptx in the reply<br/>plus a one-time connect link]
-  G -->|yes| I[service returns<br/>their refresh token]
-  I --> J[upload straight to<br/>their own Drive]
-  J --> K[Slides link in the reply]
+  A["/rembrandt in Cowork"] --> B["HTML deck<br/>Cohere gate PASS"]
+  B --> C["export.js<br/>measure the HTML in a browser"]
+  C --> D["build.py<br/>write PPTX to Google's text model"]
+  D --> E{"verify.py<br/>export gate"}
+  E -->|FAIL| F["no PPTX<br/>failing lines reported and logged"]
+  E -->|PASS| G{"has this person<br/>connected Google?"}
+  G -->|no| H[".pptx in the reply<br/>plus a one-time connect link"]
+  G -->|yes| I["service returns<br/>their refresh token"]
+  I --> J["upload straight to<br/>their own Drive"]
+  J --> K["Slides link in the reply"]
 ```
 
 Everything except the token lookup runs inside the Cowork sandbox, on the runner's own session,
