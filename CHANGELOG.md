@@ -8,6 +8,40 @@ Releases are git tags from v1.0.0 on. Earlier history is not in this repository:
 from a single commit before publication, because the example decks it carried held internal
 figures and customer names. The entries below remain the full record of what changed and why.
 
+## 1.1.0: three type sizes, Compact, Regular and Stage
+
+**Every deck is now built at one of three sizes, and the skill offers them as options before it
+outlines.** Compact is the v1.0 scale, for decks read on a screen. Regular is the new default, one
+step up (Body 1 24, H1 60), for meeting rooms and calls. Stage is for keynotes and big rooms (Body 1
+36, H1 92). They are the same 18 text styles at three steps of the scale, so the classes, the
+components and the hard rule are unchanged; what changes is how much a slide holds.
+
+Why sizes and not a zoom: a bigger type size changes what a slide can carry. At Stage a 9-row plan
+holds 6 and a dense table 6 rows, so a stage deck is recomposed, not enlarged. A first attempt that
+scaled slides and trimmed items to fit was rejected in review because the stage version quietly
+dropped data. The rule now: **Stage never drops data.** Content beyond what a stage template holds
+continues on the next slide.
+
+- `kit/master.html`: every text style reads its size from `--fs-*` tokens set on `<html data-size>`.
+  The master defaults to `regular`. Spacing that needed recalculating at a size is scoped to it
+  (`html[data-size="regular"]`, `html[data-size="stage"]`); `compact` renders exactly as v1.0. The
+  spec slide shows each style's value at the size the file declares.
+- `kit/stage.html` (new): the stage reference. Every template recomposed for a room, with
+  stage-length copy and stage capacity. Generated from the master by `tools/build-stage.py`, so the
+  shell is byte-identical and the stage rules live in one place. `--check` fails when it is stale.
+- `kit/verify.js`: reads the deck's size and checks every text node against that size's scale. It
+  prints `SIZE:` first. A deck with no attribute and no tokens is a v1.0 shell and checks as compact.
+- `kit/export/extract.js`: carries `data-size` into each per-slide render. Without it every deck
+  exported at the default size; found by running the export on all three.
+- SKILL.md: a **Size** section, the size question in the questionnaire, the size table in Assemble,
+  and the stage splitting rule. Densities are renamed standard and dense so "regular" means one thing.
+- references: the three-column type table and budgets per size (text-styles), templates at Stage
+  (templates), size checks (cohere).
+
+Checked: the master passes `verify.js` at compact and regular, `stage.html` passes at stage, a v1.0
+deck still passes as compact, and the PPTX export gate and its regression tests pass at all three
+sizes. Telemetry does not record the size yet; that needs a column in the collector.
+
 ## Unreleased: PPTX export and Google Slides delivery (Rembrandt 2.0)
 
 **Every run now ends with a Google Slides file, in the runner's own Drive.** The HTML stays the deck

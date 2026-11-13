@@ -46,11 +46,15 @@ Structure, completion and coherence, all checkable from the DOM and text.
 **Composition and type** (the Composer rules, measured)
 - [ ] On every content slide, the bottom edge of the lowest content box is within 86px of y = 1012 (one grid row). Statement, quote, and hero-number layouts that are centered on purpose are exempt; nothing else is. `kit/verify.js` measures this.
 - [ ] Nothing collides. A numeral and its label sharing a line is the signature of a component copied without its wrapper.
-- [ ] No reading text (paragraph, list item, card body, table cell, annotation) has a computed `font-size` below 21px. Caption 17 only on captions and notes; Label/Meta/Foot only on chips, header meta, table heads, footnotes.
+- [ ] No reading text (paragraph, list item, card body, table cell, annotation) is smaller than Body 1 at the deck's size: 21 at Compact, 24 at Regular, 36 at Stage. Caption only on captions and notes; Label/Meta/Foot only on chips, header meta, table heads, footnotes.
 - [ ] No kicker (`.kicker`, eyebrow line with the dot) anywhere. Subtitles, where present, are `.sub`.
 - [ ] Icons come from `kit/icons/` (Lucide) as inline symbols; none from any other set.
 - [ ] Both columns of a two-column slide meet the same floor; the right column is not quietly smaller.
-- [ ] Every slide that uses the compact styles is listed in the report with the reason it overflowed at regular.
+- [ ] Every slide that uses the compact styles is listed in the report with the reason it overflowed at standard density. No slide at Stage uses them.
+
+**Size**
+- [ ] The `SIZE:` line `kit/verify.js` prints is the size the person chose. The styles audit measures against that size's scale, so a deck at the wrong size can pass every check and still be wrong.
+- [ ] At Stage, every slide's markup came from `kit/stage.html`, and nothing from the source was dropped to fit: every row, item and figure is on a slide, split across continuation slides where needed. Every split is in the report.
 - [ ] Any target-vs-actual or before-vs-after metric is drawn, not captioned.
 
 **Coherence**

@@ -75,15 +75,15 @@ Run these in order. Do not skip 2 or 3 for existing material, and never skip 7, 
 
 1. **Ingest.** Extract the text, then look at the source only where the text is ambiguous. See **Ingest** below for the exact procedure and its stopping rule. Build a content inventory: every point, metric, table, name, date, quote, sequence, and image. Note what is a real content point versus a note-to-self ("show sample", "keep this?", "dates").
 2. **Fidelity** (existing material only, skipped when building from scratch). Ask which level applies, once, before writing anything. See **Fidelity** below.
-3. **Questionnaire.** Collect **all** missing information in one pass. See **Questionnaire** below. Do this before outlining. A deck built on holes wastes everyone's time.
+3. **Questionnaire.** Collect **all** missing information in one pass, and in the same pass offer the three **sizes** (Compact, Regular, Stage). See **Questionnaire** and **Size** below. Do this before outlining. A deck built on holes, or at the wrong size, wastes everyone's time.
 4. **Outline.** Map the inventory to templates by meaning (see `references/templates.md`). Apply the deck rhythm rules: open with a cover, use chapters once the deck passes ten slides, never repeat a template back to back, close with the closing layout.
-5. **Fill.** Write each slide's copy to the template's density budget (see `references/text-styles.md`). This is where most of the work is: it is writing, not layout.
-6. **Assemble.** **Copy** the shell out of `kit/master.html` with a script. Do not retype it. See **Assemble** below for the exact method; it is three lines of Python and it is not optional.
+5. **Fill.** Write each slide's copy to the template's budget at the chosen size (see `references/text-styles.md`). This is where most of the work is: it is writing, not layout.
+6. **Assemble.** **Copy** the shell out of `kit/master.html` with a script, set the size on `<html data-size>`, and take each slide's markup from the size's reference file. Do not retype any of it. See **Assemble** below for the exact method; it is three lines of Python and it is not optional.
 7. **Compose.** Distribute every slide vertically the way the master does: title at the top, content anchored to the bottom, air in between. See **Composer** below. Composition comes before any fit decision, because most "does not fit" and most "looks empty" problems are composition problems.
-8. **Adjust for fit.** Only if a composed slide still overflows at regular density, in this order: rewrite tighter, switch to the dense density mode, switch to a higher-capacity template variant, or split the slide. **At Verbatim the first rung does not exist**, so the order there is density, then template, then split: never reword to make something fit. Only then touch scoped CSS. Never let text spill, and never shrink type to make it fit.
+8. **Adjust for fit.** Only if a composed slide still overflows at standard density, in this order: rewrite tighter, switch to the dense density mode, switch to a higher-capacity template variant, or split the slide. **At Verbatim the first rung does not exist**, so the order there is density, then template, then split: never reword to make something fit. Only then touch scoped CSS. Never let text spill, and never shrink type to make it fit.
 9. **Cohere.** Run `node kit/verify.js "<your file>"` until it prints PASS, then do the reading checks. See **Cohere** below.
 10. **Export.** Run `node kit/export/export.js "<your file>"`. It builds a PPTX from the finished HTML, proves it against the browser, and uploads it to the runner's own Google Drive as Slides. See **Export** below. Paste its block unchanged.
-11. **Deliver.** Name the file, publish as an artifact, hand over the HTML and the Slides link (or the PPTX when the link could not be made). See **Deliver** below. Report every gap you filled, every place you invented content, and every slide that went dense.
+11. **Deliver.** Name the file, publish as an artifact, hand over the HTML and the Slides link (or the PPTX when the link could not be made). See **Deliver** below. Report the size, every gap you filled, every place you invented content, and every slide that went dense or was split to fit.
 
 ## Ingest
 
@@ -114,6 +114,19 @@ model that types it from memory produces something that looks right and is broke
 invisible ways: invented class names, a `<svg><text>Axoniq</text></svg>` in place of the logo, a
 viewer that never sizes its frame, and audits that pass because they cannot find any slides.
 
+**The size picks two things: the `data-size` on `<html>`, and where slide markup comes from.**
+
+| Size | `<html data-size>` | Copy slide markup from |
+|---|---|---|
+| Compact | `compact` | `kit/master.html` |
+| Regular | `regular` | `kit/master.html` |
+| Stage | `stage` | `kit/stage.html` |
+
+The shell (CSS, sprite, viewer, editor) is the same in all three and always comes from `kit/master.html`.
+`kit/stage.html` is the master with every template recomposed for a room: same components, stage-length
+copy, and the capacity each template holds at stage. Never build a stage slide from a master section
+and hope the tokens shrink it to fit; they make it bigger.
+
 Split the master into a head and a tail, put your slides between them:
 
 ```python
@@ -132,13 +145,14 @@ name = "Bi-Weekly ONE House"
 tail = re.sub(r'(<span id="deckname">)[^<]*', lambda m: m.group(1) + name, tail, count=1)
 tail = re.sub(r'(<div class="ov-head"><b>)[^<]*', lambda m: m.group(1) + 'AXONIQ &middot; ' + name.upper(), tail, count=1)
 head = re.sub(r'<title>[^<]*</title>', f'<title>{name}</title>', head, count=1)
+head = head.replace('<html lang="en" data-size="regular">', f'<html lang="en" data-size="{size}">', 1)  # compact | regular | stage
 ```
 
 Then, and only then:
 
 - **Each slide is a `<section class="slide" data-name="<template>" data-chapter="<chapter>" hidden>`**, a direct child of `#scaler`, with `data-name` set to the master template you used (`cards/3-up`, `index/spread`), not to the slide's title. The first slide alone has no `hidden`.
 - **Copy each slide's markup from its master section too**, then replace the words. Copying `cards/3-up` and rewriting three cards is the whole job. Writing a `<div class="card-item">` of your own invention is not.
-- **A component is its markup, not its look.** The master's components carry their structure in their wrappers, and the wrapper is what makes them work. A stat is `<div class="stat"><span class="s">label</span><span class="v num">10-13</span><span class="l">the reading line</span></div>`: `.stat` is the flex column that stacks those three, and without it a 96px numeral and a 21px label become inline neighbours that collide. A `.idx-row` is the grid that puts the numeral on the right. A `.card` is the padding and the border. Take the whole wrapper every time. If you find yourself writing `<span class="num">` next to a bare text node, you have dropped a wrapper.
+- **A component is its markup, not its look.** The master's components carry their structure in their wrappers, and the wrapper is what makes them work. A stat is `<div class="stat"><span class="s">label</span><span class="v num">10-13</span><span class="l">the reading line</span></div>`: `.stat` is the flex column that stacks those three, and without it a Stat numeral and its Body 1 label become inline neighbours that collide. A `.idx-row` is the grid that puts the numeral on the right. A `.card` is the padding and the border. Take the whole wrapper every time. If you find yourself writing `<span class="num">` next to a bare text node, you have dropped a wrapper.
 - **Two templates on one slide is inventing a layout.** It is allowed as a last resort and it is flagged in the report, but you still use each component's own markup inside your composition, and you still run the layout audit, which is what catches the collision you are about to cause.
 - **Any CSS you add is scoped and built from the style tokens**, appended before `</style>`. Never redefine a text style, never introduce a class that duplicates one (`.body-1` when `.body1` exists is the signature of a retyped shell, and `kit/verify.js` fails on it).
 - **Renumber the headers at the end**, from the final slide order, zero-padded: `#02`, not `#2`.
@@ -214,6 +228,36 @@ For existing material, ask which level applies before writing:
 
 When the source is speaker notes rather than prose ("Show sample", "Dates", "Tickets CTA"), say so when you ask, because Verbatim is meaningless against notes-to-self.
 
+## Size
+
+Every deck is built at one of three sizes. They are the same 18 text styles at three steps of
+the scale, so a deck at any size is fully on-brand; what changes is how much each slide holds.
+**Offer them as options in the questionnaire, with Regular recommended**, and say in one line what
+each is for. Ask once; never switch size mid-deck.
+
+| Size | Body text | Title | Pick it when |
+|---|---|---|---|
+| **Compact** | 21 | 54 | the deck is read on a screen or sent as a document: dense reviews, appendices, data-heavy updates |
+| **Regular** (default) | 24 | 60 | a meeting room or a video call, which is most decks |
+| **Stage** | 36 | 92 | a keynote, a conference talk, a booth screen, anything read from across a room |
+
+How to ask, as options the person can pick from:
+
+> Which size should this deck be?
+> **Regular (recommended)**: a meeting room or a call. **Compact**: read on a screen, more per slide. **Stage**: a keynote or a big room, bigger type, fewer words per slide.
+
+If the person already said where the deck will be shown ("for my talk at the conference", "to send
+to the board"), recommend the size that fits and still offer the other two. Working unattended:
+build at Regular and say so at the top of the report.
+
+**Stage never drops data.** A stage slide holds less, so the source material spreads over more
+slides. When a slide's content exceeds what the stage template holds (rows in a table, items in a
+plan, cards in a grid), split it into continuation slides ("Risks, 1 of 2"), never cut items,
+never shorten figures. At Liberal and High fidelity you may tighten wording for stage, never
+meaning. At Verbatim, stage is splits only. Every split is listed in the report.
+
+There is no dense mode at Stage. A stage slide that still overflows after Composer is split.
+
 ## Questionnaire
 
 Rembrandt's first real interaction is collecting what the source is missing. Scan the inventory for holes (undated events, unnamed people, "show URL", "show sample", empty roles, TBD figures) and ask for **all of them at once**, grouped, before you outline.
@@ -230,14 +274,24 @@ Select by what the slide is **trying to say**, then let budgets veto, never the 
 
 ## Density and type
 
-Every content template supports two density modes driven by text styles: **regular** (~100 words, Body 1 / H2) and **dense** (~150 words, Body 1 compact / H2 compact). `references/text-styles.md` documents every style; the master's spec slide renders them live.
+Every text style exists at three sizes (see **Size**); `references/text-styles.md` lists the
+pixel value of each style at each size, and the master's spec slide renders them live at
+whatever size the file declares. Sizes come from tokens on `<html data-size>`: never write a
+`font-size` by hand, at any size.
 
-**Regular is the default and Body 1 (21px) is the floor for reading text.** The compact styles exist for exactly one situation: a slide that still overflows after it has been composed at regular density. They are not a way to make a slide look designed, tidy, or balanced. Presentation text is read from the back of a room; if it fits with room to spare at 21px, that room is the design.
+Within a size, every content template supports two densities driven by the text styles:
+**standard** (Body 1 / H2, the default) and **dense** (Body 1 compact / H2 compact). Dense exists
+only at Compact and Regular, and only for a slide that still overflows after Composer.
 
-- Body 1 `21` for every paragraph, list item, card body, table cell, and chart annotation. Body 1 strong for names, small card titles, and table lead cells. Lede `25` for the one lead line of a slide; Subtitle `25` gray under a title.
-- Caption `17` only for image captions and table notes. Code `17` mono for identifiers. Label `15`, Meta `14`, Foot `12.5` only for chips and legends, header meta and table heads, footnotes and sources. None of these are body text.
+**Standard is the default and Body 1 is the floor for reading text**: 21 at Compact, 24 at
+Regular, 36 at Stage. The compact styles exist for exactly one situation: a slide that still
+overflows after it has been composed at standard density. They are not a way to make a slide look
+designed, tidy, or balanced. If it fits with room to spare, that room is the design.
+
+- Body 1 for every paragraph, list item, card body, table cell, and chart annotation. Body 1 strong for names, small card titles, and table lead cells. Lede for the one lead line of a slide; Subtitle, gray, under a title.
+- Caption only for image captions and table notes. Code mono for identifiers. Label, Meta and Foot only for chips and legends, header meta and table heads, footnotes and sources. None of these are body text.
 - Never write a `font-size`, `font-weight`, or `font-family` by hand. Use the class. If a component you copied from an example deck carries its own sizes, correct the component, do not inherit it.
-- A slide may go dense only after Composer has run and the slide still overflows. Every dense slide is listed in the report.
+- A slide may go dense only after Composer has run and the slide still overflows, and never at Stage. Every dense slide is listed in the report.
 
 ## Titles, subtitles, no kickers
 
@@ -307,7 +361,7 @@ If it says FAIL, you have not finished; fix and run it again. Never report a dec
 - Structure: cover first; chapters used if over ten slides; each chapter cover is the master `index/spread` with `.cur` and `.past` correct for its position; closing slide last. No kicker anywhere.
 - Styles and colour: `node kit/verify.js deck.html` passes. Every text node is exactly one style; every accent is a 500, with the deep steps only on coloured surfaces.
 - Numbering: header meta (`Chapter · Title · #N`) matches actual slide order; the counter total is right.
-- Composition: every content slide's lowest content box reaches within one grid row of y = 1012; no `font-size` below 21px on reading text; no off-scale sizes; dense slides are listed in the report.
+- Composition: every content slide's lowest content box reaches within one grid row of y = 1012; no reading text below Body 1 at the deck's size (21 Compact, 24 Regular, 36 Stage); no off-scale sizes; dense slides are listed in the report.
 - Completion: no slide overflows its budget; no empty slots, no leftover placeholder text (`xxx`, `lorem`, `TODO`, `[insert]`); no broken images.
 - Coherence: no template repeats back to back; chapter labels are consistent; the deck reads as one deck.
 - House rules: **no em dashes** anywhere in the copy; the company is written **Axoniq** everywhere (never AxonIQ); fonts are only Geist, Inter, Geist Mono.

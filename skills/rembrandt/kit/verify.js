@@ -7,19 +7,30 @@
 //   shell   provenance. The deck was copied from kit/master.html, not retyped from memory.
 //           A retyped shell looks plausible and fails everything quietly, and the style and
 //           colour checks can pass it by finding nothing to measure. So this runs first.
-//   styles  every text node is exactly one of the 18 styles. SVG chart labels exempt.
+//   size    which of the three type sizes the deck declares (compact, regular, stage).
+//   styles  every text node is exactly one of the 18 styles at that size. SVG chart labels exempt.
 //   colour  accents use the 500. A 600/700 only on a coloured surface. No tint as text.
 //   layout  geometry, which no style check can see: collisions, out-of-frame, dead bands.
 //   house   em dashes, emoji, company spelling, padded numbers, placeholders, filename.
 const { chromium } = require('playwright');
 const fs = require('fs'), path = require('path');
 
-const STYLES = [
-  ['Inter',122,470,'Display'],['Inter',88,500,'Display sm'],['Inter',54,530,'H1'],['Inter',40,540,'H2'],['Inter',33,550,'H2 compact'],
-  ['Inter',96,560,'Stat'],['Inter',58,560,'Stat sm'],['Inter',220,560,'Stat xl'],['Geist Mono',96,400,'Numeral'],
-  ['Geist',25,400,'Lede / Subtitle'],['Geist',21,400,'Body 1'],['Geist',21,560,'Body 1 strong'],['Geist',17.5,400,'Body 1 compact'],
-  ['Geist',17,400,'Caption'],['Geist Mono',17,400,'Code'],['Geist Mono',15,500,'Label'],['Geist Mono',14,500,'Meta'],['Geist Mono',12.5,400,'Foot'],
+// The 18 styles exist at three sizes; a deck declares one on <html data-size>.
+// compact is the v1.0 scale, so a deck from before sizes existed (no attribute, no --fs- tokens) is compact.
+const SIZES = ['compact', 'regular', 'stage'];
+const STYLE_NAMES = [
+  ['Inter','Display',470],['Inter','Display sm',500],['Inter','H1',530],['Inter','H2',540],['Inter','H2 compact',550],
+  ['Inter','Stat',560],['Inter','Stat sm',560],['Inter','Stat xl',560],['Geist Mono','Numeral',400],
+  ['Geist','Lede / Subtitle',400],['Geist','Body 1',400],['Geist','Body 1 strong',560],['Geist','Body 1 compact',400],
+  ['Geist','Caption',400],['Geist Mono','Code',400],['Geist Mono','Label',500],['Geist Mono','Meta',500],['Geist Mono','Foot',400],
 ];
+//                          compact regular stage
+const SIZE_PX = { 'Display':[122,132,180], 'Display sm':[88,96,136], 'H1':[54,60,92], 'H2':[40,44,64], 'H2 compact':[33,36,52],
+  'Stat':[96,108,160], 'Stat sm':[58,64,100], 'Stat xl':[220,240,340], 'Numeral':[96,104,136], 'Lede / Subtitle':[25,28,42],
+  'Body 1':[21,24,36], 'Body 1 strong':[21,24,36], 'Body 1 compact':[17.5,20,null], 'Caption':[17,19,28], 'Code':[17,19,30],
+  'Label':[15,16,22], 'Meta':[14,15,20], 'Foot':[12.5,13.5,18] };
+const stylesFor = size => STYLE_NAMES.map(([f,n,w]) => [f, SIZE_PX[n][SIZES.indexOf(size)], w, n]).filter(r => r[1] != null);
+let STYLES = stylesFor('compact');
 const REQUIRED_CLASSES = ['body1','body1s','body1--c','title-sm','title-sm--c','num','sub','img-cap','idx-num','idx-name','hd-meta','foot','label','meta','display'];
 const BANNED_CLASSES   = ['body-1','body-1-strong','body-1-compact','subtitle','h2-compact','stat-sm','caption','kicker','hud-mid'];
 const LEFT = 64, RIGHT = 1856, BOTTOM = 1012, ROW = 86;
@@ -37,6 +48,17 @@ const SEL = '#scaler > .slide, section.slide';
   const p = await b.newPage({ viewport: { width: 1920, height: 1080 } });
   await p.goto('file://' + path.resolve(file));
   await p.waitForTimeout(600);
+
+  /* ----------------------------------------------------------------- size */
+  const sizeInfo = await p.evaluate(() => {
+    const a = document.documentElement.getAttribute('data-size');
+    const tokens = !!getComputedStyle(document.documentElement).getPropertyValue('--fs-body').trim();
+    return { attr: a, tokens };
+  });
+  let SIZE = sizeInfo.attr || (sizeInfo.tokens ? 'regular' : 'compact');
+  if (!SIZES.includes(SIZE)) { console.log(`SIZE: FAIL, data-size="${SIZE}" is not one of ${SIZES.join(', ')}.`); process.exit(1); }
+  STYLES = stylesFor(SIZE);
+  console.log(`SIZE: ${SIZE}${sizeInfo.attr ? '' : ' (no data-size attribute; ' + (sizeInfo.tokens ? 'tokens present' : 'a v1.0 shell') + ')'}\n`);
 
   /* ---------------------------------------------------------------- shell */
   {
