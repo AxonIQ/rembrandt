@@ -37,6 +37,9 @@ continues on the next slide.
   and the stage splitting rule. Densities are renamed standard and dense so "regular" means one thing.
 - references: the three-column type table and budgets per size (text-styles), templates at Stage
   (templates), size checks (cohere).
+- `docs/sizes/` (new): every master template at Compact, Regular and Stage, side by side.
+  `tools/build-sizes.js` re-renders its images from the kit and fails if the page's template list
+  and the master disagree.
 
 Checked: the master passes `verify.js` at compact and regular, `stage.html` passes at stage, a v1.0
 deck still passes as compact, and the PPTX export gate and its regression tests pass at all three

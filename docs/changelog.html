@@ -143,6 +143,7 @@ footer a:hover{color:var(--ink)}
 <li><code>kit/export/extract.js</code>: carries <code>data-size</code> into each per-slide render. Without it every deck exported at the default size; found by running the export on all three.</li>
 <li>SKILL.md: a <strong>Size</strong> section, the size question in the questionnaire, the size table in Assemble, and the stage splitting rule. Densities are renamed standard and dense so "regular" means one thing.</li>
 <li>references: the three-column type table and budgets per size (text-styles), templates at Stage (templates), size checks (cohere).</li>
+<li><code>docs/sizes/</code> (new): every master template at Compact, Regular and Stage, side by side. <code>tools/build-sizes.js</code> re-renders its images from the kit and fails if the page's template list and the master disagree.</li>
 </ul>
 <p>Checked: the master passes <code>verify.js</code> at compact and regular, <code>stage.html</code> passes at stage, a v1.0 deck still passes as compact, and the PPTX export gate and its regression tests pass at all three sizes. Telemetry does not record the size yet; that needs a column in the collector.</p>
         </div>
