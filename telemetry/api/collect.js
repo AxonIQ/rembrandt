@@ -23,8 +23,8 @@ const HEADER = [
   '',
   'One row per deck that passed the gate and was delivered.',
   '',
-  '| when | who | deck | version | slides | chapters | dense |',
-  '| --- | --- | --- | --- | --- | --- | --- |',
+  '| when | who | deck | version | size | slides | chapters | dense |',
+  '| --- | --- | --- | --- | --- | --- | --- | --- |',
   '',
 ].join('\n');
 
@@ -43,6 +43,11 @@ const EXPORT_HEADER = [
 
 const cell = (v) => String(v ?? '').replace(/\|/g, '\\|').replace(/[\r\n]+/g, ' ').trim();
 
+// 1.1.0 added a size column. A log written before that still has the seven-column header, and a markdown
+// table drops cells past its header, so widen the header once; older rows show an empty size.
+const OLD_HEAD = '| when | who | deck | version | slides | chapters | dense |\n| --- | --- | --- | --- | --- | --- | --- |';
+const NEW_HEAD = '| when | who | deck | version | size | slides | chapters | dense |\n| --- | --- | --- | --- | --- | --- | --- | --- |';
+
 async function append(path, header, row) {
   let current = '';
   try {
@@ -50,6 +55,11 @@ async function append(path, header, row) {
     current = await fetch(meta.url, { cache: 'no-store' }).then((r) => r.text());
   } catch {
     current = header; // first write
+  }
+  if (header === HEADER && current.includes(OLD_HEAD)) {
+    // old rows have no size cell: give them an empty one so the columns stay aligned
+    const [top, rest] = current.split(OLD_HEAD);
+    current = top + NEW_HEAD + rest.replace(/^(\|(?:[^|\\\n]|\\.)*\|(?:[^|\\\n]|\\.)*\|(?:[^|\\\n]|\\.)*\|(?:[^|\\\n]|\\.)*\|)/gm, '$1  |');
   }
   await put(path, current + row, {
     access: 'public',
@@ -67,7 +77,7 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'bad or missing x-rembrandt-key' });
 
   const b = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-  const { kind, email, deck, at, version, slides, chapters, dense, outcome, failures } = b;
+  const { kind, email, deck, at, version, size, slides, chapters, dense, outcome, failures } = b;
 
   if (!email || !deck || !version) return res.status(400).json({ error: 'email, deck and version are required' });
   if (!String(email).toLowerCase().endsWith('@' + ALLOW))
@@ -82,7 +92,7 @@ export default async function handler(req, res) {
       await append(logPath('exports'), EXPORT_HEADER, row);
       return res.status(200).json({ ok: true });
     }
-    const row = `| ${cell(when)} | ${cell(email)} | ${cell(deck)} | ${cell(version)} | ${cell(slides)} | ${cell(chapters)} | ${cell(dense)} |\n`;
+    const row = `| ${cell(when)} | ${cell(email)} | ${cell(deck)} | ${cell(version)} | ${cell(size)} | ${cell(slides)} | ${cell(chapters)} | ${cell(dense)} |\n`;
     await append(logPath(), HEADER, row);
     return res.status(200).json({ ok: true });
   } catch (err) {

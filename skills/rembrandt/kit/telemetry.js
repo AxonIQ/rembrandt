@@ -46,7 +46,7 @@ function marker(email, file) {
   return path.join(os.tmpdir(), `rembrandt-telemetry-${h}`);
 }
 
-async function report({ file, deck, version, slides, chapters, dense }) {
+async function report({ file, deck, version, size, slides, chapters, dense }) {
   if (OFF) return 'off (REMBRANDT_TELEMETRY=0)';
   if (!ENDPOINT) return 'skipped, no REMBRANDT_TELEMETRY_URL set';
 
@@ -62,7 +62,7 @@ async function report({ file, deck, version, slides, chapters, dense }) {
   const body = JSON.stringify({
     email, deck, version,
     at: new Date().toISOString(),
-    slides, chapters, dense,
+    size, slides, chapters, dense,
   });
 
   const ctl = new AbortController();

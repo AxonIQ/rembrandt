@@ -10,7 +10,7 @@ Google Drive, so nothing here is bounded by a function timeout or a request size
 Two logs, both markdown tables in Vercel Blob:
 
 ```
-log.md      | when | who | deck | version | slides | chapters | dense |            one row per delivered deck
+log.md      | when | who | deck | version | size | slides | chapters | dense |            one row per delivered deck
 exports.md  | when | who | deck | version | outcome | failures | detail |         one row per PPTX export attempt
 ```
 
