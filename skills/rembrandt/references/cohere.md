@@ -39,18 +39,22 @@ Structure, completion and coherence, all checkable from the DOM and text.
 - [ ] The counter total equals the slide count.
 
 **Completion**
-- [ ] No slide overflows. Check character counts per slot against `references/text-styles.md` budgets; check that no text node's content length exceeds its slot's max. (This is why Cohere needs no screenshot: fit is a measured property of the text, not a look.)
+- [ ] No slide overflows. Fit is measured: `kit/verify.js` LAYOUT and the DOM script below are the check. Word budgets in `references/text-styles.md` are an outline guide, not a limit. (This is why Cohere needs no screenshot: fit is a measured property of the text, not a look.)
 - [ ] No empty slots and no leftover placeholder text. Grep for: `xxx`, `lorem`, `ipsum`, `TODO`, `\[insert`, `Vestibulum`, `Lorem`, `{{`, `}}`.
 - [ ] No broken images: every `<img>` has a real `src` (data URI or the checkerboard placeholder), none point at a missing file.
 
 **Composition and type** (the Composer rules, measured)
 - [ ] On every content slide, the bottom edge of the lowest content box is within 86px of y = 1012 (one grid row). Statement, quote, and hero-number layouts that are centered on purpose are exempt; nothing else is. `kit/verify.js` measures this.
 - [ ] Nothing collides. A numeral and its label sharing a line is the signature of a component copied without its wrapper.
-- [ ] No reading text (paragraph, list item, card body, table cell, annotation) has a computed `font-size` below 21px. Caption 17 only on captions and notes; Label/Meta/Foot only on chips, header meta, table heads, footnotes.
+- [ ] No reading text (paragraph, list item, card body, table cell, annotation) is smaller than Body 1 at the deck's size: 21 at Compact, 24 at Regular, 36 at Stage. Caption only on captions and notes; Label/Meta/Foot only on chips, header meta, table heads, footnotes.
 - [ ] No kicker (`.kicker`, eyebrow line with the dot) anywhere. Subtitles, where present, are `.sub`.
 - [ ] Icons come from `kit/icons/` (Lucide) as inline symbols; none from any other set.
 - [ ] Both columns of a two-column slide meet the same floor; the right column is not quietly smaller.
-- [ ] Every slide that uses the compact styles is listed in the report with the reason it overflowed at regular.
+- [ ] Every slide that uses the compact styles is listed in the report with the reason it overflowed at standard density. No slide at Stage uses them.
+
+**Size**
+- [ ] The `SIZE:` line `kit/verify.js` prints is the size the person chose, or, unattended, the size you recommended and stated in the report. The styles audit measures against that size's scale, so a deck at the wrong size can pass every check and still be wrong.
+- [ ] At Stage, every slide's markup came from `kit/stage.html`, and nothing from the source was dropped to fit: every row, item and figure is on a slide, split across continuation slides where needed. Every split is in the report.
 - [ ] Any target-vs-actual or before-vs-after metric is drawn, not captioned.
 
 **Coherence**
@@ -63,7 +67,7 @@ Structure, completion and coherence, all checkable from the DOM and text.
 - [ ] The company is written **Axoniq** everywhere. Grep for `AxonIQ` and fix any hit.
 - [ ] Only Geist, Inter, and Geist Mono are referenced; no other `font-family`.
 - [ ] No raw hex colors or off-scale font sizes introduced in scoped CSS. Only tokens.
-- [ ] The HUD names the deck, not the shell it was copied from. `#deckname` and the overview header both read the presentation's name, and `<title>` matches. `set_deck_name()` does all three.
+- [ ] The HUD names the deck, not the shell it was copied from. `#deckname` and the overview header both read the presentation's name, and `<title>` matches. The four replacements in Assemble do it.
 - [ ] The delivered filename is `<Presentation name> - Rembrandt v<version>.html`, with the version read from `kit/VERSION`.
 
 ## Handy checks
@@ -87,12 +91,12 @@ grep -oE '&middot; Product Perspective &middot; #[0-9]+' deck.html   # replace w
 
 ```bash
 # the gate: five checks in one command
-node kit/verify.js "My Deck - Rembrandt v1.0.html"   # must print: VERIFY: PASS
+node kit/verify.js "My Deck - Rembrandt v1.1.html"   # must print: VERIFY: PASS
 # any hand-written font declaration outside the style classes is a smell
 grep -oE 'style="[^"]*font-(size|weight|family)[^"]*"' deck.html
 ```
 
-For per-slot fit and for composition, a short headless DOM script (no screenshot) is the reliable check. Load the file in headless Chromium at 1920×1080, then for each `section.slide` that is not a cover, chapter cover, statement, quote, or hero number, read `getBoundingClientRect()` of every element inside `.body` and take the largest `bottom`; it must be ≥ 926 (1012 minus one grid row). In the same pass, read `getComputedStyle(el).fontSize` of every element whose direct text is longer than 24 characters and is not inside `.label`, `.meta`, `.hd-meta`, `.foot`, `.img-cap`, `.code`, or a chip; it must be ≥ 21. Print the slide number and the value for every failure. Fix, re-run, then move on. Do not eyeball a render for overflow or for balance.
+For per-slot fit and for composition, a short headless DOM script (no screenshot) is the reliable check. Load the file in headless Chromium at 1920×1080, then for each `section.slide` that is not a cover, chapter cover, statement, quote, or hero number, read `getBoundingClientRect()` of every element inside `.body` and take the largest `bottom`; it must be ≥ 926 (1012 minus one grid row). In the same pass, read `getComputedStyle(el).fontSize` of every element whose direct text is longer than 24 characters and is not inside `.label`, `.meta`, `.hd-meta`, `.foot`, `.img-cap`, `.code`, or a chip; it must be at least Body 1 at the deck's size: 21 at Compact, 24 at Regular, 36 at Stage. Print the slide number and the value for every failure. Fix, re-run, then move on. Do not eyeball a render for overflow or for balance.
 
 ## After Cohere
 

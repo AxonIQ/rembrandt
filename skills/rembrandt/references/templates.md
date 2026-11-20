@@ -62,9 +62,34 @@ Cards and stat tiles with air above their text carry one Lucide icon (`kit/icons
 
 The master anchors content to the bottom of the frame and pins the title to the top; the air is between them. When you drop content into a template, keep that: the content block ends within one grid row of y = 1012, cards put their text at the bottom and let media and avatars take the top, stacked groups are distributed rather than piled under the title. SKILL.md, section Composer, has the rules; Cohere measures them.
 
+## Templates at Stage
+
+Every template exists at all three sizes. Compact and Regular share the master's markup; at Stage, copy
+the template from `kit/stage.html`, where each one is recomposed for a room. What changes at Stage:
+
+| Template | At Stage |
+|---|---|
+| cover/light, cover/backdrop | title of two lines at most, subtitle of two lines |
+| index/spread | chapter names only, five chapters; each description moves to its own chapter cover's subtitle |
+| index/catalog | two columns of rows |
+| cards/3-up, 2-up, 4-up, 6-grid | one short line per card; longer cards go fewer per slide, or to plan/detailed |
+| numbers/4-up | a 2 by 2 grid, so each figure gets the width it needs; no room for a subtitle |
+| numbers/6-grid | icons hidden, one short reading line |
+| table/comparison | cells of a few words |
+| table/dense | 6 rows |
+| table/definitions | 3 terms |
+| plan/detailed, plan/compact | 4 rows, 6 rows |
+| roadmap/quarters, roadmap/timeline | short bar and card labels |
+| team/trio | shorter portraits, one-line bios |
+| spec/type | the stage scale, one line per style |
+
+Everything else (chapters, images, numbers/hero, numbers/9-grid, matrix, team 1/5/6, quote,
+statement, versus, diagram, logos, closing) keeps its master composition with stage-length copy.
+When content exceeds a stage template, the slide continues on the next one ("1 of 2"); see Size in SKILL.md.
+
 ## Rhythm rules (deck level)
 
 - Open with a cover; close with the closing layout.
 - Over ten slides: chapters, with the master `index/spread` as the chapter cover (`.cur` on the current chapter, `.past` on those already shown). No separate index slide.
-- Never place the same template on two consecutive content slides. Vary the family or the variant.
+- Never place the same template on two consecutive content slides. Vary the family or the variant. Continuation slides ("1 of 2", "2 of 2") are the exception.
 - Aim for at least six distinct template families across a fifteen-slide deck. Monotony is a defect Cohere checks for.

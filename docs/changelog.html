@@ -130,6 +130,57 @@ footer a:hover{color:var(--ink)}
 
       <article class="rel">
         <div class="relv">
+          <h2 id="v1-1-0: three type sizes, Compact, Regular and Stage">1.1.0: three type sizes, Compact, Regular and Stage</h2>
+          
+        </div>
+        <div class="relbody">
+<p><strong>Every deck is now built at one of three sizes, and the skill offers them as options before it outlines.</strong> Compact is the v1.0 scale, for decks read on a screen. Regular is the new default, one step up (Body 1 24, H1 60), for meeting rooms and calls. Stage is for keynotes and big rooms (Body 1 36, H1 92). They are the same 18 text styles at three steps of the scale, so the classes, the components and the hard rule are unchanged; what changes is how much a slide holds.</p>
+<p>Why sizes and not a zoom: a bigger type size changes what a slide can carry. At Stage a 9-row plan holds 6 and a dense table 6 rows, so a stage deck is recomposed, not enlarged. A first attempt that scaled slides and trimmed items to fit was rejected in review because the stage version quietly dropped data. The rule now: <strong>Stage never drops data.</strong> Content beyond what a stage template holds continues on the next slide.</p>
+<ul>
+<li><code>kit/master.html</code>: every text style reads its size from <code>--fs-*</code> tokens set on <code>&lt;html data-size&gt;</code>. The master defaults to <code>regular</code>. Spacing that needed recalculating at a size is scoped to it (<code>html[data-size="regular"]</code>, <code>html[data-size="stage"]</code>); <code>compact</code> renders exactly as v1.0. The spec slide shows each style's value at the size the file declares.</li>
+<li><code>kit/stage.html</code> (new): the stage reference. Every template recomposed for a room, with stage-length copy and stage capacity. Generated from the master by <code>tools/build-stage.py</code>, so the shell is byte-identical and the stage rules live in one place. <code>--check</code> fails when it is stale.</li>
+<li><code>kit/verify.js</code>: reads the deck's size and checks every text node against that size's scale. It prints <code>SIZE:</code> first. A deck with no attribute and no tokens is a v1.0 shell and checks as compact.</li>
+<li><code>kit/export/extract.js</code>: carries <code>data-size</code> into each per-slide render. Without it every deck exported at the default size; found by running the export on all three.</li>
+<li>SKILL.md: a <strong>Size</strong> section, the size question in the questionnaire, the size table in Assemble, and the stage splitting rule. Densities are renamed standard and dense so "regular" means one thing.</li>
+<li>references: the three-column type table and budgets per size (text-styles), templates at Stage (templates), size checks (cohere).</li>
+<li><code>docs/sizes/</code> (new): every master template at Compact, Regular and Stage, side by side. <code>tools/build-sizes.js</code> re-renders its images from the kit and fails if the page's template list and the master disagree.</li>
+</ul>
+<p>Release test: three fresh sessions, each given only the skill, built the same 24-slide all-hands deck at Regular (unattended, no context: 25 slides), Compact (a board read-ahead: 24 slides) and Stage (a 400-person hall: 40 slides, every item, row and figure kept). All three passed <code>verify.js</code> and the export gate. Their reports drove these fixes before release:</p>
+<ul>
+<li>Unattended runs build the size the person's words point to, Regular when nothing does; the report, never the deck, states it.</li>
+<li>Fit is measured by the gate; word budgets are an outline guide, recalibrated from those decks (about 120, 100 and 60 words at standard density).</li>
+<li>Stage: continuation slides are exempt from the no-repeat rhythm rule and carry "1 of 2" in the H1; long items get more room rather than cuts; chapter descriptions move to their chapter covers; SVG chart labels at least Caption size. <code>verify.js</code> now fails a stage deck that uses Body 1 compact.</li>
+<li>Assemble takes slide markup from the size's reference file and names the four replacements.</li>
+<li>Size-aware reference values in text-styles and cohere; the spec slide's stage Code is 30.</li>
+<li>Telemetry records the size: a new column in the deck log, migrated in place for older logs.</li>
+</ul>
+<p>The master passes <code>verify.js</code> at compact and regular, <code>stage.html</code> passes at stage, a v1.0 deck still passes as compact, and the PPTX export gate and its regression tests pass at all three sizes.</p>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
+          <h2 id="vUnreleased: PPTX export and Google Slides delivery (Rembrandt 2-0)">Unreleased: PPTX export and Google Slides delivery (Rembrandt 2.0)</h2>
+          
+        </div>
+        <div class="relbody">
+<p><strong>Every run now ends with a Google Slides file, in the runner's own Drive.</strong> The HTML stays the deck and the thing Cohere checks. After Cohere passes, <code>kit/export/export.js</code> measures the finished HTML in a headless browser, writes a PPTX against Google Slides' own text model, proves the PPTX against the browser, and uploads it straight to the runner's Google Drive, where Drive converts it to Slides. Each person connects their Google account once, with one <code>drive.file</code> consent, and owns every deck they make. When they have not connected, or anything fails, the run delivers the <code>.pptx</code> with a one-line drop-in instruction instead. <code>ROLLOUT-2.0.md</code> is the plan.</p>
+<p>Why a study came first: Google Slides does not lay text out the way PowerPoint or a browser does. Measured on real imports, its 100% line spacing is 1.2 times the font size for every font, its first baseline sits 0.96 em below the box top, its default text insets are 0.1 by 0.05 in, it drops letter spacing entirely, it misconverts exact line spacing, and it resolves weights only through typeface names such as <code>Inter Medium</code>. A naive export lands text 9 px right and 3 px low and turns every mid-weight bold. The exporter writes to the measured model and lands within 0.05 px.</p>
+<ul>
+<li><code>kit/export/extract.js</code> measures each slide word by word and records the rendered lines; runs are tagged by the line they were drawn on, so an explicit <code>&lt;br&gt;</code>, a balanced wrap and a soft wrap are one mechanism and none can be lost.</li>
+<li><code>kit/export/build.py</code> replays those lines as explicit breaks, sizes every box from the shaped width of its widest line (<code>shape.py</code>, HarfBuzz with the exact font file), writes whole-point sizes on a 1 px = 1 pt canvas, zero insets, whole-percent spacing.</li>
+<li><code>kit/export/verify.py</code> reads the package back and checks TEXT, FIT, GEOM and HOUSE; the build fails on any of them. <code>test_export.py</code> breaks the exporter six ways and asserts the gate catches each. It caught a real re-wrap on its first run.</li>
+<li>Text set in Inter ships as Inter Tight at zero tracking; 470 to 540 as Medium, 550 and 560 as SemiBold. Gradients, dot patterns and SVG icons ship as 2x rasters. Fonts are vendored (OFL).</li>
+<li><code>kit/telemetry.js</code> gains <code>reportExport</code>: one row per export attempt with the outcome and, on a gate failure, the failing lines, so the exporter can be fixed from the log alone. The collector keeps a second log for it and <code>/api/log?which=exports</code> reads it.</li>
+<li><code>kit/export/gdrive.js</code> is everything that talks to Google: consent, code exchange, refresh, and a resumable upload with conversion to Slides. <code>kit/export/authorize.js</code> is the one-time connect. <code>test_delivery.py</code> drives both through a stubbed Google and asserts on what the runner would see.</li>
+<li><code>telemetry/api/token.js</code> keeps one refresh token per person, encrypted with AES-256-GCM, because the sandbox is wiped between sessions. The deck itself never passes through the service, so there is no size cap and no function timeout in the path. <code>kit/service.json</code> carries the host and the OAuth client so no install needs an environment variable.</li>
+<li>SKILL.md: step 10 is <strong>Export</strong>, Deliver is 11, and the reply carries the Slides link or the <code>.pptx</code> beside the HTML.</li>
+</ul>
+        </div>
+      </article>
+
+      <article class="rel">
+        <div class="relv">
           <h2 id="vUnreleased: usage telemetry">Unreleased: usage telemetry</h2>
           
         </div>
@@ -142,10 +193,10 @@ footer a:hover{color:var(--ink)}
         </div>
       </article>
 
-      <article class="rel current">
+      <article class="rel">
         <div class="relv">
           <h2 id="v1-0-6">1.0.6</h2>
-          <span class="tag">Current</span>
+          
         </div>
         <div class="relbody">
 <p><strong>The kit now lives inside the skill folder.</strong> Until this release Rembrandt could not work for anyone who installed it as a plugin.</p>
@@ -403,7 +454,7 @@ footer a:hover{color:var(--ink)}
 <path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
 <path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
 </svg>
-    <span>Rembrandt v1.0.6</span>
+    <span>Rembrandt v1.1.0</span>
     <span class="push"><a href="https://axoniq.io">axoniq.io</a></span>
   </div>
 </footer>
