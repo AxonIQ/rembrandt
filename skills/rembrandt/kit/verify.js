@@ -56,6 +56,10 @@ const SEL = '#scaler > .slide, section.slide';
     return { attr: a, tokens };
   });
   let SIZE = sizeInfo.attr || (sizeInfo.tokens ? 'regular' : 'compact');
+  if (sizeInfo.attr && !sizeInfo.tokens) {
+    console.log(`SIZE: FAIL, the deck declares data-size="${sizeInfo.attr}" but its shell has no size tokens, so it renders at the v1.0 scale. Copy the current kit/master.html shell.`);
+    process.exit(1);
+  }
   if (!SIZES.includes(SIZE)) { console.log(`SIZE: FAIL, data-size="${SIZE}" is not one of ${SIZES.join(', ')}.`); process.exit(1); }
   STYLES = stylesFor(SIZE);
   console.log(`SIZE: ${SIZE}${sizeInfo.attr ? '' : ' (no data-size attribute; ' + (sizeInfo.tokens ? 'tokens present' : 'a v1.0 shell') + ')'}\n`);
@@ -146,7 +150,7 @@ const SEL = '#scaler > .slide, section.slide';
       const dense = await p.evaluate(SEL => [...document.querySelectorAll(SEL)].map((sl, i) => sl.querySelector('.body1--c') ? i + 1 : 0).filter(Boolean), SEL);
       if (dense.length) {
         results[results.length - 1].ok = false;
-        results[results.length - 1].out += `\n  stage deck uses Body 1 compact (.body1--c) on slide${dense.length > 1 ? 's' : ''} ${dense.map(n => '#' + String(n).padStart(2, '0')).join(', ')}; there is no dense mode at Stage: split the slide`;
+        results[results.length - 1].out = results[results.length - 1].out.replace(/^STYLES: pass, every text node is exactly one style/, 'STYLES: FAIL, Body 1 compact at Stage') + `\n  stage deck uses Body 1 compact (.body1--c) on slide${dense.length > 1 ? 's' : ''} ${dense.map(n => '#' + String(n).padStart(2, '0')).join(', ')}; there is no dense mode at Stage: split the slide`;
       }
     }
   }

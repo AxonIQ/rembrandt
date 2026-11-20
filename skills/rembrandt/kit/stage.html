@@ -450,10 +450,10 @@ table{border-collapse:collapse;width:100%}
 html[data-size="compact"] .sz-c{display:inline}
 html:not([data-size="compact"]):not([data-size="stage"]) .sz-r{display:inline}
 html[data-size="stage"] .sz-s{display:inline}
-html[data-size="regular"] .cat-row{padding:15px 0}
-html[data-size="regular"] .stats6 .stat{padding:26px 32px;gap:8px}
-html[data-size="regular"] .plan-row{padding:18px 0}
-html[data-size="regular"] .ts-row{padding:4px 0 4px;gap:2px}
+html:not([data-size="compact"]):not([data-size="stage"]) .cat-row{padding:15px 0}
+html:not([data-size="compact"]):not([data-size="stage"]) .stats6 .stat{padding:26px 32px;gap:8px}
+html:not([data-size="compact"]):not([data-size="stage"]) .plan-row{padding:18px 0}
+html:not([data-size="compact"]):not([data-size="stage"]) .ts-row{padding:4px 0 4px;gap:2px}
 html[data-size="stage"] .idx-row{padding:6px 0;gap:30px}
 html[data-size="stage"] .cat-row{padding:12px 0;grid-template-columns:64px 1fr auto}
 html[data-size="stage"] .cards3 .card{padding:36px;gap:14px}
@@ -1590,7 +1590,14 @@ html[data-size="stage"] .cards3 .card .ico{width:56px;height:56px}
     doc.querySelectorAll('.slide').forEach(function (sl, i) { if (i) sl.setAttribute('hidden', ''); else sl.removeAttribute('hidden'); });
     doc.querySelectorAll('[data-rid]').forEach(function (el) { el.removeAttribute('data-rid'); });
     var b = doc.querySelector('body'); if (b) b.classList.remove('rb-edit');
-    return '<!doctype html>\n<html lang="en">' + doc.innerHTML + '</html>';
+    // keep the deck's own attributes on <html> (innerHTML leaves them out): data-size sets its type size.
+    // Only these two: a host page may add others at runtime (a theme flag) that do not belong in the file.
+    var root = document.documentElement, attrs = '';
+    ['lang', 'data-size'].forEach(function (n) {
+      var v = root.getAttribute(n);
+      if (v != null) attrs += ' ' + n + '="' + String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '"';
+    });
+    return '<!doctype html>\n<html' + attrs + '>' + doc.innerHTML + '</html>';
   }
   async function saveInPlace() {
     var html = bake();
