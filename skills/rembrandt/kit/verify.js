@@ -140,6 +140,15 @@ const SEL = '#scaler > .slide, section.slide';
     else out = `STYLES: ${r.rows.length} violating combinations\n` +
       r.rows.map(x => `  #${String(x.slide).padStart(2,'0')} ${x.style.padEnd(24)} x${x.n}  ${x.el}  "${x.text}"`).join('\n');
     results.push({ name: 'styles', ok: !!r.slides && !r.rows.length, out });
+    // There is no dense mode at Stage. The stage tokens give Body 1 compact the Body 1 size, so the style
+    // check alone would pass it; count the class instead.
+    if (SIZE === 'stage') {
+      const dense = await p.evaluate(SEL => [...document.querySelectorAll(SEL)].map((sl, i) => sl.querySelector('.body1--c') ? i + 1 : 0).filter(Boolean), SEL);
+      if (dense.length) {
+        results[results.length - 1].ok = false;
+        results[results.length - 1].out += `\n  stage deck uses Body 1 compact (.body1--c) on slide${dense.length > 1 ? 's' : ''} ${dense.map(n => '#' + String(n).padStart(2, '0')).join(', ')}; there is no dense mode at Stage: split the slide`;
+      }
+    }
   }
 
   /* --------------------------------------------------------------- colour */
@@ -373,7 +382,7 @@ const SEL = '#scaler > .slide, section.slide';
       const version = fs.readFileSync(path.join(here, 'VERSION'), 'utf8').trim();
       const base = path.basename(file);
       const deck = (base.match(/^(.+) - Rembrandt v\d+\.\d+\.html$/) || [])[1] || path.basename(base, '.html');
-      status = await require('./telemetry.js').report({ file, deck, version, ...shape });
+      status = await require('./telemetry.js').report({ file, deck, version, size: SIZE, ...shape });
     } catch (err) {
       status = 'not recorded, ' + ((err && err.message) || 'unknown error');
     }

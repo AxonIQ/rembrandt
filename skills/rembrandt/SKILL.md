@@ -25,9 +25,9 @@ Do not offer to build a deck without the checks, do not install a browser, and d
 something unverified. A deck that skipped the gate is not a Rembrandt deck, whatever its filename
 says. This is the one condition where the right answer is to build nothing.
 
-**2. Say which version you are, and what gets logged.** Read `kit/VERSION` and open with two lines:
+**2. Say which version you are, and what gets logged.** Read `kit/VERSION` and open with two lines, using its major and minor (the example is for 1.1.x):
 
-> Rembrandt v1.0.
+> Rembrandt v1.1.
 > When a deck passes the gate I add one line to Axoniq's Rembrandt log: your email, the deck's name, the time, this version, and how many slides and chapters it came to. Nothing from inside the deck.
 
 Say it at the start, before any work happens, and say it once. It is a notice, not a question: do not
@@ -137,21 +137,22 @@ open(out, 'w').write(head + "\n\n".join(slides) + "\n" + tail)
 ```
 
 **Name the deck in the chrome.** The tail carries the presenter HUD and the overview header, both
-still saying "Master Slide Deck". Three replacements, no helper:
+still saying "Master Slide Deck", and the master says `data-size="regular"`. Four replacements, no helper. The head and the tail always come from `kit/master.html`, at every size:
 
 ```python
 import re
 name = "Bi-Weekly ONE House"
+size = "regular"   # the size chosen in the questionnaire: compact | regular | stage
 tail = re.sub(r'(<span id="deckname">)[^<]*', lambda m: m.group(1) + name, tail, count=1)
 tail = re.sub(r'(<div class="ov-head"><b>)[^<]*', lambda m: m.group(1) + 'AXONIQ &middot; ' + name.upper(), tail, count=1)
 head = re.sub(r'<title>[^<]*</title>', f'<title>{name}</title>', head, count=1)
-head = head.replace('<html lang="en" data-size="regular">', f'<html lang="en" data-size="{size}">', 1)  # compact | regular | stage
+head = head.replace('<html lang="en" data-size="regular">', f'<html lang="en" data-size="{size}">', 1)
 ```
 
 Then, and only then:
 
 - **Each slide is a `<section class="slide" data-name="<template>" data-chapter="<chapter>" hidden>`**, a direct child of `#scaler`, with `data-name` set to the master template you used (`cards/3-up`, `index/spread`), not to the slide's title. The first slide alone has no `hidden`.
-- **Copy each slide's markup from its master section too**, then replace the words. Copying `cards/3-up` and rewriting three cards is the whole job. Writing a `<div class="card-item">` of your own invention is not.
+- **Copy each slide's markup from its section in the size's reference file** (`kit/master.html` at Compact and Regular, `kit/stage.html` at Stage), then replace the words. Copying `cards/3-up` and rewriting three cards is the whole job. Writing a `<div class="card-item">` of your own invention is not.
 - **A component is its markup, not its look.** The master's components carry their structure in their wrappers, and the wrapper is what makes them work. A stat is `<div class="stat"><span class="s">label</span><span class="v num">10-13</span><span class="l">the reading line</span></div>`: `.stat` is the flex column that stacks those three, and without it a Stat numeral and its Body 1 label become inline neighbours that collide. A `.idx-row` is the grid that puts the numeral on the right. A `.card` is the padding and the border. Take the whole wrapper every time. If you find yourself writing `<span class="num">` next to a bare text node, you have dropped a wrapper.
 - **Two templates on one slide is inventing a layout.** It is allowed as a last resort and it is flagged in the report, but you still use each component's own markup inside your composition, and you still run the layout audit, which is what catches the collision you are about to cause.
 - **Any CSS you add is scoped and built from the style tokens**, appended before `</style>`. Never redefine a text style, never introduce a class that duplicates one (`.body-1` when `.body1` exists is the signature of a retyped shell, and `kit/verify.js` fails on it).
@@ -190,9 +191,9 @@ The output filename is:
 ```
 
 - **Presentation name** is the deck's name as it appears in the header meta, in its own capitalisation: `Bi-Weekly ONE House`, `Product Perspective`. That is the short name, not the full cover headline.
-- **version** is the contents of `kit/VERSION`, major and minor only: `v1.0`. Read the file; never guess it.
+- **version** is the contents of `kit/VERSION`, major and minor only: `v1.1` for 1.1.0. Read the file; never guess it.
 
-So: `Bi-Weekly ONE House - Rembrandt v1.0.html`. The spaces and the hyphens are part of the format,
+So: `Bi-Weekly ONE House - Rembrandt v1.1.html`. The spaces and the hyphens are part of the format,
 and `kit/verify.js` fails a deck whose filename does not match it, or whose version does not match
 `kit/VERSION`. The point is that any deck can be traced to the rules that made it without opening it.
 
@@ -247,16 +248,39 @@ How to ask, as options the person can pick from:
 > **Regular (recommended)**: a meeting room or a call. **Compact**: read on a screen, more per slide. **Stage**: a keynote or a big room, bigger type, fewer words per slide.
 
 If the person already said where the deck will be shown ("for my talk at the conference", "to send
-to the board"), recommend the size that fits and still offer the other two. Working unattended:
-build at Regular and say so at the top of the report.
+to the board"), recommend the size that fits and still offer the other two. **Working unattended**, build
+at the size you would have recommended: the one the person's own words point to, and Regular when
+nothing does. State the size and the reason at the top of your report, never inside the deck.
 
 **Stage never drops data.** A stage slide holds less, so the source material spreads over more
-slides. When a slide's content exceeds what the stage template holds (rows in a table, items in a
-plan, cards in a grid), split it into continuation slides ("Risks, 1 of 2"), never cut items,
-never shorten figures. At Liberal and High fidelity you may tighten wording for stage, never
-meaning. At Verbatim, stage is splits only. Every split is listed in the report.
+slides. When content exceeds what the stage template holds (rows in a table, items in a plan, cards
+in a grid; `references/templates.md` lists each capacity), split it into continuation slides, never
+cut items, never shorten figures.
 
-There is no dense mode at Stage. A stage slide that still overflows after Composer is split.
+- **What fits is measured, not counted.** A slide that passes `kit/verify.js` fits. Word budgets in
+  `references/text-styles.md` are an outline guide for planning splits early, not a gate: an
+  over-budget slide that fits stays, and a slide inside its budget that overflows does not.
+- **The fit ladder at Stage** is the same as at the other sizes minus dense: compose, rewrite tighter
+  (not at Verbatim, and never the meaning), switch to a higher-capacity template, split. Scoped CSS
+  is still allowed for spacing.
+- **Continuations** are titled "Risks, 1 of 2", "Risks, 2 of 2" in the H1. A template with no H1
+  (numbers/hero, team/solo, statement, quote) takes the master's standard head-row above its content
+  when it continues. Continuation slides are exempt from the rule against repeating a template back
+  to back; that is what a continuation is.
+- **Long items:** when cards, bios or table cells are longer than a stage template holds per item,
+  give each item more room rather than cutting it: fewer cards per slide, one person per slide, or a
+  list template (plan/detailed) instead of cards. Every such recomposition is in the report.
+- **Chapter descriptions** that the stage index does not show move to that chapter's own cover, as
+  the subtitle under its title. Nothing in the agenda is lost.
+- **Charts at Stage:** SVG labels are exempt from the style check, so size them yourself: at least
+  Caption at the deck's size (28 at Stage, 19 at Regular, 17 at Compact).
+
+There is no dense mode at Stage: no Body 1 compact, and `kit/verify.js` fails a stage deck that uses
+it. H2 compact is not a dense style when a template uses it for small cards (4-up, plan rows, team
+names); it stays at every size.
+
+At Liberal and High fidelity you may tighten wording for stage, never meaning. At Verbatim, stage is
+splits only. Every split and every recomposition is listed in the report.
 
 ## Questionnaire
 
@@ -264,7 +288,7 @@ Rembrandt's first real interaction is collecting what the source is missing. Sca
 
 - Accept a **URL as an answer**. If the person answers "https://axoniq.io/our-people" or a concept page, go fetch it and use what it says. A pasted link is a complete answer, not a deferral.
 - Offer a visible **placeholder** option for anything genuinely not-yet-known ("DATES · TBD" in mono), so the deck can ship with the hole marked rather than blocked.
-- Ask once. If you are working unattended, state your assumptions at the top of the deliverable and proceed.
+- Ask once. If you are working unattended, proceed and state every assumption at the top of your report to the person, never inside the deck.
 
 Never invent a date, a name, a figure, or a URL silently. Either ask, use a marked placeholder, or (Liberal only) draft it and flag it in the report.
 
@@ -295,7 +319,7 @@ designed, tidy, or balanced. If it fits with room to spare, that room is the des
 
 ## Titles, subtitles, no kickers
 
-There is **no kicker** (the small mono line with the orange dot above a title). Not on covers, not on content slides, not anywhere. Every slide has one H1 title. Slides that need context get a **Subtitle** (`.sub`, gray Lede metrics) directly under the title; most slides do not need one. Chapter context lives in the header, not above the title.
+There is **no kicker** (the small mono line with the orange dot above a title). Not on covers, not on content slides, not anywhere. Every content slide has one H1 title; covers, chapter covers, statements, quotes and hero numbers carry their own display type instead. Slides that need context get a **Subtitle** (`.sub`, gray Lede metrics) directly under the title; most slides do not need one. Chapter context lives in the header, not above the title.
 
 ## Composer
 
@@ -337,7 +361,7 @@ Cohere is two parts: a gate you run, and a reading pass you do.
 **The gate.** One command, and it must print PASS before you deliver anything:
 
 ```bash
-node kit/verify.js "Bi-Weekly ONE House - Rembrandt v1.0.html"
+node kit/verify.js "Bi-Weekly ONE House - Rembrandt v1.1.html"
 ```
 
 It runs five checks and fails closed on every one:
@@ -376,7 +400,7 @@ records where every line of text actually sits, and writes a PPTX that Google Sl
 same lines and baselines. Run it once Cohere prints PASS, never before:
 
 ```bash
-node kit/export/export.js "Bi-Weekly ONE House - Rembrandt v2.0.html"
+node kit/export/export.js "Bi-Weekly ONE House - Rembrandt v1.1.html"
 ```
 
 It prints a block. Paste it under the Cohere lines, unchanged. It has five parts:

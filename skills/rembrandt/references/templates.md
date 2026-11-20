@@ -70,10 +70,10 @@ the template from `kit/stage.html`, where each one is recomposed for a room. Wha
 | Template | At Stage |
 |---|---|
 | cover/light, cover/backdrop | title of two lines at most, subtitle of two lines |
-| index/spread | chapter names only, no descriptions; five chapters |
+| index/spread | chapter names only, five chapters; each description moves to its own chapter cover's subtitle |
 | index/catalog | two columns of rows |
-| cards/3-up, 2-up, 4-up, 6-grid | one short line per card |
-| numbers/4-up | a 2 by 2 grid, so each figure gets the width it needs |
+| cards/3-up, 2-up, 4-up, 6-grid | one short line per card; longer cards go fewer per slide, or to plan/detailed |
+| numbers/4-up | a 2 by 2 grid, so each figure gets the width it needs; no room for a subtitle |
 | numbers/6-grid | icons hidden, one short reading line |
 | table/comparison | cells of a few words |
 | table/dense | 6 rows |
@@ -91,5 +91,5 @@ When content exceeds a stage template, the slide continues on the next one ("1 o
 
 - Open with a cover; close with the closing layout.
 - Over ten slides: chapters, with the master `index/spread` as the chapter cover (`.cur` on the current chapter, `.past` on those already shown). No separate index slide.
-- Never place the same template on two consecutive content slides. Vary the family or the variant.
+- Never place the same template on two consecutive content slides. Vary the family or the variant. Continuation slides ("1 of 2", "2 of 2") are the exception.
 - Aim for at least six distinct template families across a fifteen-slide deck. Monotony is a defect Cohere checks for.

@@ -41,9 +41,24 @@ continues on the next slide.
   `tools/build-sizes.js` re-renders its images from the kit and fails if the page's template list
   and the master disagree.
 
-Checked: the master passes `verify.js` at compact and regular, `stage.html` passes at stage, a v1.0
-deck still passes as compact, and the PPTX export gate and its regression tests pass at all three
-sizes. Telemetry does not record the size yet; that needs a column in the collector.
+Release test: three fresh sessions, each given only the skill, built the same 24-slide all-hands
+deck at Regular (unattended, no context: 25 slides), Compact (a board read-ahead: 24 slides) and Stage
+(a 400-person hall: 40 slides, every item, row and figure kept). All three passed `verify.js` and the
+export gate. Their reports drove these fixes before release:
+
+- Unattended runs build the size the person's words point to, Regular when nothing does; the report,
+  never the deck, states it.
+- Fit is measured by the gate; word budgets are an outline guide, recalibrated from those decks
+  (about 120, 100 and 60 words at standard density).
+- Stage: continuation slides are exempt from the no-repeat rhythm rule and carry "1 of 2" in the H1;
+  long items get more room rather than cuts; chapter descriptions move to their chapter covers; SVG
+  chart labels at least Caption size. `verify.js` now fails a stage deck that uses Body 1 compact.
+- Assemble takes slide markup from the size's reference file and names the four replacements.
+- Size-aware reference values in text-styles and cohere; the spec slide's stage Code is 30.
+- Telemetry records the size: a new column in the deck log, migrated in place for older logs.
+
+The master passes `verify.js` at compact and regular, `stage.html` passes at stage, a v1.0 deck still
+passes as compact, and the PPTX export gate and its regression tests pass at all three sizes.
 
 ## Unreleased: PPTX export and Google Slides delivery (Rembrandt 2.0)
 

@@ -18,7 +18,7 @@ Every style exists at three sizes. A deck declares one on `<html data-size>` and
 its size from the matching tokens, so the class names never change. `kit/verify.js` prints the size it
 found and checks every text node against that size's column.
 
-- **Compact**: the v1.0 scale. Decks read on a screen or sent as documents.
+- **Compact**: the v1.0 scale, at v1.0's spacing (no size adjustments). Decks read on a screen or sent as documents.
 - **Regular**: the default. Meeting rooms and calls.
 - **Stage**: keynotes, talks, booths. Slide markup comes from `kit/stage.html`.
 
@@ -56,15 +56,15 @@ The header meta reads `Chapter · Presentation title · #N`. The part that chang
 
 Reading text is anything the audience is meant to read as content: paragraphs, list items, card bodies, table cells, chart annotations, the right-hand column of a two-column slide. **Reading text is Body 1 or larger, always**: 21 at Compact, 24 at Regular, 36 at Stage.
 
-| Text | Style |
-|---|---|
-| The one lead line of a slide | Lede 25 |
-| Paragraphs, bullets, card bodies, table cells, annotations | Body 1 21 |
-| Card and column headings | H2 40; H2 compact 33 in 4-up or tagged cards; Body 1 strong in 6-grids |
-| Image captions, table notes, axis labels | Caption 17 |
-| Chips, tags, legends | Label 15 |
-| Header meta, table heads, card indexes | Meta 14 |
-| Footnotes and sources | Foot 12.5 |
+| Text | Style | Compact · Regular · Stage |
+|---|---|---|
+| The one lead line of a slide | Lede | 25 · 28 · 42 |
+| Paragraphs, bullets, card bodies, table cells, annotations | Body 1 | 21 · 24 · 36 |
+| Card and column headings | H2; H2 compact in 4-up or tagged cards; Body 1 strong in 6-grids | 40 · 44 · 64; 33 · 36 · 52 |
+| Image captions, table notes, axis labels | Caption | 17 · 19 · 28 |
+| Chips, tags, legends | Label | 15 · 16 · 22 |
+| Header meta, table heads, card indexes | Meta | 14 · 15 · 20 |
+| Footnotes and sources | Foot | 12.5 · 13.5 · 18 |
 
 Caption, Code, Label, Meta and Foot are never used for reading text. A bullet in Caption is a defect, not a variant.
 
@@ -73,19 +73,19 @@ Caption, Code, Label, Meta and Foot are never used for reading text. A bullet in
 Every content template runs in one of two densities.
 
 - **Standard**. H2 (`.title-sm`) + Body 1 (`.body1`). **The default.** If the content fits with room to spare, the room stays: it is the design, not a problem to fill or shrink around.
-- **Dense**. H2 compact (`.title-sm--c`) + Body 1 compact (`.body1--c`). Allowed only at Compact and Regular, when a slide has been composed at standard density (see Composer in SKILL.md) and still overflows. Never chosen for tidiness, balance, or to make a slide "look designed". Every dense slide is listed in the report.
+- **Dense**. H2 compact (`.title-sm--c`) + Body 1 compact (`.body1--c`). H2 compact on its own is also the standard heading of small cards, at every size; Body 1 compact is what makes a slide dense. Allowed only at Compact and Regular, when a slide has been composed at standard density (see Composer in SKILL.md) and still overflows. Never chosen for tidiness, balance, or to make a slide "look designed". Every dense slide is listed in the report.
 
 Escalation when copy overflows: compose → rewrite tighter → switch to dense → switch to a higher-capacity template variant → split the slide. Scoped CSS is the last resort, and only for spacing. Shrinking type off the scale is never a step.
 
 ### Budgets by size
 
-Words a slide carries, as a starting point. Budgets only veto; the slide's job still picks the template.
+Words a content slide carries at standard density, as a guide for planning the outline. They were measured on real decks built at each size (1.1.0 release test); slides up to these counts fit. Fit itself is measured by `kit/verify.js`: an over-budget slide that passes stays as it is.
 
 | Size | Standard | Dense | Typical capacity |
 |---|---|---|---|
-| Compact | about 100 words | about 150 | the master's own sample slides |
-| Regular | about 80 words | about 120 | the master at `data-size="regular"` |
-| Stage | about 40 words | none | `kit/stage.html`: a plan holds 4 detailed rows or 6 compact, a dense table 6 rows, definitions 3, index rows carry names only |
+| Compact | about 120 words | about 170 | the master rendered at `data-size="compact"` |
+| Regular | about 100 words | about 140 | the master as shipped (`data-size="regular"`) |
+| Stage | about 60 words | none | `kit/stage.html`: a plan holds 4 detailed rows or 6 compact, a dense table 6 rows, definitions 3, index rows carry names only |
 
 At Stage the reference file is the budget: each template in `kit/stage.html` holds exactly what that
 template holds on stage. More content than that is a continuation slide, never a cut.
