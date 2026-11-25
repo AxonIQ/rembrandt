@@ -1,6 +1,6 @@
 # Rembrandt
 
-**Version 1.0.6** (`skills/rembrandt/kit/VERSION`). Rembrandt renders any input, a slide deck, a markdown file, a
+**Version 1.1.0** (`skills/rembrandt/kit/VERSION`). Rembrandt renders any input, a slide deck, a markdown file, a
 PDF, or a plain description, into an Axoniq-branded presentation built to the master standard: the
 real templates, the real tokens, the real brand assets. The output is always **one self-contained
 HTML file** you can present from any browser.
@@ -17,13 +17,30 @@ Leave **Sync automatically** on and new versions arrive by themselves.
 Start a new chat for each deck. Rembrandt reads the whole conversation, so leftovers from a previous
 run bleed into the next one and no check can catch it.
 
+## Sizes (new in 1.1)
+
+Rembrandt now builds every deck at one of three sizes, and asks which one before it starts:
+
+| Size | Body text | Title | For |
+|---|---|---|---|
+| **Compact** | 21 | 54 | decks read on a screen or sent as a document; this was the only size before 1.1 |
+| **Regular** (default) | 24 | 60 | meeting rooms and calls |
+| **Stage** | 36 | 92 | keynotes, conference talks, booths, big rooms |
+
+**What changes for you:** the default is now Regular, one step bigger than before, so the same material
+can take a few more slides. If you want decks exactly as they were, answer Compact. Stage never drops
+anything from your source: content that does not fit a stage slide continues on the next one, and the
+report lists every split.
+
+Every template at all three sizes, side by side: [`docs/sizes/index.html`](docs/sizes/index.html).
+
 ## How it works
 
 The model never designs. It **selects** a master template per slide, **fills** it with content
 fitted to that template's budget, and runs a final **Cohere** check against the source and against
 itself. All design lives in the kit; the model makes only editorial decisions.
 
-The flow: Ingest, Fidelity, Questionnaire, Outline, Fill, Assemble, Adjust for fit, **Cohere**,
+The flow: Ingest, Fidelity, Questionnaire (including the size), Outline, Fill, Assemble, Adjust for fit, **Cohere**,
 Deliver. See [`skills/rembrandt/SKILL.md`](skills/rembrandt/SKILL.md).
 
 Every deck is delivered as `<Presentation name> - Rembrandt v<version>.html`, so any output can be
@@ -40,15 +57,19 @@ rembrandt/
 │   ├── SKILL.md                    # the flow, the rules, fidelity, the questionnaire, Cohere
 │   ├── references/
 │   │   ├── templates.md            # the template catalogue, selected by meaning
-│   │   ├── text-styles.md          # the 18 styles and the two density modes
+│   │   ├── text-styles.md          # the 18 styles at three sizes, densities, budgets
 │   │   ├── color.md                # when to use the 500, and what the other steps are for
 │   │   └── cohere.md               # the final-check checklist
 │   └── kit/
-│       ├── master.html             # 37 layouts, tokens, header, viewer, editor, type spec
-│       ├── verify.js               # THE GATE: five checks, one command
+│       ├── master.html             # 37 layouts, tokens, header, viewer, editor, type spec; Compact and Regular
+│       ├── stage.html              # the same 37 recomposed for Stage (generated: tools/build-stage.py)
+│       ├── verify.js               # THE GATE: five checks, one command, at the deck's size
 │       ├── VERSION                 # the version every rendered deck is stamped with
 │       ├── assets/                 # official brand assets (logos, product marks)
 │       └── icons/                  # Lucide icons (ISC, see icons/LICENSE)
+├── tools/
+│   ├── build-stage.py              # writes kit/stage.html from the master; --check before a release
+│   └── build-sizes.js              # re-renders docs/sizes, every template at three sizes
 ├── CHANGELOG.md
 └── README.md
 ```

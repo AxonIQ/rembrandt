@@ -6,7 +6,7 @@
 <title>Rembrandt · Axoniq</title>
 <meta name="description" content="Hand it anything. It gives you back an Axoniq deck.">
 <link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap">
@@ -55,10 +55,10 @@ a:hover{border-bottom-color:var(--blue)}
 /* ---------- hero: centred, the mark on the axis ---------- */
 .hero{padding:80px 0 84px;text-align:center;
   display:flex;flex-direction:column;align-items:center}
-.mark{width:96px;height:96px;border-radius:14px;overflow:hidden;
-  border:1px solid var(--line-2);background:var(--surface);
-  box-shadow:0 10px 26px -12px rgba(16,24,40,.18);margin-bottom:30px}
-.mark img{display:block;width:100%;height:100%;object-fit:cover}
+/* logo.png carries its own squircle and shadow, with room around it: shown at 133px the squircle
+   is 96px. The hero is centred, so only the top margin is pulled back to keep the spacing as before. */
+.mark{width:133px;height:133px;margin:-16px 0 10px}
+.mark img{display:block;width:100%;height:100%}
 h1{font-family:var(--f-disp);font-size:clamp(44px,6.2vw,70px);font-weight:500;
   line-height:1.08;letter-spacing:-.021em;color:var(--ink);
   margin-bottom:22px;text-wrap:balance}
@@ -282,7 +282,7 @@ footer a:hover{color:var(--ink)}
 <div class="wrap">
 
   <header class="hero">
-    <div class="mark"><img src="hero.jpg" width="96" height="96"
+    <div class="mark"><img src="logo.png" width="133" height="133"
       alt="Illustrated portrait of a painter in a black beret holding a brush, on a gold ground."></div>
     <h1>Claude Skill for making Axoniq Branded Decks</h1>
     <p class="stand">Hand it a deck, a document, or a paragraph. It hands back an Axoniq presentation as one HTML file.</p>
@@ -497,7 +497,7 @@ footer a:hover{color:var(--ink)}
       <path d="M634.452 220.059L596.817 165.054L557.059 220.059H536.794L586.974 150.386L538.724 79.748H572.692L607.818 131.086L644.681 79.748H664.946L617.661 145.754L668.42 220.059H634.452Z"/>
       <path d="M400.001 220.059L450.567 79.748H483.956L534.329 220.059H504.414L491.483 183.003H431.074L417.564 220.059H400.001ZM436.671 167.37H486.079L461.761 97.6971L436.671 167.37Z"/>
     </svg>
-    <span>Rembrandt v1.0.6</span>
+    <span>Rembrandt v1.1.0</span>
     <span class="push"><a href="https://axoniq.io">axoniq.io</a></span>
   </div>
 </footer>

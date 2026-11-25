@@ -30,6 +30,10 @@ const FONT_CSS = `
   const names = wanted.length ? wanted : sections.map(s => s.name);
   const startOf = (name) => { const s = sections.find(x => x.name === name); return s ? s.start : -1; };
   const style = html.match(/<style>([\s\S]*?)<\/style>/)[1];
+  // The deck's type size lives on <html data-size>; each slide is re-rendered in its own document,
+  // so carry the attribute across or every slide would render at the stylesheet's default size.
+  const sizeM = html.match(/<html\b[^>]*\bdata-size="([a-z]+)"/);
+  const sizeAttr = sizeM ? ` data-size="${sizeM[1]}"` : '';
   // the symbol sprite lives outside the sections
   const spriteM = html.match(/<svg[^>]*(?:style="display:none"|hidden|aria-hidden)[^>]*>[\s\S]*?<\/svg>/);
   const sprite = spriteM ? spriteM[0] : '';
@@ -42,7 +46,7 @@ const FONT_CSS = `
     if (s < 0) { console.error(`no slide named ${name}`); process.exitCode = 1; continue; }
     const e = html.indexOf('</section>', s) + 10;
     let sec = html.slice(s, e).replace(/<section\b([^>]*)\shidden(?=[\s>])/, '<section$1');
-    const doc = `<!doctype html><html><head><meta charset="utf-8"><style>${FONT_CSS}${style}
+    const doc = `<!doctype html><html${sizeAttr}><head><meta charset="utf-8"><style>${FONT_CSS}${style}
     html,body{margin:0;background:#fff;overflow:hidden;width:1920px;height:1080px} .slide{position:absolute;left:0;top:0}</style></head><body>${sprite}${sec}</body></html>`;
     await page.setContent(doc, { waitUntil: 'load' });
     await page.evaluate(() => document.fonts.ready);
