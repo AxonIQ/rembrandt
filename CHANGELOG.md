@@ -37,6 +37,9 @@ continues on the next slide.
   and the stage splitting rule. Densities are renamed standard and dense so "regular" means one thing.
 - references: the three-column type table and budgets per size (text-styles), templates at Stage
   (templates), size checks (cohere).
+- The Rembrandt icon is now an app icon: the portrait in a squircle with a soft shadow, on a canvas
+  with room for the shadow, built by `tools/build-icon.py` (`docs/logo.png`, the favicons). iOS gets
+  the square portrait as its touch icon, since it applies its own squircle.
 - `docs/sizes/` (new): every master template at Compact, Regular and Stage, side by side.
   `tools/build-sizes.js` re-renders its images from the kit and fails if the page's template list
   and the master disagree.
